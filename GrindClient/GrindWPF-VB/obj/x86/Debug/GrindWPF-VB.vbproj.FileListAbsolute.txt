@@ -1,0 +1,16 @@
+G:\OpenSourceVB.N\GrindWPF-VB\GrindWPF-VB\bin\Debug\GrindWPF-VB.exe
+G:\OpenSourceVB.N\GrindWPF-VB\GrindWPF-VB\bin\Debug\GrindWPF-VB.pdb
+G:\OpenSourceVB.N\GrindWPF-VB\GrindWPF-VB\bin\Debug\GrindWPF-VB.xml
+G:\OpenSourceVB.N\GrindWPF-VB\GrindWPF-VB\obj\x86\Debug\MainWindow.baml
+G:\OpenSourceVB.N\GrindWPF-VB\GrindWPF-VB\obj\x86\Debug\MainWindow.g.vb
+G:\OpenSourceVB.N\GrindWPF-VB\GrindWPF-VB\obj\x86\Debug\Application.g.vb
+G:\OpenSourceVB.N\GrindWPF-VB\GrindWPF-VB\obj\x86\Debug\GrindWPF-VB_MarkupCompile.cache
+G:\OpenSourceVB.N\GrindWPF-VB\GrindWPF-VB\obj\x86\Debug\GrindWPF-VB.g.resources
+G:\OpenSourceVB.N\GrindWPF-VB\GrindWPF-VB\obj\x86\Debug\GrindWPF_VB.Resources.resources
+G:\OpenSourceVB.N\GrindWPF-VB\GrindWPF-VB\obj\x86\Debug\GrindWPF-VB.vbproj.GenerateResource.Cache
+G:\OpenSourceVB.N\GrindWPF-VB\GrindWPF-VB\obj\x86\Debug\GrindWPF-VB.exe
+G:\OpenSourceVB.N\GrindWPF-VB\GrindWPF-VB\obj\x86\Debug\GrindWPF-VB.xml
+G:\OpenSourceVB.N\GrindWPF-VB\GrindWPF-VB\obj\x86\Debug\GrindWPF-VB.pdb
+G:\OpenSourceVB.N\GrindWPF-VB\GrindWPF-VB\bin\Debug\RestSharp.dll
+G:\OpenSourceVB.N\GrindWPF-VB\GrindWPF-VB\bin\Debug\RestSharp.xml
+G:\OpenSourceVB.N\GrindWPF-VB\GrindWPF-VB\obj\x86\Debug\GrindWPF-VB.vbprojResolveAssemblyReference.cache
