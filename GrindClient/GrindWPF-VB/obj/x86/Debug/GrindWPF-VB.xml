@@ -6,15 +6,7 @@ GrindWPF-VB
 </name>
 </assembly>
 <members>
-<member name="M:GrindWPF_VB.MainWindow.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:GrindWPF_VB.MainWindow">
-	<summary>
-MainWindow
-</summary>
-</member><member name="M:GrindWPF_VB.Application.InitializeComponent">
+<member name="M:GrindWPF_VB.Application.InitializeComponent">
 	<summary>
 InitializeComponent
 </summary>
@@ -25,6 +17,14 @@ Application Entry Point.
 </member><member name="T:GrindWPF_VB.Application">
 	<summary>
 Application
+</summary>
+</member><member name="M:GrindWPF_VB.MainWindow.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:GrindWPF_VB.MainWindow">
+	<summary>
+MainWindow
 </summary>
 </member><member name="P:GrindWPF_VB.My.MyWpfExtension.Application">
 	<summary>

@@ -13,7 +13,8 @@ class CreateTasksPeopleDocumentsUnreadsAndComments < ActiveRecord::Migration
       t.text :investigation
       t.integer :developer_id
       t.integer :reviewer_id
-      t.integer :comments_count      
+      t.integer :comments_count 
+      t.integer :documents_count 
       t.date :open_date
       t.date :analysis_date
       t.date :promotion_date
@@ -33,6 +34,8 @@ class CreateTasksPeopleDocumentsUnreadsAndComments < ActiveRecord::Migration
       t.string :level
       t.string :internal_object_id
       t.integer :unread_objects_count
+      t.integer :documents_count
+      t.integer :tasks_count
     end
     create_table :documents do |t|
       t.string :name

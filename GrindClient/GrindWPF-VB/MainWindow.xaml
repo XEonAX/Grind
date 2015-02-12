@@ -45,6 +45,7 @@
                         <TextBox Grid.Row="0" HorizontalAlignment="Stretch" Margin="51,0,671,0" Name="TextBox1" VerticalAlignment="Center"  Width="200" />
                         <Label Grid.Row="0" Content="Abstract"  HorizontalAlignment="Left" Margin="278,0,0,0" Name="Label2" VerticalAlignment="Top" />
                         <TextBox Grid.Row="0"  HorizontalAlignment="Stretch" Margin="349,0,6,0" Name="TextBox2" VerticalAlignment="Center"  Width="565" />
+                        
                     </Grid>
                 </Grid>
             </TabItem>

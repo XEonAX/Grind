@@ -40,6 +40,8 @@ ActiveRecord::Schema.define(version: 20150131130010) do
     t.string  "level",                limit: 255
     t.string  "internal_object_id",   limit: 255
     t.integer "unread_objects_count", limit: 4
+    t.integer "documents_count",      limit: 4
+    t.integer "tasks_count",          limit: 4
   end
 
   create_table "tasks", force: :cascade do |t|
@@ -56,6 +58,7 @@ ActiveRecord::Schema.define(version: 20150131130010) do
     t.integer  "developer_id",       limit: 4
     t.integer  "reviewer_id",        limit: 4
     t.integer  "comments_count",     limit: 4
+    t.integer  "documents_count",    limit: 4
     t.date     "open_date"
     t.date     "analysis_date"
     t.date     "promotion_date"

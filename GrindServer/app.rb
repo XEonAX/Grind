@@ -4,22 +4,62 @@ require 'sinatra'
 require "sinatra/reloader"
 require 'sinatra/activerecord'
 require 'json'
+require 'multi_json'
 
 set :database, 'mysql://root@localhost/grindDB'
 
+class App < Sinatra::Application
+configure do
+# Don't log them. We'll do that ourself
+set :dump_errors, false
+ 
+# Don't capture any errors. Throw them up the stack
+set :raise_errors, true
+
+# Disable internal middleware for presenting errors
+# as useful HTML pages
+set :show_exceptions, false
+end
+end
+ 
+class ExceptionHandling
+def initialize(app)
+@app = app
+end
+ 
+def call(env)
+begin
+@app.call env
+rescue => ex
+env['rack.errors'].puts ex
+env['rack.errors'].puts ex.backtrace.join("\n")
+env['rack.errors'].flush
+ 
+hash = { :message => ex.to_s }
+[500, {'Content-Type' => 'application/json'}, [MultiJson.dump(hash)]]
+end
+end
+end
+use ExceptionHandling 
+
+
+
+
+
+
+
 class Person < ActiveRecord::Base
+  has_many :unread_objects
+  has_many :tasks   
 end
 
 class Unread_Object < ActiveRecord::Base
-  belongs_to :person
+  belongs_to :person, counter_cache: true
 end
 
 class Developer < Person
-  has_many :tasks 
 end
 class Reviewer < Person
-  has_many :tasks
-  has_many :unread_objects
 end
 
 class Task < ActiveRecord::Base
@@ -40,12 +80,12 @@ class Task < ActiveRecord::Base
 end
 
 class Document < ActiveRecord::Base
-  belongs_to :task
-  belongs_to :developer
+  belongs_to :task, counter_cache: true
+  belongs_to :developer, counter_cache: true
 end
 
 class Comment < ActiveRecord::Base
-  belongs_to :task
+  belongs_to :task, counter_cache: true
   has_many :comments
 end
 
@@ -58,9 +98,11 @@ get '/tasks' do
 end
 
 get '/taskslist' do
-  #Task.includes([:developer, :reviewer]).all.explain
-  Task.all(:joins => :people, :select => "tasks.*, people.*").to_json
-  #Task.includes(:reviewer).all.to_json
+  #Task.includes([:developer, :reviewer]).all.to_json
+  #Task.joins(:developer,:reviewer).select("*, people.*").to_json
+  #Task.includes(:reviewer.name,:developer.name).all.to_json #"undefined method `name' for :reviewer:Symbol"
+  #Task.find(:all, :include => {:people => :name}).to_json #Couldn't find all Tasks with 'id': (all, {:include=>{:people=>:name}})
+  Task.includes(:developer,:reviewer,:documents).all.as_json(include: [:developer,:reviewer,:documents]).to_json
 end
 
 get '/people' do
@@ -72,11 +114,12 @@ get '/person/:id' do
 end
 
 get '/task/:id' do
-  Task.where(["id = ?", params[:id]]).to_json
+  #Task.where(["id = ?", params[:id]]).to_json
+  Task.where(["id = ?", params[:id]]).first.to_json
 end
 
 get '/document/:id' do
-  Document.where(["id = ?", params[:id]]).to_json
+  Document.where(["id = ?", params[:id]]).first.to_json
 end
 
 get '/task/:id/documents' do
@@ -113,36 +156,48 @@ get '/make' do
                          )
   task1 = Task.create(  
                       :name => "IR-000001V0R2000",
-                      :description => "The Very First Incident Report",
-                      :task_status => "Opened",
+                      :abstract => "The Very First Incident Report",
+                      :task_status => "Open",
                       :task_type => "Internal",
                       :developer_id => person2.id,
                       :reviewer_id => person1.id,
-                      :internal_object_id =>'0000.0000.0000.0001'
+                      :internal_object_id =>'0000.0000.0000.0001',
+                      :bug_type => 'HL',
+                      :approved => false,
+                      :target_date => DateTime.now
+                      
                      )
   task2 = Task.create(
                       :name => "IR-000002V0R2000",
-                      :description => "Second Incident Report",
-                      :task_status => "Tech. Anal.",
+                      :abstract => "Second Incident Report",
+                      :task_status => "Analysis",
                       :task_type => "External",
                       :developer_id => person2.id,
                       :reviewer_id => person1.id,
-                      :internal_object_id =>'0000.0000.0000.0002'                     
+                      :internal_object_id =>'0000.0000.0000.0002',
+                      :bug_type => 'E',
+                      :approved => false,
+                      :target_date => DateTime.now
+                      
                      )
   task3 = Task.create(
                       :name => "IR-000003V0R2000",
-                      :description => "Another Incident Report",
-                      :task_status => "Under Corr.",
+                      :abstract => "Another Incident Report",
+                      :task_status => "Correction",
                       :task_type => "External",
                       :developer_id => person3.id,
                       :reviewer_id => person1.id,
-                      :internal_object_id =>'0000.0000.0000.0003'                      
+                      :internal_object_id =>'0000.0000.0000.0003',
+                      :bug_type => 'I',
+                      :approved => false,
+                      :target_date => DateTime.now
+                      
                      ) 
   document1 = Document.create(
                               :name => "FirstDoku",
                               :path => "\\XEON-NB\Test\FiddlerRoot.cer",
                               :task_id => task1.id,
                               :developer_id => task1.developer.id,
-                              :data => Task.all.to_json #SomeBinaryData
+                              :data => '[]' #SomeBinaryData
                              )
 end
