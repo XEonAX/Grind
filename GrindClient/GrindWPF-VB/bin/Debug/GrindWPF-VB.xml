@@ -18,6 +18,14 @@ Application Entry Point.
 	<summary>
 Application
 </summary>
+</member><member name="M:GrindWPF_VB.Chat.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:GrindWPF_VB.Chat">
+	<summary>
+Chat
+</summary>
 </member><member name="M:GrindWPF_VB.MainWindow.InitializeComponent">
 	<summary>
 InitializeComponent

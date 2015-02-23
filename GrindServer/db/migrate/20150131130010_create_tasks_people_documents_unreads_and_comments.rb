@@ -2,7 +2,7 @@ class CreateTasksPeopleDocumentsUnreadsAndComments < ActiveRecord::Migration
   def self.up
     create_table :tasks do |t|
       t.string :name
-      t.string :task_status
+      t.integer :task_status
       t.string :task_type
       t.string :abstract
       t.string :bug_type
@@ -13,8 +13,8 @@ class CreateTasksPeopleDocumentsUnreadsAndComments < ActiveRecord::Migration
       t.text :investigation
       t.integer :developer_id
       t.integer :reviewer_id
-      t.integer :comments_count 
-      t.integer :documents_count 
+      t.integer :comments_count
+      t.integer :documents_count
       t.date :open_date
       t.date :analysis_date
       t.date :promotion_date
@@ -23,7 +23,7 @@ class CreateTasksPeopleDocumentsUnreadsAndComments < ActiveRecord::Migration
       t.date :collection_date
       t.date :closed_date
       t.date :modified_date
-      t.date :target_date      
+      t.date :target_date
       t.datetime :created_at
       t.datetime :updated_at
     end

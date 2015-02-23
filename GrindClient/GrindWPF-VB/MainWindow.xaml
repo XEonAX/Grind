@@ -1,12 +1,9 @@
 ﻿<Window x:Class="MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    Title="MainWindow" mc:Ignorable="d" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" Name="MainWindow" Height="542" Width="952" WindowStyle="ThreeDBorderWindow">
+    Title="MainWindow"  Name="MainWindow" WindowStyle="ThreeDBorderWindow" mc:Ignorable="d" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" d:DesignHeight="648" d:DesignWidth="805" SizeToContent="WidthAndHeight">
     <Grid>
         <TabControl Name="MaintabControl">
-            <TabItem Header="Documents" Name="tiDocuments">
-                <Grid />
-            </TabItem>
             <TabItem Header="Tasks" Name="tiTasks">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -18,10 +15,10 @@
                     <ToolBar Height="26" HorizontalAlignment="Left" >
                         <Button Name="btnRefresh" >
                             Refresh
-                        </Button>   
+                        </Button>
                     </ToolBar>
                     <Grid Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                        <DataGrid ItemsSource="{Binding UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False"  HorizontalAlignment="Stretch"  Name="GridTasks" VerticalAlignment="Stretch" IsReadOnly="True" >
+                        <DataGrid ItemsSource="{Binding UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False"  HorizontalAlignment="Stretch"  Name="GridTasks" VerticalAlignment="Stretch" IsReadOnly="True" BorderThickness="5">
                             <DataGridTextColumn  Header="Name" Binding="{Binding Path=name}"/>
                             <DataGridTextColumn  Header="Description" Binding="{Binding Path=description}"/>
                         </DataGrid>
@@ -29,26 +26,29 @@
                     <GridSplitter Background="DarkGray"  ResizeDirection="Rows" Grid.Row="2" 
                   HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
                   ResizeBehavior="PreviousAndNext" />
-                    <Grid Grid.Row="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="*" />
-                        </Grid.RowDefinitions>
-
-                        <Label Grid.Row="0" Content="Name"  HorizontalAlignment="Left" Margin="6,0,0,0" Name="Label1" VerticalAlignment="Top" />
-                        <TextBox Grid.Row="0" HorizontalAlignment="Stretch" Margin="51,0,671,0" Name="TextBox1" VerticalAlignment="Center"  Width="200" />
-                        <Label Grid.Row="0" Content="Abstract"  HorizontalAlignment="Left" Margin="278,0,0,0" Name="Label2" VerticalAlignment="Top" />
-                        <TextBox Grid.Row="0"  HorizontalAlignment="Stretch" Margin="349,0,6,0" Name="TextBox2" VerticalAlignment="Center"  Width="565" />
-                        
-                    </Grid>
+                    <Border Grid.Row="3" BorderThickness="4" BorderBrush="#FF6C8DAD">
+                        <Grid  HorizontalAlignment="Stretch" VerticalAlignment="Top"  Height="246">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="187*" />
+                            </Grid.RowDefinitions>
+                            <Label Content="TaskTracking Form"   HorizontalAlignment="Stretch"  HorizontalContentAlignment="Center"  Margin="6,0,0,0" Name="lblHeader" VerticalAlignment="Top" Background="ForestGreen" Foreground="White" FontWeight="ExtraBold" FontSize="18" Grid.ColumnSpan="2" />
+                            <Label Grid.Row="1" Content="Name"  HorizontalAlignment="Left" Margin="6,0,0,0" Name="Label1" VerticalAlignment="Top" />
+                            <TextBox Grid.Row="1" HorizontalAlignment="Stretch" Margin="51,0,26,0" Name="TextBox1" VerticalAlignment="Center"  Width="200" />
+                            <Label Grid.Row="1" Content="Abstract"  HorizontalAlignment="Left" Margin="1,0,0,0" Name="Label2" VerticalAlignment="Top" Grid.Column="1" />
+                            <TextBox Grid.Row="1"  HorizontalAlignment="Stretch" Margin="72,0,6,0" Name="TextBox2" VerticalAlignment="Center" Grid.Column="1" />
+                        </Grid>
+                    </Border>   
                 </Grid>
             </TabItem>
-        </TabControl>
+        <TabItem Header="Documents" Name="tiDocuments">
+                <Grid />
+            </TabItem>
+            </TabControl>
     </Grid>
 </Window>

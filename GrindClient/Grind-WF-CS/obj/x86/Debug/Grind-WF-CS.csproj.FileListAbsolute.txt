@@ -1,0 +1,10 @@
+J:\Root\Grind\GrindClient\Grind-WF-CS\bin\Debug\Grind-WF-CS.exe
+J:\Root\Grind\GrindClient\Grind-WF-CS\bin\Debug\Grind-WF-CS.pdb
+J:\Root\Grind\GrindClient\Grind-WF-CS\obj\x86\Debug\Grind_WF_CS.Form1.resources
+J:\Root\Grind\GrindClient\Grind-WF-CS\obj\x86\Debug\Grind_WF_CS.Properties.Resources.resources
+J:\Root\Grind\GrindClient\Grind-WF-CS\obj\x86\Debug\Grind-WF-CS.csproj.GenerateResource.Cache
+J:\Root\Grind\GrindClient\Grind-WF-CS\obj\x86\Debug\Grind-WF-CS.exe
+J:\Root\Grind\GrindClient\Grind-WF-CS\obj\x86\Debug\Grind-WF-CS.pdb
+J:\Root\Grind\GrindClient\Grind-WF-CS\bin\Debug\RestSharp.dll
+J:\Root\Grind\GrindClient\Grind-WF-CS\bin\Debug\RestSharp.xml
+J:\Root\Grind\GrindClient\Grind-WF-CS\obj\x86\Debug\Grind-WF-CS.csprojResolveAssemblyReference.cache

@@ -13,7 +13,6 @@ G:\OpenSourceVB.N\GrindClient\Grind-WF\obj\x86\Debug\Grind-WF.vbprojResolveAssem
 J:\Root\Grind\GrindClient\Grind-WF\obj\x86\Debug\Grind-WF.exe
 J:\Root\Grind\GrindClient\Grind-WF\obj\x86\Debug\Grind-WF.xml
 J:\Root\Grind\GrindClient\Grind-WF\obj\x86\Debug\Grind-WF.pdb
-J:\Root\Grind\GrindClient\Grind-WF\obj\x86\Debug\Grind-WF.vbprojResolveAssemblyReference.cache
 J:\Root\Grind\GrindClient\Grind-WF\obj\x86\Debug\Grind_WF.Form1.resources
 J:\Root\Grind\GrindClient\Grind-WF\obj\x86\Debug\Grind_WF.Resources.resources
 J:\Root\Grind\GrindClient\Grind-WF\obj\x86\Debug\Grind-WF.vbproj.GenerateResource.Cache

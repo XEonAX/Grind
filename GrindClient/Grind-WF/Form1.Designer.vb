@@ -38,9 +38,26 @@ Partial Class Form1
         Me.colApproved = New System.Windows.Forms.DataGridViewCheckBoxColumn()
         Me.colModified = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.colCreated = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.GroupBox6 = New System.Windows.Forms.GroupBox()
+        Me.GroupBox3 = New System.Windows.Forms.GroupBox()
+        Me.GroupBox8 = New System.Windows.Forms.GroupBox()
+        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.conReviewer = New System.Windows.Forms.ComboBox()
+        Me.cobExecutor = New System.Windows.Forms.ComboBox()
+        Me.GroupBox7 = New System.Windows.Forms.GroupBox()
+        Me.cbApproved = New System.Windows.Forms.CheckBox()
+        Me.GroupBox5 = New System.Windows.Forms.GroupBox()
+        Me.rbOthers = New System.Windows.Forms.RadioButton()
+        Me.rbCRITSIT = New System.Windows.Forms.RadioButton()
+        Me.rbBacklog = New System.Windows.Forms.RadioButton()
+        Me.rbHMA = New System.Windows.Forms.RadioButton()
+        Me.GroupBox4 = New System.Windows.Forms.GroupBox()
+        Me.rbHL = New System.Windows.Forms.RadioButton()
+        Me.rbBug = New System.Windows.Forms.RadioButton()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.dtpPromotion = New System.Windows.Forms.DateTimePicker()
+        Me.bsTask = New System.Windows.Forms.BindingSource(Me.components)
         Me.dtpCorrection = New System.Windows.Forms.DateTimePicker()
         Me.dtpReview = New System.Windows.Forms.DateTimePicker()
         Me.dtpAnalysis = New System.Windows.Forms.DateTimePicker()
@@ -61,23 +78,6 @@ Partial Class Form1
         Me.ToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
         Me.RefreshToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.tpFiles = New System.Windows.Forms.TabPage()
-        Me.GroupBox3 = New System.Windows.Forms.GroupBox()
-        Me.GroupBox4 = New System.Windows.Forms.GroupBox()
-        Me.GroupBox5 = New System.Windows.Forms.GroupBox()
-        Me.rbBug = New System.Windows.Forms.RadioButton()
-        Me.rbHL = New System.Windows.Forms.RadioButton()
-        Me.GroupBox6 = New System.Windows.Forms.GroupBox()
-        Me.rbHMA = New System.Windows.Forms.RadioButton()
-        Me.rbBacklog = New System.Windows.Forms.RadioButton()
-        Me.rbCRITSIT = New System.Windows.Forms.RadioButton()
-        Me.rbOthers = New System.Windows.Forms.RadioButton()
-        Me.GroupBox7 = New System.Windows.Forms.GroupBox()
-        Me.cbApproved = New System.Windows.Forms.CheckBox()
-        Me.GroupBox8 = New System.Windows.Forms.GroupBox()
-        Me.Panel1 = New System.Windows.Forms.Panel()
-        Me.cobExecutor = New System.Windows.Forms.ComboBox()
-        Me.conReviewer = New System.Windows.Forms.ComboBox()
-        Me.bsTask = New System.Windows.Forms.BindingSource(Me.components)
         Me.TabControl1.SuspendLayout()
         Me.tpTask.SuspendLayout()
         CType(Me.scTasksMain, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -88,17 +88,17 @@ Partial Class Form1
         Me.spTaskListAndForm.Panel2.SuspendLayout()
         Me.spTaskListAndForm.SuspendLayout()
         CType(Me.dGridTasks, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.GroupBox2.SuspendLayout()
-        Me.TableLayoutPanel1.SuspendLayout()
-        Me.GroupBox1.SuspendLayout()
-        Me.MenuStrip1.SuspendLayout()
         Me.GroupBox3.SuspendLayout()
-        Me.GroupBox4.SuspendLayout()
-        Me.GroupBox5.SuspendLayout()
-        Me.GroupBox7.SuspendLayout()
         Me.GroupBox8.SuspendLayout()
         Me.Panel1.SuspendLayout()
+        Me.GroupBox7.SuspendLayout()
+        Me.GroupBox5.SuspendLayout()
+        Me.GroupBox4.SuspendLayout()
+        Me.GroupBox2.SuspendLayout()
+        Me.TableLayoutPanel1.SuspendLayout()
         CType(Me.bsTask, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.GroupBox1.SuspendLayout()
+        Me.MenuStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
         'TabControl1
@@ -262,6 +262,201 @@ Partial Class Form1
         Me.colCreated.Name = "colCreated"
         Me.colCreated.ReadOnly = True
         '
+        'GroupBox6
+        '
+        Me.GroupBox6.Location = New System.Drawing.Point(49, 401)
+        Me.GroupBox6.Name = "GroupBox6"
+        Me.GroupBox6.Size = New System.Drawing.Size(417, 100)
+        Me.GroupBox6.TabIndex = 5
+        Me.GroupBox6.TabStop = False
+        Me.GroupBox6.Text = "GroupBox6"
+        '
+        'GroupBox3
+        '
+        Me.GroupBox3.Controls.Add(Me.GroupBox8)
+        Me.GroupBox3.Controls.Add(Me.GroupBox7)
+        Me.GroupBox3.Controls.Add(Me.GroupBox5)
+        Me.GroupBox3.Controls.Add(Me.GroupBox4)
+        Me.GroupBox3.Dock = System.Windows.Forms.DockStyle.Top
+        Me.GroupBox3.Location = New System.Drawing.Point(0, 155)
+        Me.GroupBox3.Name = "GroupBox3"
+        Me.GroupBox3.Size = New System.Drawing.Size(881, 67)
+        Me.GroupBox3.TabIndex = 4
+        Me.GroupBox3.TabStop = False
+        '
+        'GroupBox8
+        '
+        Me.GroupBox8.Controls.Add(Me.Panel1)
+        Me.GroupBox8.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.GroupBox8.Location = New System.Drawing.Point(444, 16)
+        Me.GroupBox8.Name = "GroupBox8"
+        Me.GroupBox8.Size = New System.Drawing.Size(434, 48)
+        Me.GroupBox8.TabIndex = 3
+        Me.GroupBox8.TabStop = False
+        Me.GroupBox8.Text = "Concerned Persons"
+        '
+        'Panel1
+        '
+        Me.Panel1.AutoScroll = True
+        Me.Panel1.Controls.Add(Me.conReviewer)
+        Me.Panel1.Controls.Add(Me.cobExecutor)
+        Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Panel1.Location = New System.Drawing.Point(3, 16)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(428, 29)
+        Me.Panel1.TabIndex = 0
+        '
+        'conReviewer
+        '
+        Me.conReviewer.Dock = System.Windows.Forms.DockStyle.Left
+        Me.conReviewer.FormattingEnabled = True
+        Me.conReviewer.Items.AddRange(New Object() {"Reviewer", "-------------------------"})
+        Me.conReviewer.Location = New System.Drawing.Point(144, 0)
+        Me.conReviewer.Name = "conReviewer"
+        Me.conReviewer.Size = New System.Drawing.Size(144, 21)
+        Me.conReviewer.TabIndex = 1
+        '
+        'cobExecutor
+        '
+        Me.cobExecutor.Dock = System.Windows.Forms.DockStyle.Left
+        Me.cobExecutor.FormattingEnabled = True
+        Me.cobExecutor.Items.AddRange(New Object() {"Executor", "-------------------------"})
+        Me.cobExecutor.Location = New System.Drawing.Point(0, 0)
+        Me.cobExecutor.Name = "cobExecutor"
+        Me.cobExecutor.Size = New System.Drawing.Size(144, 21)
+        Me.cobExecutor.TabIndex = 0
+        '
+        'GroupBox7
+        '
+        Me.GroupBox7.AutoSize = True
+        Me.GroupBox7.Controls.Add(Me.cbApproved)
+        Me.GroupBox7.Dock = System.Windows.Forms.DockStyle.Left
+        Me.GroupBox7.Location = New System.Drawing.Point(334, 16)
+        Me.GroupBox7.Name = "GroupBox7"
+        Me.GroupBox7.Size = New System.Drawing.Size(110, 48)
+        Me.GroupBox7.TabIndex = 2
+        Me.GroupBox7.TabStop = False
+        Me.GroupBox7.Text = "Approval"
+        '
+        'cbApproved
+        '
+        Me.cbApproved.AutoSize = True
+        Me.cbApproved.Dock = System.Windows.Forms.DockStyle.Left
+        Me.cbApproved.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cbApproved.Location = New System.Drawing.Point(3, 16)
+        Me.cbApproved.Name = "cbApproved"
+        Me.cbApproved.Size = New System.Drawing.Size(104, 29)
+        Me.cbApproved.TabIndex = 0
+        Me.cbApproved.Tag = "Approved"
+        Me.cbApproved.Text = "Approved"
+        Me.cbApproved.UseVisualStyleBackColor = True
+        '
+        'GroupBox5
+        '
+        Me.GroupBox5.AutoSize = True
+        Me.GroupBox5.Controls.Add(Me.rbOthers)
+        Me.GroupBox5.Controls.Add(Me.rbCRITSIT)
+        Me.GroupBox5.Controls.Add(Me.rbBacklog)
+        Me.GroupBox5.Controls.Add(Me.rbHMA)
+        Me.GroupBox5.Dock = System.Windows.Forms.DockStyle.Left
+        Me.GroupBox5.Location = New System.Drawing.Point(92, 16)
+        Me.GroupBox5.Name = "GroupBox5"
+        Me.GroupBox5.Size = New System.Drawing.Size(242, 48)
+        Me.GroupBox5.TabIndex = 1
+        Me.GroupBox5.TabStop = False
+        Me.GroupBox5.Text = "BugType"
+        '
+        'rbOthers
+        '
+        Me.rbOthers.AutoSize = True
+        Me.rbOthers.Dock = System.Windows.Forms.DockStyle.Left
+        Me.rbOthers.Location = New System.Drawing.Point(183, 16)
+        Me.rbOthers.Name = "rbOthers"
+        Me.rbOthers.Size = New System.Drawing.Size(56, 29)
+        Me.rbOthers.TabIndex = 3
+        Me.rbOthers.TabStop = True
+        Me.rbOthers.Tag = "Others"
+        Me.rbOthers.Text = "Others"
+        Me.rbOthers.UseVisualStyleBackColor = True
+        '
+        'rbCRITSIT
+        '
+        Me.rbCRITSIT.AutoSize = True
+        Me.rbCRITSIT.Dock = System.Windows.Forms.DockStyle.Left
+        Me.rbCRITSIT.Location = New System.Drawing.Point(116, 16)
+        Me.rbCRITSIT.Name = "rbCRITSIT"
+        Me.rbCRITSIT.Size = New System.Drawing.Size(67, 29)
+        Me.rbCRITSIT.TabIndex = 2
+        Me.rbCRITSIT.TabStop = True
+        Me.rbCRITSIT.Tag = "CRITSIT"
+        Me.rbCRITSIT.Text = "CRITSIT"
+        Me.rbCRITSIT.UseVisualStyleBackColor = True
+        '
+        'rbBacklog
+        '
+        Me.rbBacklog.AutoSize = True
+        Me.rbBacklog.Dock = System.Windows.Forms.DockStyle.Left
+        Me.rbBacklog.Location = New System.Drawing.Point(52, 16)
+        Me.rbBacklog.Name = "rbBacklog"
+        Me.rbBacklog.Size = New System.Drawing.Size(64, 29)
+        Me.rbBacklog.TabIndex = 1
+        Me.rbBacklog.TabStop = True
+        Me.rbBacklog.Tag = "Backlog"
+        Me.rbBacklog.Text = "Backlog"
+        Me.rbBacklog.UseVisualStyleBackColor = True
+        '
+        'rbHMA
+        '
+        Me.rbHMA.AutoSize = True
+        Me.rbHMA.Dock = System.Windows.Forms.DockStyle.Left
+        Me.rbHMA.Location = New System.Drawing.Point(3, 16)
+        Me.rbHMA.Name = "rbHMA"
+        Me.rbHMA.Size = New System.Drawing.Size(49, 29)
+        Me.rbHMA.TabIndex = 0
+        Me.rbHMA.TabStop = True
+        Me.rbHMA.Tag = "HMA"
+        Me.rbHMA.Text = "HMA"
+        Me.rbHMA.UseVisualStyleBackColor = True
+        '
+        'GroupBox4
+        '
+        Me.GroupBox4.AutoSize = True
+        Me.GroupBox4.Controls.Add(Me.rbHL)
+        Me.GroupBox4.Controls.Add(Me.rbBug)
+        Me.GroupBox4.Dock = System.Windows.Forms.DockStyle.Left
+        Me.GroupBox4.Location = New System.Drawing.Point(3, 16)
+        Me.GroupBox4.Name = "GroupBox4"
+        Me.GroupBox4.Size = New System.Drawing.Size(89, 48)
+        Me.GroupBox4.TabIndex = 0
+        Me.GroupBox4.TabStop = False
+        Me.GroupBox4.Text = "Task Type"
+        '
+        'rbHL
+        '
+        Me.rbHL.AutoSize = True
+        Me.rbHL.Dock = System.Windows.Forms.DockStyle.Left
+        Me.rbHL.Location = New System.Drawing.Point(47, 16)
+        Me.rbHL.Name = "rbHL"
+        Me.rbHL.Size = New System.Drawing.Size(39, 29)
+        Me.rbHL.TabIndex = 1
+        Me.rbHL.TabStop = True
+        Me.rbHL.Tag = "HL"
+        Me.rbHL.Text = "HL"
+        Me.rbHL.UseVisualStyleBackColor = True
+        '
+        'rbBug
+        '
+        Me.rbBug.AutoSize = True
+        Me.rbBug.Dock = System.Windows.Forms.DockStyle.Left
+        Me.rbBug.Location = New System.Drawing.Point(3, 16)
+        Me.rbBug.Name = "rbBug"
+        Me.rbBug.Size = New System.Drawing.Size(44, 29)
+        Me.rbBug.TabIndex = 0
+        Me.rbBug.TabStop = True
+        Me.rbBug.Tag = "Bug"
+        Me.rbBug.Text = "Bug"
+        Me.rbBug.UseVisualStyleBackColor = True
+        '
         'GroupBox2
         '
         Me.GroupBox2.Controls.Add(Me.TableLayoutPanel1)
@@ -318,6 +513,10 @@ Partial Class Form1
         Me.dtpPromotion.Size = New System.Drawing.Size(117, 20)
         Me.dtpPromotion.TabIndex = 13
         Me.dtpPromotion.Tag = "PromotionDate"
+        '
+        'bsTask
+        '
+        Me.bsTask.DataSource = GetType(Grind_WF.Task)
         '
         'dtpCorrection
         '
@@ -546,211 +745,13 @@ Partial Class Form1
         Me.tpFiles.Text = "Files"
         Me.tpFiles.UseVisualStyleBackColor = True
         '
-        'GroupBox3
-        '
-        Me.GroupBox3.Controls.Add(Me.GroupBox8)
-        Me.GroupBox3.Controls.Add(Me.GroupBox7)
-        Me.GroupBox3.Controls.Add(Me.GroupBox5)
-        Me.GroupBox3.Controls.Add(Me.GroupBox4)
-        Me.GroupBox3.Dock = System.Windows.Forms.DockStyle.Top
-        Me.GroupBox3.Location = New System.Drawing.Point(0, 155)
-        Me.GroupBox3.Name = "GroupBox3"
-        Me.GroupBox3.Size = New System.Drawing.Size(881, 67)
-        Me.GroupBox3.TabIndex = 4
-        Me.GroupBox3.TabStop = False
-        '
-        'GroupBox4
-        '
-        Me.GroupBox4.AutoSize = True
-        Me.GroupBox4.Controls.Add(Me.rbHL)
-        Me.GroupBox4.Controls.Add(Me.rbBug)
-        Me.GroupBox4.Dock = System.Windows.Forms.DockStyle.Left
-        Me.GroupBox4.Location = New System.Drawing.Point(3, 16)
-        Me.GroupBox4.Name = "GroupBox4"
-        Me.GroupBox4.Size = New System.Drawing.Size(89, 48)
-        Me.GroupBox4.TabIndex = 0
-        Me.GroupBox4.TabStop = False
-        Me.GroupBox4.Text = "Task Type"
-        '
-        'GroupBox5
-        '
-        Me.GroupBox5.AutoSize = True
-        Me.GroupBox5.Controls.Add(Me.rbOthers)
-        Me.GroupBox5.Controls.Add(Me.rbCRITSIT)
-        Me.GroupBox5.Controls.Add(Me.rbBacklog)
-        Me.GroupBox5.Controls.Add(Me.rbHMA)
-        Me.GroupBox5.Dock = System.Windows.Forms.DockStyle.Left
-        Me.GroupBox5.Location = New System.Drawing.Point(92, 16)
-        Me.GroupBox5.Name = "GroupBox5"
-        Me.GroupBox5.Size = New System.Drawing.Size(242, 48)
-        Me.GroupBox5.TabIndex = 1
-        Me.GroupBox5.TabStop = False
-        Me.GroupBox5.Text = "BugType"
-        '
-        'rbBug
-        '
-        Me.rbBug.AutoSize = True
-        Me.rbBug.Dock = System.Windows.Forms.DockStyle.Left
-        Me.rbBug.Location = New System.Drawing.Point(3, 16)
-        Me.rbBug.Name = "rbBug"
-        Me.rbBug.Size = New System.Drawing.Size(44, 29)
-        Me.rbBug.TabIndex = 0
-        Me.rbBug.TabStop = True
-        Me.rbBug.Tag = "Bug"
-        Me.rbBug.Text = "Bug"
-        Me.rbBug.UseVisualStyleBackColor = True
-        '
-        'rbHL
-        '
-        Me.rbHL.AutoSize = True
-        Me.rbHL.Dock = System.Windows.Forms.DockStyle.Left
-        Me.rbHL.Location = New System.Drawing.Point(47, 16)
-        Me.rbHL.Name = "rbHL"
-        Me.rbHL.Size = New System.Drawing.Size(39, 29)
-        Me.rbHL.TabIndex = 1
-        Me.rbHL.TabStop = True
-        Me.rbHL.Tag = "HL"
-        Me.rbHL.Text = "HL"
-        Me.rbHL.UseVisualStyleBackColor = True
-        '
-        'GroupBox6
-        '
-        Me.GroupBox6.Location = New System.Drawing.Point(49, 401)
-        Me.GroupBox6.Name = "GroupBox6"
-        Me.GroupBox6.Size = New System.Drawing.Size(417, 100)
-        Me.GroupBox6.TabIndex = 5
-        Me.GroupBox6.TabStop = False
-        Me.GroupBox6.Text = "GroupBox6"
-        '
-        'rbHMA
-        '
-        Me.rbHMA.AutoSize = True
-        Me.rbHMA.Dock = System.Windows.Forms.DockStyle.Left
-        Me.rbHMA.Location = New System.Drawing.Point(3, 16)
-        Me.rbHMA.Name = "rbHMA"
-        Me.rbHMA.Size = New System.Drawing.Size(49, 29)
-        Me.rbHMA.TabIndex = 0
-        Me.rbHMA.TabStop = True
-        Me.rbHMA.Tag = "HMA"
-        Me.rbHMA.Text = "HMA"
-        Me.rbHMA.UseVisualStyleBackColor = True
-        '
-        'rbBacklog
-        '
-        Me.rbBacklog.AutoSize = True
-        Me.rbBacklog.Dock = System.Windows.Forms.DockStyle.Left
-        Me.rbBacklog.Location = New System.Drawing.Point(52, 16)
-        Me.rbBacklog.Name = "rbBacklog"
-        Me.rbBacklog.Size = New System.Drawing.Size(64, 29)
-        Me.rbBacklog.TabIndex = 1
-        Me.rbBacklog.TabStop = True
-        Me.rbBacklog.Tag = "Backlog"
-        Me.rbBacklog.Text = "Backlog"
-        Me.rbBacklog.UseVisualStyleBackColor = True
-        '
-        'rbCRITSIT
-        '
-        Me.rbCRITSIT.AutoSize = True
-        Me.rbCRITSIT.Dock = System.Windows.Forms.DockStyle.Left
-        Me.rbCRITSIT.Location = New System.Drawing.Point(116, 16)
-        Me.rbCRITSIT.Name = "rbCRITSIT"
-        Me.rbCRITSIT.Size = New System.Drawing.Size(67, 29)
-        Me.rbCRITSIT.TabIndex = 2
-        Me.rbCRITSIT.TabStop = True
-        Me.rbCRITSIT.Tag = "CRITSIT"
-        Me.rbCRITSIT.Text = "CRITSIT"
-        Me.rbCRITSIT.UseVisualStyleBackColor = True
-        '
-        'rbOthers
-        '
-        Me.rbOthers.AutoSize = True
-        Me.rbOthers.Dock = System.Windows.Forms.DockStyle.Left
-        Me.rbOthers.Location = New System.Drawing.Point(183, 16)
-        Me.rbOthers.Name = "rbOthers"
-        Me.rbOthers.Size = New System.Drawing.Size(56, 29)
-        Me.rbOthers.TabIndex = 3
-        Me.rbOthers.TabStop = True
-        Me.rbOthers.Tag = "Others"
-        Me.rbOthers.Text = "Others"
-        Me.rbOthers.UseVisualStyleBackColor = True
-        '
-        'GroupBox7
-        '
-        Me.GroupBox7.AutoSize = True
-        Me.GroupBox7.Controls.Add(Me.cbApproved)
-        Me.GroupBox7.Dock = System.Windows.Forms.DockStyle.Left
-        Me.GroupBox7.Location = New System.Drawing.Point(334, 16)
-        Me.GroupBox7.Name = "GroupBox7"
-        Me.GroupBox7.Size = New System.Drawing.Size(110, 48)
-        Me.GroupBox7.TabIndex = 2
-        Me.GroupBox7.TabStop = False
-        Me.GroupBox7.Text = "Approval"
-        '
-        'cbApproved
-        '
-        Me.cbApproved.AutoSize = True
-        Me.cbApproved.Dock = System.Windows.Forms.DockStyle.Left
-        Me.cbApproved.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cbApproved.Location = New System.Drawing.Point(3, 16)
-        Me.cbApproved.Name = "cbApproved"
-        Me.cbApproved.Size = New System.Drawing.Size(104, 29)
-        Me.cbApproved.TabIndex = 0
-        Me.cbApproved.Tag = "Approved"
-        Me.cbApproved.Text = "Approved"
-        Me.cbApproved.UseVisualStyleBackColor = True
-        '
-        'GroupBox8
-        '
-        Me.GroupBox8.Controls.Add(Me.Panel1)
-        Me.GroupBox8.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.GroupBox8.Location = New System.Drawing.Point(444, 16)
-        Me.GroupBox8.Name = "GroupBox8"
-        Me.GroupBox8.Size = New System.Drawing.Size(434, 48)
-        Me.GroupBox8.TabIndex = 3
-        Me.GroupBox8.TabStop = False
-        Me.GroupBox8.Text = "Concerned Persons"
-        '
-        'Panel1
-        '
-        Me.Panel1.AutoScroll = True
-        Me.Panel1.Controls.Add(Me.conReviewer)
-        Me.Panel1.Controls.Add(Me.cobExecutor)
-        Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Panel1.Location = New System.Drawing.Point(3, 16)
-        Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(428, 29)
-        Me.Panel1.TabIndex = 0
-        '
-        'cobExecutor
-        '
-        Me.cobExecutor.Dock = System.Windows.Forms.DockStyle.Left
-        Me.cobExecutor.FormattingEnabled = True
-        Me.cobExecutor.Items.AddRange(New Object() {"Executor", "-------------------------"})
-        Me.cobExecutor.Location = New System.Drawing.Point(0, 0)
-        Me.cobExecutor.Name = "cobExecutor"
-        Me.cobExecutor.Size = New System.Drawing.Size(144, 21)
-        Me.cobExecutor.TabIndex = 0
-        '
-        'conReviewer
-        '
-        Me.conReviewer.Dock = System.Windows.Forms.DockStyle.Left
-        Me.conReviewer.FormattingEnabled = True
-        Me.conReviewer.Items.AddRange(New Object() {"Reviewer", "-------------------------"})
-        Me.conReviewer.Location = New System.Drawing.Point(144, 0)
-        Me.conReviewer.Name = "conReviewer"
-        Me.conReviewer.Size = New System.Drawing.Size(144, 21)
-        Me.conReviewer.TabIndex = 1
-        '
-        'bsTask
-        '
-        Me.bsTask.DataSource = GetType(Grind_WF.Task)
-        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1029, 497)
         Me.Controls.Add(Me.TabControl1)
+        Me.DoubleBuffered = True
         Me.MainMenuStrip = Me.MenuStrip1
         Me.Name = "Form1"
         Me.Text = "Form1"
@@ -766,24 +767,24 @@ Partial Class Form1
         CType(Me.spTaskListAndForm, System.ComponentModel.ISupportInitialize).EndInit()
         Me.spTaskListAndForm.ResumeLayout(False)
         CType(Me.dGridTasks, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.GroupBox3.ResumeLayout(False)
+        Me.GroupBox3.PerformLayout()
+        Me.GroupBox8.ResumeLayout(False)
+        Me.Panel1.ResumeLayout(False)
+        Me.GroupBox7.ResumeLayout(False)
+        Me.GroupBox7.PerformLayout()
+        Me.GroupBox5.ResumeLayout(False)
+        Me.GroupBox5.PerformLayout()
+        Me.GroupBox4.ResumeLayout(False)
+        Me.GroupBox4.PerformLayout()
         Me.GroupBox2.ResumeLayout(False)
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.TableLayoutPanel1.PerformLayout()
+        CType(Me.bsTask, System.ComponentModel.ISupportInitialize).EndInit()
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
         Me.MenuStrip1.ResumeLayout(False)
         Me.MenuStrip1.PerformLayout()
-        Me.GroupBox3.ResumeLayout(False)
-        Me.GroupBox3.PerformLayout()
-        Me.GroupBox4.ResumeLayout(False)
-        Me.GroupBox4.PerformLayout()
-        Me.GroupBox5.ResumeLayout(False)
-        Me.GroupBox5.PerformLayout()
-        Me.GroupBox7.ResumeLayout(False)
-        Me.GroupBox7.PerformLayout()
-        Me.GroupBox8.ResumeLayout(False)
-        Me.Panel1.ResumeLayout(False)
-        CType(Me.bsTask, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub

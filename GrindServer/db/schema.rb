@@ -46,7 +46,7 @@ ActiveRecord::Schema.define(version: 20150131130010) do
 
   create_table "tasks", force: :cascade do |t|
     t.string   "name",               limit: 255
-    t.string   "task_status",        limit: 255
+    t.integer  "task_status",        limit: 4
     t.string   "task_type",          limit: 255
     t.string   "abstract",           limit: 255
     t.string   "bug_type",           limit: 255

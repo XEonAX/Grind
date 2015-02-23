@@ -31,7 +31,7 @@ Public Class Task
     Public Property DeveloperId As Integer
     Public Property ReviewerId As Integer
     Public Property Name As String
-    Public Property TaskStatus As String
+    Public Property TaskStatus As eTaskStatus
     Public Property TaskType As String
     Public Property Abstract As String
     Public ReadOnly Property TaskName As String
@@ -72,4 +72,14 @@ Public Class Task
     Public Property Developer As Person
     Public Property Reviewer As Person
     Public Property Documents As List(Of Document)
+    Enum eTaskStatus
+        Open = 0
+        Analysis
+        Review
+        Correction
+        Promotion
+        Colection
+        Closed
+    End Enum
+
 End Class

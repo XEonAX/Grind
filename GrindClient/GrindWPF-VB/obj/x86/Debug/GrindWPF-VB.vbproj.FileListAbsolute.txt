@@ -29,4 +29,5 @@ J:\Root\Grind\GrindClient\GrindWPF-VB\obj\x86\Debug\GrindWPF-VB.vbproj.GenerateR
 J:\Root\Grind\GrindClient\GrindWPF-VB\obj\x86\Debug\GrindWPF-VB.exe
 J:\Root\Grind\GrindClient\GrindWPF-VB\obj\x86\Debug\GrindWPF-VB.xml
 J:\Root\Grind\GrindClient\GrindWPF-VB\obj\x86\Debug\GrindWPF-VB.pdb
-J:\Root\Grind\GrindClient\GrindWPF-VB\obj\x86\Debug\GrindWPF-VB.vbprojResolveAssemblyReference.cache
+J:\Root\Grind\GrindClient\GrindWPF-VB\obj\x86\Debug\Chat.baml
+J:\Root\Grind\GrindClient\GrindWPF-VB\obj\x86\Debug\Chat.g.vb

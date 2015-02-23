@@ -157,41 +157,44 @@ get '/make' do
   task1 = Task.create(  
                       :name => "IR-000001V0R2000",
                       :abstract => "The Very First Incident Report",
-                      :task_status => "Open",
+                      :task_status => 0,
                       :task_type => "Internal",
                       :developer_id => person2.id,
                       :reviewer_id => person1.id,
                       :internal_object_id =>'0000.0000.0000.0001',
                       :bug_type => 'HL',
                       :approved => false,
-                      :target_date => DateTime.now
-                      
+                      :target_date => DateTime.now,
+                      :open_date => DateTime.new(2015,1,3,4,5,6,'+7')
+                      :analysis_date => DateTime.new(2015,1,7,4,5,6,'+7')
                      )
   task2 = Task.create(
                       :name => "IR-000002V0R2000",
                       :abstract => "Second Incident Report",
-                      :task_status => "Analysis",
+                      :task_status => 1,
                       :task_type => "External",
                       :developer_id => person2.id,
                       :reviewer_id => person1.id,
                       :internal_object_id =>'0000.0000.0000.0002',
                       :bug_type => 'E',
                       :approved => false,
-                      :target_date => DateTime.now
-                      
+                      :target_date => DateTime.now,
+                      :open_date => DateTime.new(2014,2,3,4,5,6,'+7')
+                      :analysis_date => DateTime.new(2014,7,7,4,5,6,'+7')
                      )
   task3 = Task.create(
                       :name => "IR-000003V0R2000",
                       :abstract => "Another Incident Report",
-                      :task_status => "Correction",
+                      :task_status => 2,
                       :task_type => "External",
                       :developer_id => person3.id,
                       :reviewer_id => person1.id,
                       :internal_object_id =>'0000.0000.0000.0003',
                       :bug_type => 'I',
                       :approved => false,
-                      :target_date => DateTime.now
-                      
+                      :target_date => DateTime.now,
+                      :open_date => DateTime.new(2015,1,1,4,5,6,'+7')
+                      :analysis_date => 
                      ) 
   document1 = Document.create(
                               :name => "FirstDoku",
