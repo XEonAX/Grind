@@ -47,9 +47,9 @@ ActiveRecord::Schema.define(version: 20150131130010) do
   create_table "tasks", force: :cascade do |t|
     t.string   "name",               limit: 255
     t.integer  "task_status",        limit: 4
-    t.string   "task_type",          limit: 255
+    t.integer  "bug_type",           limit: 4
     t.string   "abstract",           limit: 255
-    t.string   "bug_type",           limit: 255
+    t.boolean  "is_bug",             limit: 1
     t.string   "internal_object_id", limit: 255
     t.boolean  "approved",           limit: 1
     t.text     "description",        limit: 65535
@@ -61,12 +61,11 @@ ActiveRecord::Schema.define(version: 20150131130010) do
     t.integer  "documents_count",    limit: 4
     t.date     "open_date"
     t.date     "analysis_date"
-    t.date     "promotion_date"
     t.date     "review_date"
     t.date     "correction_date"
+    t.date     "promotion_date"
     t.date     "collection_date"
     t.date     "closed_date"
-    t.date     "modified_date"
     t.date     "target_date"
     t.datetime "created_at"
     t.datetime "updated_at"

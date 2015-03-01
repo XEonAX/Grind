@@ -106,7 +106,7 @@ get '/taskslist' do
 end
 
 get '/people' do
-  Person.all.to_json
+  Person.all.to_json  
 end
 
 get '/person/:id' do
@@ -117,6 +117,15 @@ get '/task/:id' do
   #Task.where(["id = ?", params[:id]]).to_json
   Task.where(["id = ?", params[:id]]).first.to_json
 end
+
+
+post "/newtask" do
+  @task = Task.new(params[:task])
+  if @task.save
+    redirect "task/#{@task.id}"
+  end
+end
+
 
 get '/document/:id' do
   Document.where(["id = ?", params[:id]]).first.to_json
@@ -158,43 +167,61 @@ get '/make' do
                       :name => "IR-000001V0R2000",
                       :abstract => "The Very First Incident Report",
                       :task_status => 0,
-                      :task_type => "Internal",
+                      :is_bug => true,
                       :developer_id => person2.id,
                       :reviewer_id => person1.id,
                       :internal_object_id =>'0000.0000.0000.0001',
-                      :bug_type => 'HL',
+                      :bug_type => 2,
                       :approved => false,
                       :target_date => DateTime.now,
-                      :open_date => DateTime.new(2015,1,3,4,5,6,'+7')
-                      :analysis_date => DateTime.new(2015,1,7,4,5,6,'+7')
+                      :open_date => DateTime.new(2015,1,3,4,5,6,'+7'),
+                      :analysis_date => DateTime.new(2015,1,7,4,5,6,'+7'),
+                      :review_date => DateTime.new(2015,1,7,4,5,6,'+7'),
+                      :correction_date => DateTime.new(2015,1,7,4,5,6,'+7'),
+                      :promotion_date => DateTime.new(2015,1,7,4,5,6,'+7'),
+                      :collection_date => DateTime.new(2015,1,7,4,5,6,'+7'),
+                      :closed_date => DateTime.new(2015,1,7,4,5,6,'+7'),
+                      :approved => false
                      )
   task2 = Task.create(
                       :name => "IR-000002V0R2000",
                       :abstract => "Second Incident Report",
                       :task_status => 1,
-                      :task_type => "External",
+                      :is_bug => true,
                       :developer_id => person2.id,
                       :reviewer_id => person1.id,
                       :internal_object_id =>'0000.0000.0000.0002',
-                      :bug_type => 'E',
+                      :bug_type => 3,
                       :approved => false,
                       :target_date => DateTime.now,
-                      :open_date => DateTime.new(2014,2,3,4,5,6,'+7')
-                      :analysis_date => DateTime.new(2014,7,7,4,5,6,'+7')
+                      :open_date => DateTime.new(2014,2,3,4,5,6,'+7'),
+                      :analysis_date => DateTime.new(2014,3,4,4,5,6,'+7'),
+                      :review_date => DateTime.new(2015,1,7,4,5,6,'+7'),
+                      :correction_date => DateTime.new(2015,1,7,4,5,6,'+7'),
+                      :promotion_date => DateTime.new(2015,1,7,4,5,6,'+7'),
+                      :collection_date => DateTime.new(2015,1,7,4,5,6,'+7'),
+                      :closed_date => DateTime.new(2015,1,7,4,5,6,'+7'),
+                      :approved => false
                      )
   task3 = Task.create(
                       :name => "IR-000003V0R2000",
                       :abstract => "Another Incident Report",
                       :task_status => 2,
-                      :task_type => "External",
+                      :is_bug => true,
                       :developer_id => person3.id,
                       :reviewer_id => person1.id,
                       :internal_object_id =>'0000.0000.0000.0003',
-                      :bug_type => 'I',
+                      :bug_type => 2,
                       :approved => false,
                       :target_date => DateTime.now,
-                      :open_date => DateTime.new(2015,1,1,4,5,6,'+7')
-                      :analysis_date => 
+                      :open_date => DateTime.new(2015,1,1,4,5,6,'+7'),
+                      :analysis_date => DateTime.new(2015,2,2,4,5,6,'+7'),
+                      :review_date => DateTime.new(2015,1,7,4,5,6,'+7'),
+                      :correction_date => DateTime.new(2015,1,7,4,5,6,'+7'),
+                      :promotion_date => DateTime.new(2015,1,7,4,5,6,'+7'),
+                      :collection_date => DateTime.new(2015,1,7,4,5,6,'+7'),
+                      :closed_date => DateTime.new(2015,1,7,4,5,6,'+7'),
+                      :approved => false
                      ) 
   document1 = Document.create(
                               :name => "FirstDoku",

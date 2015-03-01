@@ -1,0 +1,12 @@
+J:\Root\Grind\GrindClient\Grind-WPF-CS\bin\Debug\Grind-WPF-CS.exe
+J:\Root\Grind\GrindClient\Grind-WPF-CS\bin\Debug\Grind-WPF-CS.pdb
+J:\Root\Grind\GrindClient\Grind-WPF-CS\obj\x86\Debug\MainWindow.baml
+J:\Root\Grind\GrindClient\Grind-WPF-CS\obj\x86\Debug\MainWindow.g.cs
+J:\Root\Grind\GrindClient\Grind-WPF-CS\obj\x86\Debug\App.g.cs
+J:\Root\Grind\GrindClient\Grind-WPF-CS\obj\x86\Debug\Grind-WPF-CS_MarkupCompile.cache
+J:\Root\Grind\GrindClient\Grind-WPF-CS\obj\x86\Debug\Grind-WPF-CS.g.resources
+J:\Root\Grind\GrindClient\Grind-WPF-CS\obj\x86\Debug\Grind_WPF_CS.Properties.Resources.resources
+J:\Root\Grind\GrindClient\Grind-WPF-CS\obj\x86\Debug\Grind-WPF-CS.csproj.GenerateResource.Cache
+J:\Root\Grind\GrindClient\Grind-WPF-CS\obj\x86\Debug\Grind-WPF-CS.exe
+J:\Root\Grind\GrindClient\Grind-WPF-CS\obj\x86\Debug\Grind-WPF-CS.pdb
+J:\Root\Grind\GrindClient\Grind-WPF-CS\obj\x86\Debug\App.baml

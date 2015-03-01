@@ -1,0 +1,93 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" x:Class="Grind_WPF_CS.MainWindow"
+        Title="MainWindow" VerticalAlignment="Top" Height="553" Width="757" HorizontalAlignment="Left">
+	<Grid>
+		<Border BorderThickness="1" BorderBrush="#FF688BAE">
+			<Grid x:Name="MainGrid">
+				<Grid.RowDefinitions>
+					<RowDefinition Height="28"  />
+					<RowDefinition Height="200"  />
+					<RowDefinition Height="6"/>
+					<RowDefinition />
+				</Grid.RowDefinitions>
+				<StackPanel Grid.Row="0" VerticalAlignment="Center" Orientation="Horizontal" Margin="2,0,0,0">
+					<Button Content="New" Margin="2,0"/>
+					<Button  Content="Refresh" Margin="2,0"/>
+				</StackPanel>
+			
+				<DataGrid Grid.Row="1" IsReadOnly="True" ClipboardCopyMode="IncludeHeader" CanUserResizeRows="False" BorderBrush="{x:Null}" >
+					<DataGrid.Columns>
+						<DataGridTextColumn Header="Task Name" IsReadOnly="True"/>
+						<DataGridTextColumn Header="Task Status" IsReadOnly="True"/>
+						<DataGridTextColumn Header="Task Type" IsReadOnly="True"/>
+						<DataGridTextColumn Header="Bug Type" IsReadOnly="True"/>
+						<DataGridTextColumn Header="Target Date" IsReadOnly="True"/>
+						<DataGridTextColumn Header="Executor" IsReadOnly="True"/>
+						<DataGridTextColumn Header="Reviewer" IsReadOnly="True"/>
+						<DataGridTextColumn Header="Status" IsReadOnly="True"/>
+						<DataGridCheckBoxColumn Header="Approved" IsReadOnly="True"/>
+					
+					</DataGrid.Columns>
+				</DataGrid>
+				<GridSplitter HorizontalAlignment="Stretch" Grid.Row="2" ResizeDirection="Rows" ResizeBehavior="PreviousAndNext" Foreground="Black" Background="#FF688CAF" />
+				<Grid Grid.Row="3" ScrollViewer.VerticalScrollBarVisibility="Auto" >
+					<Grid.RowDefinitions>
+						<RowDefinition Height="35"/>
+						<RowDefinition Height="25"/>
+						<RowDefinition Height="55"/>
+						<RowDefinition/>
+						
+					</Grid.RowDefinitions>
+					<Label Content="Task Tracking Form" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="DarkOrange" Foreground="White" FontWeight="Bold" FontSize="16"/>
+					<DockPanel LastChildFill="True" Grid.Row="1">
+						<Label Content="Name"/>
+						<TextBox  Text="" VerticalAlignment="Center" Margin="0" HorizontalAlignment="Left" Width="184"  />
+						<Label Content="Description" HorizontalAlignment="Left" Margin="5,0,0,0"/>
+						<TextBox  Text="" VerticalAlignment="Center" Margin="0,0,5,0"  />
+					</DockPanel>
+					<DockPanel LastChildFill="False" Grid.Row="2">
+						<Label Content="Status:"/>
+						<Grid Grid.IsSharedSizeScope="True"  ShowGridLines="True">
+							<Grid.RowDefinitions>
+								<RowDefinition/>
+								<RowDefinition/>
+							</Grid.RowDefinitions>
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="Auto"/>
+								<ColumnDefinition Width="Auto"/>
+								<ColumnDefinition Width="Auto"/>
+								<ColumnDefinition Width="Auto"/>
+								<ColumnDefinition Width="Auto"/>
+								<ColumnDefinition Width="Auto"/>
+								<ColumnDefinition Width="Auto"/>
+							</Grid.ColumnDefinitions>
+
+							<RadioButton Content="Opened" GroupName="TaskState" Margin="15,0" VerticalAlignment="Center"/>
+							<RadioButton Content="Analysis" GroupName="TaskState" Margin="15,0" Grid.Column="1" VerticalAlignment="Center"/>
+							<RadioButton Content="Review" GroupName="TaskState" Margin="15,0" Grid.Column="2" VerticalAlignment="Center"/>
+							<RadioButton Content="Correction" GroupName="TaskState" Margin="15,0" Grid.Column="3" VerticalAlignment="Center"/>
+							<RadioButton Content="Promotion" GroupName="TaskState" Margin="15,0" Grid.Column="4" VerticalAlignment="Center"/>
+							<RadioButton Content="Collection" GroupName="TaskState" Margin="15,0" Grid.Column="5" VerticalAlignment="Center"/>
+							<RadioButton Content="Closed" GroupName="TaskState" Margin="15,0" Grid.Column="6" VerticalAlignment="Center"/>
+							<DatePicker Grid.Row="2" BorderBrush="{x:Null}"/>
+							<DatePicker Grid.Row="2" Grid.Column="1" BorderBrush="{x:Null}"/>
+							<DatePicker Grid.Row="2" Grid.Column="2" BorderBrush="{x:Null}"/>
+							<DatePicker Grid.Row="2" Grid.Column="3" BorderBrush="{x:Null}"/>
+							<DatePicker Grid.Row="2" Grid.Column="4" BorderBrush="{x:Null}"/>
+							<DatePicker Grid.Row="2" Grid.Column="5" BorderBrush="{x:Null}"/>
+							<DatePicker Grid.Row="2" Grid.Column="6" BorderBrush="{x:Null}"/>
+							<Border BorderBrush="#FF3854F3" BorderThickness="1" Grid.RowSpan="2" Grid.ColumnSpan="7" />
+							
+						</Grid>
+						
+						
+					</DockPanel>
+					
+				</Grid>
+    				  	
+			</Grid>
+		</Border>
+	</Grid>
+</Window>

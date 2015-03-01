@@ -3,9 +3,9 @@ class CreateTasksPeopleDocumentsUnreadsAndComments < ActiveRecord::Migration
     create_table :tasks do |t|
       t.string :name
       t.integer :task_status
-      t.string :task_type
+      t.integer :bug_type
       t.string :abstract
-      t.string :bug_type
+      t.boolean :is_bug
       t.string :internal_object_id
       t.boolean :approved
       t.text :description
@@ -17,12 +17,12 @@ class CreateTasksPeopleDocumentsUnreadsAndComments < ActiveRecord::Migration
       t.integer :documents_count
       t.date :open_date
       t.date :analysis_date
-      t.date :promotion_date
       t.date :review_date
       t.date :correction_date
+      t.date :promotion_date
       t.date :collection_date
       t.date :closed_date
-      t.date :modified_date
+      #t.date :modified_date
       t.date :target_date
       t.datetime :created_at
       t.datetime :updated_at

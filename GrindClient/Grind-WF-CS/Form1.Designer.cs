@@ -47,7 +47,7 @@
             this.GroupBox3 = new System.Windows.Forms.GroupBox();
             this.GroupBox8 = new System.Windows.Forms.GroupBox();
             this.Panel1 = new System.Windows.Forms.Panel();
-            this.conReviewer = new System.Windows.Forms.ComboBox();
+            this.cobReviewer = new System.Windows.Forms.ComboBox();
             this.cobExecutor = new System.Windows.Forms.ComboBox();
             this.GroupBox7 = new System.Windows.Forms.GroupBox();
             this.cbApproved = new System.Windows.Forms.CheckBox();
@@ -280,9 +280,9 @@
             // 
             // GroupBox6
             // 
-            this.GroupBox6.Location = new System.Drawing.Point(49, 401);
+            this.GroupBox6.Location = new System.Drawing.Point(109, 321);
             this.GroupBox6.Name = "GroupBox6";
-            this.GroupBox6.Size = new System.Drawing.Size(417, 100);
+            this.GroupBox6.Size = new System.Drawing.Size(420, 102);
             this.GroupBox6.TabIndex = 5;
             this.GroupBox6.TabStop = false;
             this.GroupBox6.Text = "GroupBox6";
@@ -314,7 +314,7 @@
             // Panel1
             // 
             this.Panel1.AutoScroll = true;
-            this.Panel1.Controls.Add(this.conReviewer);
+            this.Panel1.Controls.Add(this.cobReviewer);
             this.Panel1.Controls.Add(this.cobExecutor);
             this.Panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Panel1.Location = new System.Drawing.Point(3, 16);
@@ -322,17 +322,17 @@
             this.Panel1.Size = new System.Drawing.Size(405, 58);
             this.Panel1.TabIndex = 0;
             // 
-            // conReviewer
+            // cobReviewer
             // 
-            this.conReviewer.Dock = System.Windows.Forms.DockStyle.Left;
-            this.conReviewer.FormattingEnabled = true;
-            this.conReviewer.Items.AddRange(new object[] {
+            this.cobReviewer.Dock = System.Windows.Forms.DockStyle.Left;
+            this.cobReviewer.FormattingEnabled = true;
+            this.cobReviewer.Items.AddRange(new object[] {
             "Reviewer",
             "-------------------------"});
-            this.conReviewer.Location = new System.Drawing.Point(144, 0);
-            this.conReviewer.Name = "conReviewer";
-            this.conReviewer.Size = new System.Drawing.Size(144, 21);
-            this.conReviewer.TabIndex = 1;
+            this.cobReviewer.Location = new System.Drawing.Point(144, 0);
+            this.cobReviewer.Name = "cobReviewer";
+            this.cobReviewer.Size = new System.Drawing.Size(144, 21);
+            this.cobReviewer.TabIndex = 1;
             // 
             // cobExecutor
             // 
@@ -833,7 +833,7 @@
         internal System.Windows.Forms.GroupBox GroupBox3;
         internal System.Windows.Forms.GroupBox GroupBox8;
         internal System.Windows.Forms.Panel Panel1;
-        internal System.Windows.Forms.ComboBox conReviewer;
+        internal System.Windows.Forms.ComboBox cobReviewer;
         internal System.Windows.Forms.ComboBox cobExecutor;
         internal System.Windows.Forms.GroupBox GroupBox7;
         internal System.Windows.Forms.CheckBox cbApproved;
