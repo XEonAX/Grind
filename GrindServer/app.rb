@@ -77,7 +77,13 @@ class Task < ActiveRecord::Base
                               :unread_cause => 'Create')
       end
     end
+  public  
+    def task_params
+      params.require(:task).permit(:name, :task_status,:bug_type) 
+    end
 end
+
+
 
 class Document < ActiveRecord::Base
   belongs_to :task, counter_cache: true
@@ -115,12 +121,16 @@ end
 
 get '/task/:id' do
   #Task.where(["id = ?", params[:id]]).to_json
-  Task.where(["id = ?", params[:id]]).first.to_json
+  #Task.where(["id = ?", params[:id]]).first.to_json
+  Task.includes(:developer,:reviewer,:documents).where(["id = ?", params[:id]]).first.as_json(include: [:developer,:reviewer,:documents]).to_json
 end
 
 
 post "/newtask" do
-  @task = Task.new(params[:task])
+  #request.body.read
+  hash = JSON.parse(request.body.read)
+hash.delete("id")
+@task = Task.new(hash)
   if @task.save
     redirect "task/#{@task.id}"
   end

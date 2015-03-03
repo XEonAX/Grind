@@ -80,14 +80,14 @@ namespace Grind_WF_CS
         public DateTime TargetDate { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
-        public string DeveloperName
-        {
-            get { return this.Developer.Name; }
-        }
-        public string ReviewerName
-        {
-            get { return this.Reviewer.Name; }
-        }
+        //public string DeveloperName
+        //{
+        //    get { return this.Developer.Name; }
+        //}
+        //public string ReviewerName
+        //{
+        //    get { return this.Reviewer.Name; }
+        //}
 
         public Person Developer { get; set; }
         public Person Reviewer { get; set; }
