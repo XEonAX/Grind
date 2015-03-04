@@ -48,13 +48,13 @@ ActiveRecord::Schema.define(version: 20150131130010) do
     t.string   "name",               limit: 255
     t.integer  "task_status",        limit: 4
     t.integer  "bug_type",           limit: 4
-    t.string   "abstract",           limit: 255
+    t.string   "title",              limit: 255
     t.boolean  "is_bug",             limit: 1
     t.string   "internal_object_id", limit: 255
     t.boolean  "approved",           limit: 1
     t.text     "description",        limit: 65535
     t.text     "analysis",           limit: 65535
-    t.text     "investigation",      limit: 65535
+    t.text     "review",             limit: 65535
     t.integer  "developer_id",       limit: 4
     t.integer  "reviewer_id",        limit: 4
     t.integer  "comments_count",     limit: 4

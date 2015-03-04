@@ -52,8 +52,8 @@ namespace Grind_WF_CS
             rRestRequest.Method = Method.GET;
             rRestResponse = rRestClient.Execute(rRestRequest);
             People = JSONDeserilizer.Deserialize<List<Person>>(rRestResponse);
-            cobExecutor.Items.AddRange(People.Select(x => x.Name).ToArray());
-            cobReviewer.Items.AddRange(People.Select(x => x.Name).ToArray());
+            cobExecutor.Items.AddRange(People.Select(x => x.name).ToArray());
+            cobReviewer.Items.AddRange(People.Select(x => x.name).ToArray());
 
             dGridTasks.DataSource = TaskList;
 
@@ -74,7 +74,7 @@ namespace Grind_WF_CS
             rRestRequest = new RestRequest();
             rRestRequest.Resource = "task/{id}";
             rRestRequest.DateFormat = "yyyy-MM-ddTHH:mm:sssssZ";
-            rRestRequest.AddUrlSegment("id", TaskList[dGridTasks.CurrentRow.Index].Id.ToString());
+            rRestRequest.AddUrlSegment("id", TaskList[dGridTasks.CurrentRow.Index].id.ToString());
             rRestRequest.Method = Method.GET;
             rRestResponse = rRestClient.Execute(rRestRequest);
             RetrievedTask = JSONDeserilizer.Deserialize<Task>(rRestResponse);
@@ -84,8 +84,8 @@ namespace Grind_WF_CS
         private void FillTaskTrackingForm(Task _Task)
         {
             
-                txtTaskName.Text = _Task.Name;
-                txtAbstract.Text = _Task.Abstract;
+                txtTaskName.Text = _Task.name;
+                txtTitle.Text = _Task.title;
                 //foreach (Control ctl in tlpTaskStatus.Controls)
                 //{
                 //    ctl.Enabled = false;
@@ -97,18 +97,18 @@ namespace Grind_WF_CS
                 dtpPromotion.Enabled = false;
                 dtpCollection.Enabled = false;
                 dtpClosed.Enabled = false;
-                dtpOpen.Value = _Task.OpenDate;
-                dtpAnalysis.Value = _Task.AnalysisDate;
-                dtpReview.Value = _Task.ReviewDate;
-                dtpCorrection.Value = _Task.CorrectionDate;
-                dtpPromotion.Value = _Task.PromotionDate;
-                dtpCollection.Value = _Task.CollectionDate;
-                dtpClosed.Value = _Task.ClosedDate;
-                if (_Task.IsBug)
+                dtpOpen.Value = _Task.open_date;
+                dtpAnalysis.Value = _Task.analysis_date;
+                dtpReview.Value = _Task.review_date;
+                dtpCorrection.Value = _Task.correction_date;
+                dtpPromotion.Value = _Task.promotion_date;
+                dtpCollection.Value = _Task.collection_date;
+                dtpClosed.Value = _Task.closed_date;
+                if (_Task.is_bug)
                     rbBug.Checked = true;
                 else
                     rbHL.Checked = true;
-                switch (_Task.BugType)
+                switch (_Task.bug_type)
                 {
                     case eBugType.HMA:
                         rbHMA.Checked = true;
@@ -126,11 +126,13 @@ namespace Grind_WF_CS
                         break;
                 }
                 trbTaskStatus.Enabled = true;
-                trbTaskStatus.Value = (int)_Task.TaskStatus;
-                cobExecutor.Text = _Task.Developer.Name;//People.Find(x => x.Id==_Task.DeveloperId).Name;
-                cobReviewer.Text = _Task.Reviewer.Name;//People.Find(x => x.Id == _Task.ReviewerId).Name;
-            
-           
+                trbTaskStatus.Value = (int)_Task.task_status;
+                cobExecutor.Text = /*_Task.developer.name;*/People.Find(x => x.id==_Task.developer_id).name;
+                cobReviewer.Text = /*_Task.reviewer.name;*/People.Find(x => x.id == _Task.reviewer_id).name;
+                rtbDescription.Rtf = _Task.description;
+                rtbAnalysis.Rtf = _Task.analysis;
+                rtbReview.Rtf = _Task.review;
+                      
             //case "Open":
             //    rbOpen.Checked = true;
             //    break;
@@ -183,31 +185,36 @@ namespace Grind_WF_CS
         private void ToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             Task task=new Task();
-            task.Name = txtTaskName.Text;
-            task.Description = "Descriptiosnfds";
+            task.name = txtTaskName.Text;
+            task.description = "Descriptiosnfds";
             if (rbBug.Checked)
-                task.IsBug = true;
+                task.is_bug = true;
             else
-                task.IsBug = false;
+                task.is_bug = false;
             if (rbHMA.Checked)
-                task.BugType = eBugType.HMA;
+                task.bug_type = eBugType.HMA;
             else if (rbCRITSIT.Checked)
-                task.BugType = eBugType.CRITSIT;
+                task.bug_type = eBugType.CRITSIT;
             else if (rbBacklog.Checked)
-                task.BugType = eBugType.BackLog;
+                task.bug_type = eBugType.BackLog;
             else
-                task.BugType = eBugType.Others;
-            task.TaskStatus = (eTaskStatus)trbTaskStatus.Value;
-            task.Approved = cbApproved.Checked;
-            task.DeveloperId = People.Find(x => x.Name == cobExecutor.SelectedItem.ToString()).Id;
-            task.ReviewerId = People.Find(x => x.Name == cobReviewer.SelectedItem.ToString()).Id;
-            task.OpenDate = dtpOpen.Value;
-            task.AnalysisDate = dtpAnalysis.Value;
-            task.ReviewDate = dtpReview.Value;
-            task.CorrectionDate = dtpCorrection.Value;
-            task.PromotionDate = dtpPromotion.Value;
-            task.CollectionDate = dtpCollection.Value;
-            task.ClosedDate = dtpClosed.Value;
+                task.bug_type = eBugType.Others;
+            task.task_status = (eTaskStatus)trbTaskStatus.Value;
+            task.approved = cbApproved.Checked;
+            task.developer_id = People.Find(x => x.name == cobExecutor.SelectedItem.ToString()).id;
+            task.reviewer_id = People.Find(x => x.name == cobReviewer.SelectedItem.ToString()).id;
+            task.open_date = dtpOpen.Value;
+            task.analysis_date = dtpAnalysis.Value;
+            task.review_date = dtpReview.Value;
+            task.correction_date = dtpCorrection.Value;
+            task.promotion_date = dtpPromotion.Value;
+            task.collection_date = dtpCollection.Value;
+            task.closed_date = dtpClosed.Value;
+            task.description = rtbDescription.Rtf;
+            task.analysis = rtbAnalysis.Rtf;
+            task.review = rtbReview.Rtf;
+            if (task.documents==null)
+                task.documents=new List<Document>();
             rRestRequest = new RestRequest();
             rRestRequest.Resource = "newtask";
             rRestRequest.DateFormat = "yyyy-MM-ddTHH:mm:sssssZ";

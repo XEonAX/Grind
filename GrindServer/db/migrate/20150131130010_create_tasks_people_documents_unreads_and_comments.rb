@@ -4,13 +4,13 @@ class CreateTasksPeopleDocumentsUnreadsAndComments < ActiveRecord::Migration
       t.string :name
       t.integer :task_status
       t.integer :bug_type
-      t.string :abstract
+      t.string :title
       t.boolean :is_bug
       t.string :internal_object_id
       t.boolean :approved
       t.text :description
       t.text :analysis
-      t.text :investigation
+      t.text :review
       t.integer :developer_id
       t.integer :reviewer_id
       t.integer :comments_count

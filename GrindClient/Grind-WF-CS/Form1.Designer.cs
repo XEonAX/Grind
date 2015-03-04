@@ -77,14 +77,19 @@
             this.dtpClosed = new System.Windows.Forms.DateTimePicker();
             this.trbTaskStatus = new System.Windows.Forms.TrackBar();
             this.GroupBox1 = new System.Windows.Forms.GroupBox();
+            this.txtTitle = new System.Windows.Forms.TextBox();
+            this.label8 = new System.Windows.Forms.Label();
             this.txtTaskName = new System.Windows.Forms.TextBox();
             this.TextBox1 = new System.Windows.Forms.TextBox();
             this.MenuStrip1 = new System.Windows.Forms.MenuStrip();
             this.ToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.RefreshToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tpFiles = new System.Windows.Forms.TabPage();
-            this.label8 = new System.Windows.Forms.Label();
-            this.txtAbstract = new System.Windows.Forms.TextBox();
+            this.rtbDescription = new System.Windows.Forms.RichTextBox();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.rtbAnalysis = new System.Windows.Forms.RichTextBox();
+            this.groupBox9 = new System.Windows.Forms.GroupBox();
+            this.rtbReview = new System.Windows.Forms.RichTextBox();
             this.TabControl1.SuspendLayout();
             this.tpTask.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.scTasksMain)).BeginInit();
@@ -95,6 +100,7 @@
             this.spTaskListAndForm.Panel2.SuspendLayout();
             this.spTaskListAndForm.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dGridTasks)).BeginInit();
+            this.GroupBox6.SuspendLayout();
             this.GroupBox3.SuspendLayout();
             this.GroupBox8.SuspendLayout();
             this.Panel1.SuspendLayout();
@@ -106,6 +112,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.trbTaskStatus)).BeginInit();
             this.GroupBox1.SuspendLayout();
             this.MenuStrip1.SuspendLayout();
+            this.groupBox2.SuspendLayout();
+            this.groupBox9.SuspendLayout();
             this.SuspendLayout();
             // 
             // TabControl1
@@ -160,6 +168,8 @@
             // spTaskListAndForm.Panel2
             // 
             this.spTaskListAndForm.Panel2.AutoScroll = true;
+            this.spTaskListAndForm.Panel2.Controls.Add(this.groupBox9);
+            this.spTaskListAndForm.Panel2.Controls.Add(this.groupBox2);
             this.spTaskListAndForm.Panel2.Controls.Add(this.GroupBox6);
             this.spTaskListAndForm.Panel2.Controls.Add(this.GroupBox3);
             this.spTaskListAndForm.Panel2.Controls.Add(this.gbTaskStatus);
@@ -282,12 +292,14 @@
             // 
             // GroupBox6
             // 
-            this.GroupBox6.Location = new System.Drawing.Point(109, 321);
+            this.GroupBox6.Controls.Add(this.rtbDescription);
+            this.GroupBox6.Dock = System.Windows.Forms.DockStyle.Top;
+            this.GroupBox6.Location = new System.Drawing.Point(0, 282);
             this.GroupBox6.Name = "GroupBox6";
-            this.GroupBox6.Size = new System.Drawing.Size(420, 102);
+            this.GroupBox6.Size = new System.Drawing.Size(858, 197);
             this.GroupBox6.TabIndex = 5;
             this.GroupBox6.TabStop = false;
-            this.GroupBox6.Text = "GroupBox6";
+            this.GroupBox6.Text = "Description";
             // 
             // GroupBox3
             // 
@@ -703,7 +715,7 @@
             // 
             // GroupBox1
             // 
-            this.GroupBox1.Controls.Add(this.txtAbstract);
+            this.GroupBox1.Controls.Add(this.txtTitle);
             this.GroupBox1.Controls.Add(this.label8);
             this.GroupBox1.Controls.Add(this.txtTaskName);
             this.GroupBox1.Dock = System.Windows.Forms.DockStyle.Top;
@@ -713,6 +725,28 @@
             this.GroupBox1.TabIndex = 2;
             this.GroupBox1.TabStop = false;
             this.GroupBox1.Text = "Name";
+            // 
+            // txtTitle
+            // 
+            this.txtTitle.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtTitle.Location = new System.Drawing.Point(233, 16);
+            this.txtTitle.Name = "txtTitle";
+            this.txtTitle.Size = new System.Drawing.Size(622, 20);
+            this.txtTitle.TabIndex = 3;
+            this.txtTitle.Tag = "TaskName";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Dock = System.Windows.Forms.DockStyle.Left;
+            this.label8.Location = new System.Drawing.Point(184, 16);
+            this.label8.Margin = new System.Windows.Forms.Padding(6, 0, 3, 0);
+            this.label8.Name = "label8";
+            this.label8.Padding = new System.Windows.Forms.Padding(0, 4, 0, 0);
+            this.label8.Size = new System.Drawing.Size(49, 17);
+            this.label8.TabIndex = 2;
+            this.label8.Text = "Abstract:";
+            this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // txtTaskName
             // 
@@ -774,27 +808,53 @@
             this.tpFiles.Text = "Files";
             this.tpFiles.UseVisualStyleBackColor = true;
             // 
-            // label8
+            // rtbDescription
             // 
-            this.label8.AutoSize = true;
-            this.label8.Dock = System.Windows.Forms.DockStyle.Left;
-            this.label8.Location = new System.Drawing.Point(184, 16);
-            this.label8.Margin = new System.Windows.Forms.Padding(6, 0, 3, 0);
-            this.label8.Name = "label8";
-            this.label8.Padding = new System.Windows.Forms.Padding(0, 4, 0, 0);
-            this.label8.Size = new System.Drawing.Size(49, 17);
-            this.label8.TabIndex = 2;
-            this.label8.Text = "Abstract:";
-            this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.rtbDescription.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rtbDescription.Location = new System.Drawing.Point(3, 16);
+            this.rtbDescription.Name = "rtbDescription";
+            this.rtbDescription.Size = new System.Drawing.Size(852, 178);
+            this.rtbDescription.TabIndex = 0;
+            this.rtbDescription.Text = "";
             // 
-            // txtAbstract
+            // groupBox2
             // 
-            this.txtAbstract.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtAbstract.Location = new System.Drawing.Point(233, 16);
-            this.txtAbstract.Name = "txtAbstract";
-            this.txtAbstract.Size = new System.Drawing.Size(622, 20);
-            this.txtAbstract.TabIndex = 3;
-            this.txtAbstract.Tag = "TaskName";
+            this.groupBox2.Controls.Add(this.rtbAnalysis);
+            this.groupBox2.Dock = System.Windows.Forms.DockStyle.Top;
+            this.groupBox2.Location = new System.Drawing.Point(0, 479);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(858, 197);
+            this.groupBox2.TabIndex = 6;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Analysis";
+            // 
+            // rtbAnalysis
+            // 
+            this.rtbAnalysis.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rtbAnalysis.Location = new System.Drawing.Point(3, 16);
+            this.rtbAnalysis.Name = "rtbAnalysis";
+            this.rtbAnalysis.Size = new System.Drawing.Size(852, 178);
+            this.rtbAnalysis.TabIndex = 0;
+            this.rtbAnalysis.Text = "";
+            // 
+            // groupBox9
+            // 
+            this.groupBox9.Controls.Add(this.rtbReview);
+            this.groupBox9.Location = new System.Drawing.Point(144, 695);
+            this.groupBox9.Name = "groupBox9";
+            this.groupBox9.Size = new System.Drawing.Size(420, 197);
+            this.groupBox9.TabIndex = 7;
+            this.groupBox9.TabStop = false;
+            this.groupBox9.Text = "Description";
+            // 
+            // rtbReview
+            // 
+            this.rtbReview.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rtbReview.Location = new System.Drawing.Point(3, 16);
+            this.rtbReview.Name = "rtbReview";
+            this.rtbReview.Size = new System.Drawing.Size(414, 178);
+            this.rtbReview.TabIndex = 0;
+            this.rtbReview.Text = "";
             // 
             // Form1
             // 
@@ -817,6 +877,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.spTaskListAndForm)).EndInit();
             this.spTaskListAndForm.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dGridTasks)).EndInit();
+            this.GroupBox6.ResumeLayout(false);
             this.GroupBox3.ResumeLayout(false);
             this.GroupBox3.PerformLayout();
             this.GroupBox8.ResumeLayout(false);
@@ -835,6 +896,8 @@
             this.GroupBox1.PerformLayout();
             this.MenuStrip1.ResumeLayout(false);
             this.MenuStrip1.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox9.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -896,8 +959,13 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label7;
-        internal System.Windows.Forms.TextBox txtAbstract;
+        internal System.Windows.Forms.TextBox txtTitle;
         private System.Windows.Forms.Label label8;
+        internal System.Windows.Forms.GroupBox groupBox9;
+        private System.Windows.Forms.RichTextBox rtbReview;
+        internal System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.RichTextBox rtbAnalysis;
+        private System.Windows.Forms.RichTextBox rtbDescription;
     }
 }
 

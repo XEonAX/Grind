@@ -175,7 +175,7 @@ get '/make' do
                          )
   task1 = Task.create(  
                       :name => "IR-000001V0R2000",
-                      :abstract => "The Very First Incident Report",
+                      :title => "The Very First Incident Report",
                       :task_status => 0,
                       :is_bug => true,
                       :developer_id => person2.id,
@@ -195,7 +195,7 @@ get '/make' do
                      )
   task2 = Task.create(
                       :name => "IR-000002V0R2000",
-                      :abstract => "Second Incident Report",
+                      :title => "Second Incident Report",
                       :task_status => 1,
                       :is_bug => true,
                       :developer_id => person2.id,
@@ -215,7 +215,7 @@ get '/make' do
                      )
   task3 = Task.create(
                       :name => "IR-000003V0R2000",
-                      :abstract => "Another Incident Report",
+                      :title => "Another Incident Report",
                       :task_status => 2,
                       :is_bug => true,
                       :developer_id => person3.id,
