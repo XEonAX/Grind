@@ -8,9 +8,9 @@ class CreateTasksPeopleDocumentsUnreadsAndComments < ActiveRecord::Migration
       t.boolean :is_bug
       t.string :internal_object_id
       t.boolean :approved
-      t.text :description
-      t.text :analysis
-      t.text :review
+      t.binary :description, :data, :binary, :limit => 10.megabyte
+      t.binary :analysis, :data, :binary, :limit => 10.megabyte
+      t.binary :review, :data, :binary, :limit => 10.megabyte
       t.integer :developer_id
       t.integer :reviewer_id
       t.integer :comments_count
@@ -30,8 +30,8 @@ class CreateTasksPeopleDocumentsUnreadsAndComments < ActiveRecord::Migration
     create_table :people do |t|
       t.string :name
       t.string :trigram
-      t.string :state
-      t.string :level
+      t.boolean :active
+      t.integer :level
       t.string :internal_object_id
       t.integer :unread_objects_count
       t.integer :documents_count

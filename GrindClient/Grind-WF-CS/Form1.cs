@@ -36,22 +36,24 @@ namespace Grind_WF_CS
         RestClient rRestClient = new RestClient();
         IRestResponse rRestResponse;
         RestRequest rRestRequest = new RestRequest();
-        public SortableBindingList<Task> TaskList;
+        public SortableBindingList<ClientTask> TaskList;
         JsonDeserializer JSONDeserilizer = new JsonDeserializer();
         JsonSerializer JSONSerilizer = new JsonSerializer();
         Task RetrievedTask;
-        List<Person> People;
+        bool UserChange = false;
+        public static List<Person> People;
+        //string OldDescriptionRtf, OldAnalysisRtf, OldReviewRtf;
         private void RefreshToolStripMenuItem_Click(System.Object sender, System.EventArgs e)
         {
             //Uri.TryCreate("http://localhost:4567/", UriKind.Absolute, out rRestClient.BaseUrl);
-            rRestRequest.Resource = "taskslist";
-            rRestRequest.Method = Method.GET;
-            rRestResponse = rRestClient.Execute(rRestRequest);
-            TaskList = JSONDeserilizer.Deserialize<SortableBindingList<Task>>(rRestResponse);
             rRestRequest.Resource = "people";
             rRestRequest.Method = Method.GET;
             rRestResponse = rRestClient.Execute(rRestRequest);
             People = JSONDeserilizer.Deserialize<List<Person>>(rRestResponse);
+            rRestRequest.Resource = "tasks";
+            rRestRequest.Method = Method.GET;
+            rRestResponse = rRestClient.Execute(rRestRequest);
+            TaskList = JSONDeserilizer.Deserialize<SortableBindingList<ClientTask>>(rRestResponse);
             cobExecutor.Items.AddRange(People.Select(x => x.name).ToArray());
             cobReviewer.Items.AddRange(People.Select(x => x.name).ToArray());
 
@@ -70,7 +72,7 @@ namespace Grind_WF_CS
 
         private void dGridTasks_SelectionChanged(System.Object sender, System.EventArgs e)
         {
-
+            
             rRestRequest = new RestRequest();
             rRestRequest.Resource = "task/{id}";
             rRestRequest.DateFormat = "yyyy-MM-ddTHH:mm:sssssZ";
@@ -79,12 +81,14 @@ namespace Grind_WF_CS
             rRestResponse = rRestClient.Execute(rRestRequest);
             RetrievedTask = JSONDeserilizer.Deserialize<Task>(rRestResponse);
             FillTaskTrackingForm(RetrievedTask);
+            
         }
 
         private void FillTaskTrackingForm(Task _Task)
         {
-            
-                txtTaskName.Text = _Task.name;
+
+                UserChange = false;
+                txtName.Text = _Task.name;
                 txtTitle.Text = _Task.title;
                 //foreach (Control ctl in tlpTaskStatus.Controls)
                 //{
@@ -132,7 +136,8 @@ namespace Grind_WF_CS
                 rtbDescription.Rtf = _Task.description;
                 rtbAnalysis.Rtf = _Task.analysis;
                 rtbReview.Rtf = _Task.review;
-                      
+
+                UserChange = true;
             //case "Open":
             //    rbOpen.Checked = true;
             //    break;
@@ -184,46 +189,70 @@ namespace Grind_WF_CS
 
         private void ToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            Task task=new Task();
-            task.name = txtTaskName.Text;
-            task.description = "Descriptiosnfds";
+            RootObject postObject = new RootObject();
+            postObject.task = new Task();
+            postObject.task.name = txtName.Text;
+            postObject.task.title = txtTitle.Text;
+
             if (rbBug.Checked)
-                task.is_bug = true;
+                postObject.task.is_bug = true;
             else
-                task.is_bug = false;
+                postObject.task.is_bug = false;
+
             if (rbHMA.Checked)
-                task.bug_type = eBugType.HMA;
+                postObject.task.bug_type = eBugType.HMA;
             else if (rbCRITSIT.Checked)
-                task.bug_type = eBugType.CRITSIT;
+                postObject.task.bug_type = eBugType.CRITSIT;
             else if (rbBacklog.Checked)
-                task.bug_type = eBugType.BackLog;
+                postObject.task.bug_type = eBugType.BackLog;
             else
-                task.bug_type = eBugType.Others;
-            task.task_status = (eTaskStatus)trbTaskStatus.Value;
-            task.approved = cbApproved.Checked;
-            task.developer_id = People.Find(x => x.name == cobExecutor.SelectedItem.ToString()).id;
-            task.reviewer_id = People.Find(x => x.name == cobReviewer.SelectedItem.ToString()).id;
-            task.open_date = dtpOpen.Value;
-            task.analysis_date = dtpAnalysis.Value;
-            task.review_date = dtpReview.Value;
-            task.correction_date = dtpCorrection.Value;
-            task.promotion_date = dtpPromotion.Value;
-            task.collection_date = dtpCollection.Value;
-            task.closed_date = dtpClosed.Value;
-            task.description = rtbDescription.Rtf;
-            task.analysis = rtbAnalysis.Rtf;
-            task.review = rtbReview.Rtf;
-            if (task.documents==null)
-                task.documents=new List<Document>();
+                postObject.task.bug_type = eBugType.Others;
+            postObject.task.task_status = (eTaskStatus)trbTaskStatus.Value;
+            postObject.task.approved = cbApproved.Checked;
+            postObject.task.developer_id = People.Find(x => x.name == cobExecutor.SelectedItem.ToString()).id;
+            postObject.task.reviewer_id = People.Find(x => x.name == cobReviewer.SelectedItem.ToString()).id;
+            postObject.task.open_date = dtpOpen.Value;
+            postObject.task.analysis_date = dtpAnalysis.Value;
+            postObject.task.review_date = dtpReview.Value;
+            postObject.task.correction_date = dtpCorrection.Value;
+            postObject.task.promotion_date = dtpPromotion.Value;
+            postObject.task.collection_date = dtpCollection.Value;
+            postObject.task.closed_date = dtpClosed.Value;
+            postObject.task.description = rtbDescription.Rtf;
+            postObject.task.analysis = rtbAnalysis.Rtf;
+            postObject.task.review = rtbReview.Rtf;
+            //if (RT.task.documents==null)
+            //    RT.task.documents=new List<Document>();
             rRestRequest = new RestRequest();
-            rRestRequest.Resource = "newtask";
+            rRestRequest.Resource = "task";
             rRestRequest.DateFormat = "yyyy-MM-ddTHH:mm:sssssZ";
             rRestRequest.Method = Method.POST;
             rRestRequest.RequestFormat = DataFormat.Json;      
-            rRestRequest.AddBody(task);
+            rRestRequest.AddBody(postObject);
             rRestResponse = rRestClient.Execute(rRestRequest);
             RetrievedTask = JSONDeserilizer.Deserialize<Task>(rRestResponse);
             FillTaskTrackingForm(RetrievedTask);
+        }
+
+        private void rtbDescription_Leave(object sender, EventArgs e)
+        {
+
+        }
+
+        private void rtb_TextChanged(object sender, EventArgs e)
+        {
+            if (sender is RichTextBox)
+            {
+                if (!UserChange && ((RichTextBox)sender).Rtf.Length > Math.Pow(2, 20))
+            {
+                ((RichTextBox)sender).BackColor = Color.Red;
+            }
+            else
+            {
+                ((RichTextBox)sender).BackColor = Color.White;
+            }
+            }
+            
         }
 
     }

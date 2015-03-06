@@ -5,17 +5,40 @@ using System.Text;
 
 namespace Grind_WF_CS
 {
+    public class RootObject
+    {
+        public Person person { get; set; }
+        public Task task { get; set; }
+        public Document document { get; set; }
+    }
+
+
+    public class RootPerson 
+	{
+        public Person person { get; set; }
+   	}
+
+    public class RootTask
+    {
+        public Task task { get; set; }
+    }
+
+    public class RootDocument
+    {
+        public Document document { get; set; }
+    }
+
     public class Person
     {
         public int id { get; set; }
         public string name { get; set; }
         public string trigram { get; set; }
-        public string state { get; set; }
-        public string level { get; set; }
-        public object internal_object_id { get; set; }
+        public bool active { get; set; }
+        public eLevel level { get; set; }
+        public string internal_object_id { get; set; }
         public int unread_objects_count { get; set; }
         public int documents_count { get; set; }
-        public object tasks_count { get; set; }
+        public int tasks_count { get; set; }
         //public int Id { get; set; }
         //public string Name { get; set; }
         //public string Trigram { get; set; }
@@ -35,7 +58,7 @@ namespace Grind_WF_CS
         public string data { get; set; }
         public string path { get; set; }
         public int developer_id { get; set; }
-        public object internal_object_id { get; set; }
+        public string internal_object_id { get; set; }
         public string created_at { get; set; }
         public string updated_at { get; set; }
         //public int TaskId { get; set; }
@@ -55,6 +78,10 @@ namespace Grind_WF_CS
         public int developer_id { get; set; }
         public int reviewer_id { get; set; }
         public string name { get; set; }
+        //public string taskName
+        //{
+        //    get { return this.name + " - " + this.title; }
+        //}
         public eTaskStatus task_status { get; set; }
         public eBugType bug_type { get; set; }
         public string title { get; set; }
@@ -79,6 +106,15 @@ namespace Grind_WF_CS
         //public Person developer { get; set; }
         //public Person reviewer { get; set; }
         public List<Document> documents { get; set; }
+        //public string DeveloperName
+        //{
+        //    get { return Form1.People.Find(x => x.id == this.developer_id).name; }
+        //}
+        //public string ReviewerName
+        //{
+        //    get { return Form1.People.Find(x => x.id == this.reviewer_id).name; }
+        //}
+
 
         //public int Id { get; set; }
         //public int DeveloperId { get; set; }
@@ -140,6 +176,23 @@ namespace Grind_WF_CS
         //public Person Reviewer { get; set; }
         //public List<Document> Documents { get; set; }
     }
+
+    public class ClientTask : Task
+    {
+        public string taskName
+        {
+            get { return this.name + " - " + this.title; }
+        }
+        public string DeveloperName
+        {
+            get { return Form1.People.Find(x => x.id == this.developer_id).name; }
+        }
+        public string ReviewerName
+        {
+            get { return Form1.People.Find(x => x.id == this.reviewer_id).name; }
+        }
+
+    }
     public enum eTaskStatus
     {
         Open = 0,
@@ -156,5 +209,12 @@ namespace Grind_WF_CS
         BackLog,
         CRITSIT,
         Others
+    }
+    public enum eLevel
+    {
+        Master = 0,
+        Admin,
+        User,
+        Viewer
     }
 }

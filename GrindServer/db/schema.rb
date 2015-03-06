@@ -36,8 +36,8 @@ ActiveRecord::Schema.define(version: 20150131130010) do
   create_table "people", force: :cascade do |t|
     t.string  "name",                 limit: 255
     t.string  "trigram",              limit: 255
-    t.string  "state",                limit: 255
-    t.string  "level",                limit: 255
+    t.boolean "active",               limit: 1
+    t.integer "level",                limit: 4
     t.string  "internal_object_id",   limit: 255
     t.integer "unread_objects_count", limit: 4
     t.integer "documents_count",      limit: 4
@@ -52,9 +52,11 @@ ActiveRecord::Schema.define(version: 20150131130010) do
     t.boolean  "is_bug",             limit: 1
     t.string   "internal_object_id", limit: 255
     t.boolean  "approved",           limit: 1
-    t.text     "description",        limit: 65535
-    t.text     "analysis",           limit: 65535
-    t.text     "review",             limit: 65535
+    t.binary   "description",        limit: 16777215
+    t.binary   "data",               limit: 16777215
+    t.binary   "binary",             limit: 16777215
+    t.binary   "analysis",           limit: 16777215
+    t.binary   "review",             limit: 16777215
     t.integer  "developer_id",       limit: 4
     t.integer  "reviewer_id",        limit: 4
     t.integer  "comments_count",     limit: 4
