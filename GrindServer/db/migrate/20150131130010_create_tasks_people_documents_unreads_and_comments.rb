@@ -8,9 +8,9 @@ class CreateTasksPeopleDocumentsUnreadsAndComments < ActiveRecord::Migration
       t.boolean :is_bug
       t.string :internal_object_id
       t.boolean :approved
-      t.binary :description, :data, :binary, :limit => 10.megabyte
-      t.binary :analysis, :data, :binary, :limit => 10.megabyte
-      t.binary :review, :data, :binary, :limit => 10.megabyte
+      t.binary :description, :limit => 10.megabyte
+      t.binary :analysis, :limit => 10.megabyte
+      t.binary :review, :limit => 10.megabyte
       t.integer :developer_id
       t.integer :reviewer_id
       t.integer :comments_count
