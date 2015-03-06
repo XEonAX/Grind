@@ -53,8 +53,6 @@ ActiveRecord::Schema.define(version: 20150131130010) do
     t.string   "internal_object_id", limit: 255
     t.boolean  "approved",           limit: 1
     t.binary   "description",        limit: 16777215
-    t.binary   "data",               limit: 16777215
-    t.binary   "binary",             limit: 16777215
     t.binary   "analysis",           limit: 16777215
     t.binary   "review",             limit: 16777215
     t.integer  "developer_id",       limit: 4
