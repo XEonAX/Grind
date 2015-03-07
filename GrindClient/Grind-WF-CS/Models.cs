@@ -75,6 +75,18 @@ namespace Grind_WF_CS
 
     public class Task 
     {
+        public Task()
+        {
+            open_date = DateTime.Now.AddDays(0*7);
+            analysis_date = DateTime.Now.AddDays(1*7);
+            review_date = DateTime.Now.AddDays(1*7);
+            correction_date = DateTime.Now.AddDays(1*7);
+            promotion_date = DateTime.Now.AddDays(1*7);
+            collection_date = DateTime.Now.AddDays(2*7);
+            closed_date = DateTime.Now.AddDays(3*7);
+            developer_id = Globals.People.First().id;
+            reviewer_id = Globals.People.First().id;
+        }
         public int id { get; set; }
         public int developer_id { get; set; }
         public int reviewer_id { get; set; }

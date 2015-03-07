@@ -1,51 +1,40 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using RestSharp;
-using RestSharp.Deserializers;
-using RestSharp.Serializers;
-using System.Reflection;
-
 
 namespace Grind_WF_CS
 {
-    public partial class Form1 : Form
+    public partial class TaskTrackingForm : UserControl
     {
-        public Form1()
+        public TaskTrackingForm()
         {
             InitializeComponent();
         }
 
-
-        public SortableBindingList<ClientTask> TaskList;
-        Task RetrievedTask;
-        bool UserChange = false;
-
-        private void Form1_Load(object sender, System.EventArgs e)
+        private void TaskTrackingForm_Load(object sender, EventArgs e)
         {
-            dGridTasks.AutoGenerateColumns = false;
-            dGridTasks.DataSource = TaskList;
-            new Controllers("http://localhost:4567/");
-            new Globals();
+
+        }
+        private void FillPeopleDropDown()
+        {
+            cobExecutor.Items.Clear();
+            cobExecutor.Items.Add("Executor");
+            cobExecutor.Items.Add("-------------------------");
+            cobExecutor.Items.AddRange(Globals.People.Select(x => x.name).ToArray());
+            
+            cobReviewer.Items.Clear();
+            cobReviewer.Items.Add("Reviewer");
+            cobReviewer.Items.Add("-------------------------");
+            cobReviewer.Items.AddRange(Globals.People.Select(x => x.name).ToArray());
         }
 
-
-
-        private void dGridTasks_SelectionChanged(System.Object sender, System.EventArgs e)
+        public void FillFormfromTask(Task task)
         {
-            Controllers.ReadTask(TaskList[dGridTasks.CurrentRow.Index].id,ref RetrievedTask);
-            FillTaskTrackingForm(RetrievedTask);
-        }
-
-        private void FillTaskTrackingForm(Task task)
-        {
-
-            UserChange = false;
             txtName.Text = task.name;
             txtTitle.Text = task.title;
             dtpOpen.Enabled = true;
@@ -90,14 +79,10 @@ namespace Grind_WF_CS
             rtbDescription.Rtf = task.description;
             rtbAnalysis.Rtf = task.analysis;
             rtbReview.Rtf = task.review;
-
-            UserChange = true;
-
         }
 
-        private void BuildTaskFromForm(ref Task task)
+        public void BuildTaskfromTaskFilledForm(ref Task task)
         {
-
             task.name = txtName.Text;
             task.title = txtTitle.Text;
 
@@ -128,8 +113,7 @@ namespace Grind_WF_CS
             task.description = rtbDescription.Rtf;
             task.analysis = rtbAnalysis.Rtf;
             task.review = rtbReview.Rtf;
-        
-        }
+         }
 
         private void trbTaskStatus_ValueChanged(object sender, EventArgs e)
         {
@@ -149,106 +133,7 @@ namespace Grind_WF_CS
                         enableddtpCount--;
                     }
                 }
-
             }
-        }
-
-        private void tsmiNew_Click(object sender, EventArgs e)
-        {
-            if (tsmiNew.Text == "New")
-            {
-                //New Task mode
-                tsmiNew.Text = "Save";
-                tsmiUpdate.Text = "Cancel";
-                dGridTasks.Enabled = false;
-                FillTaskTrackingForm(new Task());
-
-            }
-            else if (tsmiNew.Text == "Save")
-            {
-                //New Task Save
-                Task task = new Task();
-                BuildTaskFromForm(ref task);
-                Controllers.CreateTask(ref task);
-                Controllers.ReadTasks(ref TaskList);
-
-                tsmiNew.Text = "New";
-                tsmiUpdate.Text = "Update";
-                dGridTasks.Enabled = true;
-
-                FillTaskTrackingForm(task);
-            }
-            else if (tsmiNew.Text == "Cancel" && tsmiUpdate.Text == "Update")
-            { 
-                //Update Mode Cancel
-                Controllers.ReadTasks(ref TaskList);
-                tsmiNew.Text = "New";
-                tsmiUpdate.Text = "Update";
-                dGridTasks.Enabled = true;
-                           
-            }
-            
-        }
-        
-        private void tsmiRefresh_Click(System.Object sender, System.EventArgs e)
-        {
-            Controllers.ReadPeople(ref Globals.People);
-            Controllers.ReadTasks(ref TaskList);
-            cobExecutor.Items.AddRange(Globals.People.Select(x => x.name).ToArray());
-            cobReviewer.Items.AddRange(Globals.People.Select(x => x.name).ToArray());
-
-            dGridTasks.DataSource = TaskList;
-        }
-
-        private void rtb_TextChanged(object sender, EventArgs e)
-        {
-            if (sender is RichTextBox)
-            {
-                if (!UserChange && ((RichTextBox)sender).Rtf.Length > Math.Pow(2, 20))
-                {
-                    ((RichTextBox)sender).BackColor = Color.Red;
-                }
-                else
-                {
-                    ((RichTextBox)sender).BackColor = Color.White;
-                }
-            }
-        }
-
-        private void dGridTasks_RowCountChanged(object sender, DataGridViewRowsAddedEventArgs e)
-        {
-            RowCountChanged(sender, e);
-        }
-
-        private void dGridTasks_RowCountChanged(object sender, DataGridViewRowsRemovedEventArgs e)
-        {
-            RowCountChanged(sender, e);
-        }
-
-        private void RowCountChanged(object sender, EventArgs e)
-        {
-            if (sender is DataGridView)
-                if (((DataGridView)sender).RowCount == 0)
-                    tsmiUpdate.Enabled = false;
-                else
-                    tsmiUpdate.Enabled = true;
-
-
         }
     }
-
-
-
 }
-
-
-
-
-
-
-
-
-
-
-
-

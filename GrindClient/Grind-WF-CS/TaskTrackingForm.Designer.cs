@@ -1,13 +1,13 @@
 ﻿namespace Grind_WF_CS
 {
-    partial class Form1
+    partial class TaskTrackingForm
     {
-        /// <summary>
+        /// <summary> 
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary>
+        /// <summary> 
         /// Clean up any resources being used.
         /// </summary>
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
@@ -20,29 +20,14 @@
             base.Dispose(disposing);
         }
 
-        #region Windows Form Designer generated code
+        #region Component Designer generated code
 
-        /// <summary>
-        /// Required method for Designer support - do not modify
+        /// <summary> 
+        /// Required method for Designer support - do not modify 
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
         {
-            this.TabControl1 = new System.Windows.Forms.TabControl();
-            this.tpTask = new System.Windows.Forms.TabPage();
-            this.scTasksMain = new System.Windows.Forms.SplitContainer();
-            this.spTaskListAndForm = new System.Windows.Forms.SplitContainer();
-            this.dGridTasks = new System.Windows.Forms.DataGridView();
-            this.colTaskName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colTaskStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colTaskType = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.colBugType = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colTargetDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colExecutor = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colReviewer = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colApproved = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.colModified = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colCreated = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupBox9 = new System.Windows.Forms.GroupBox();
             this.rtbReview = new System.Windows.Forms.RichTextBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
@@ -86,23 +71,6 @@
             this.label8 = new System.Windows.Forms.Label();
             this.txtName = new System.Windows.Forms.TextBox();
             this.TextBox1 = new System.Windows.Forms.TextBox();
-            this.MenuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.tsmiNew = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiRefresh = new System.Windows.Forms.ToolStripMenuItem();
-            this.tpFiles = new System.Windows.Forms.TabPage();
-            this.tpUsers = new System.Windows.Forms.TabPage();
-            this.tsmiUpdate = new System.Windows.Forms.ToolStripMenuItem();
-            this.grindUserMaintenence1 = new Grind_WF_CS.GrindUserMaintenence();
-            this.TabControl1.SuspendLayout();
-            this.tpTask.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.scTasksMain)).BeginInit();
-            this.scTasksMain.Panel1.SuspendLayout();
-            this.scTasksMain.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.spTaskListAndForm)).BeginInit();
-            this.spTaskListAndForm.Panel1.SuspendLayout();
-            this.spTaskListAndForm.Panel2.SuspendLayout();
-            this.spTaskListAndForm.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dGridTasks)).BeginInit();
             this.groupBox9.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.GroupBox6.SuspendLayout();
@@ -116,199 +84,15 @@
             this.tlpTaskStatus.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trbTaskStatus)).BeginInit();
             this.GroupBox1.SuspendLayout();
-            this.MenuStrip1.SuspendLayout();
-            this.tpUsers.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // TabControl1
-            // 
-            this.TabControl1.Controls.Add(this.tpTask);
-            this.TabControl1.Controls.Add(this.tpFiles);
-            this.TabControl1.Controls.Add(this.tpUsers);
-            this.TabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.TabControl1.HotTrack = true;
-            this.TabControl1.Location = new System.Drawing.Point(0, 0);
-            this.TabControl1.Name = "TabControl1";
-            this.TabControl1.SelectedIndex = 0;
-            this.TabControl1.Size = new System.Drawing.Size(978, 750);
-            this.TabControl1.TabIndex = 1;
-            // 
-            // tpTask
-            // 
-            this.tpTask.Controls.Add(this.scTasksMain);
-            this.tpTask.Location = new System.Drawing.Point(4, 22);
-            this.tpTask.Name = "tpTask";
-            this.tpTask.Padding = new System.Windows.Forms.Padding(3);
-            this.tpTask.Size = new System.Drawing.Size(970, 724);
-            this.tpTask.TabIndex = 1;
-            this.tpTask.Text = "Tasks";
-            this.tpTask.UseVisualStyleBackColor = true;
-            // 
-            // scTasksMain
-            // 
-            this.scTasksMain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.scTasksMain.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
-            this.scTasksMain.IsSplitterFixed = true;
-            this.scTasksMain.Location = new System.Drawing.Point(3, 3);
-            this.scTasksMain.Name = "scTasksMain";
-            // 
-            // scTasksMain.Panel1
-            // 
-            this.scTasksMain.Panel1.Controls.Add(this.spTaskListAndForm);
-            this.scTasksMain.Panel1.Controls.Add(this.MenuStrip1);
-            this.scTasksMain.Panel2MinSize = 80;
-            this.scTasksMain.Size = new System.Drawing.Size(964, 718);
-            this.scTasksMain.SplitterDistance = 843;
-            this.scTasksMain.TabIndex = 0;
-            // 
-            // spTaskListAndForm
-            // 
-            this.spTaskListAndForm.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.spTaskListAndForm.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
-            this.spTaskListAndForm.Location = new System.Drawing.Point(0, 24);
-            this.spTaskListAndForm.Name = "spTaskListAndForm";
-            this.spTaskListAndForm.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            // 
-            // spTaskListAndForm.Panel1
-            // 
-            this.spTaskListAndForm.Panel1.Controls.Add(this.dGridTasks);
-            // 
-            // spTaskListAndForm.Panel2
-            // 
-            this.spTaskListAndForm.Panel2.AutoScroll = true;
-            this.spTaskListAndForm.Panel2.Controls.Add(this.groupBox9);
-            this.spTaskListAndForm.Panel2.Controls.Add(this.groupBox2);
-            this.spTaskListAndForm.Panel2.Controls.Add(this.GroupBox6);
-            this.spTaskListAndForm.Panel2.Controls.Add(this.GroupBox3);
-            this.spTaskListAndForm.Panel2.Controls.Add(this.gbTaskStatus);
-            this.spTaskListAndForm.Panel2.Controls.Add(this.GroupBox1);
-            this.spTaskListAndForm.Panel2.Controls.Add(this.TextBox1);
-            this.spTaskListAndForm.Size = new System.Drawing.Size(843, 694);
-            this.spTaskListAndForm.SplitterDistance = 35;
-            this.spTaskListAndForm.TabIndex = 0;
-            // 
-            // dGridTasks
-            // 
-            this.dGridTasks.AllowUserToAddRows = false;
-            this.dGridTasks.AllowUserToDeleteRows = false;
-            this.dGridTasks.AllowUserToResizeRows = false;
-            this.dGridTasks.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dGridTasks.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
-            this.dGridTasks.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dGridTasks.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.colTaskName,
-            this.colTaskStatus,
-            this.colTaskType,
-            this.colBugType,
-            this.colTargetDate,
-            this.colExecutor,
-            this.colReviewer,
-            this.colApproved,
-            this.colModified,
-            this.colCreated});
-            this.dGridTasks.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dGridTasks.Location = new System.Drawing.Point(0, 0);
-            this.dGridTasks.Name = "dGridTasks";
-            this.dGridTasks.ReadOnly = true;
-            this.dGridTasks.RowHeadersVisible = false;
-            this.dGridTasks.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dGridTasks.Size = new System.Drawing.Size(843, 35);
-            this.dGridTasks.TabIndex = 1;
-            this.dGridTasks.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.dGridTasks_RowCountChanged);
-            this.dGridTasks.RowsRemoved += new System.Windows.Forms.DataGridViewRowsRemovedEventHandler(this.dGridTasks_RowCountChanged);
-            this.dGridTasks.SelectionChanged += new System.EventHandler(this.dGridTasks_SelectionChanged);
-            // 
-            // colTaskName
-            // 
-            this.colTaskName.DataPropertyName = "taskName";
-            this.colTaskName.FillWeight = 40F;
-            this.colTaskName.HeaderText = "Task Name";
-            this.colTaskName.Name = "colTaskName";
-            this.colTaskName.ReadOnly = true;
-            // 
-            // colTaskStatus
-            // 
-            this.colTaskStatus.DataPropertyName = "task_status";
-            this.colTaskStatus.FillWeight = 15F;
-            this.colTaskStatus.HeaderText = "Task Status";
-            this.colTaskStatus.Name = "colTaskStatus";
-            this.colTaskStatus.ReadOnly = true;
-            // 
-            // colTaskType
-            // 
-            this.colTaskType.DataPropertyName = "is_bug";
-            this.colTaskType.FillWeight = 15F;
-            this.colTaskType.HeaderText = "Is Bug";
-            this.colTaskType.Name = "colTaskType";
-            this.colTaskType.ReadOnly = true;
-            this.colTaskType.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.colTaskType.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            // 
-            // colBugType
-            // 
-            this.colBugType.DataPropertyName = "bug_type";
-            this.colBugType.FillWeight = 10F;
-            this.colBugType.HeaderText = "Bug Type";
-            this.colBugType.Name = "colBugType";
-            this.colBugType.ReadOnly = true;
-            // 
-            // colTargetDate
-            // 
-            this.colTargetDate.DataPropertyName = "target_date";
-            this.colTargetDate.FillWeight = 15F;
-            this.colTargetDate.HeaderText = "Target Date";
-            this.colTargetDate.Name = "colTargetDate";
-            this.colTargetDate.ReadOnly = true;
-            // 
-            // colExecutor
-            // 
-            this.colExecutor.DataPropertyName = "DeveloperName";
-            this.colExecutor.FillWeight = 20F;
-            this.colExecutor.HeaderText = "Executor";
-            this.colExecutor.Name = "colExecutor";
-            this.colExecutor.ReadOnly = true;
-            // 
-            // colReviewer
-            // 
-            this.colReviewer.DataPropertyName = "ReviewerName";
-            this.colReviewer.FillWeight = 20F;
-            this.colReviewer.HeaderText = "Reviewer";
-            this.colReviewer.Name = "colReviewer";
-            this.colReviewer.ReadOnly = true;
-            // 
-            // colApproved
-            // 
-            this.colApproved.DataPropertyName = "approved";
-            this.colApproved.FillWeight = 10F;
-            this.colApproved.HeaderText = "Approved";
-            this.colApproved.Name = "colApproved";
-            this.colApproved.ReadOnly = true;
-            this.colApproved.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.colApproved.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            // 
-            // colModified
-            // 
-            this.colModified.DataPropertyName = "updated_at";
-            this.colModified.FillWeight = 10F;
-            this.colModified.HeaderText = "Modified";
-            this.colModified.Name = "colModified";
-            this.colModified.ReadOnly = true;
-            // 
-            // colCreated
-            // 
-            this.colCreated.DataPropertyName = "created_at";
-            this.colCreated.FillWeight = 10F;
-            this.colCreated.HeaderText = "Created";
-            this.colCreated.Name = "colCreated";
-            this.colCreated.ReadOnly = true;
             // 
             // groupBox9
             // 
             this.groupBox9.Controls.Add(this.rtbReview);
-            this.groupBox9.Location = new System.Drawing.Point(187, 416);
+            this.groupBox9.Location = new System.Drawing.Point(10, 671);
             this.groupBox9.Name = "groupBox9";
-            this.groupBox9.Size = new System.Drawing.Size(420, 197);
-            this.groupBox9.TabIndex = 7;
+            this.groupBox9.Size = new System.Drawing.Size(843, 164);
+            this.groupBox9.TabIndex = 14;
             this.groupBox9.TabStop = false;
             this.groupBox9.Text = "Review";
             // 
@@ -317,19 +101,17 @@
             this.rtbReview.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rtbReview.Location = new System.Drawing.Point(3, 16);
             this.rtbReview.Name = "rtbReview";
-            this.rtbReview.Size = new System.Drawing.Size(414, 178);
+            this.rtbReview.Size = new System.Drawing.Size(837, 145);
             this.rtbReview.TabIndex = 0;
             this.rtbReview.Text = "";
-            this.rtbReview.TextChanged += new System.EventHandler(this.rtb_TextChanged);
             // 
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.rtbAnalysis);
-            this.groupBox2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.groupBox2.Location = new System.Drawing.Point(0, 325);
+            this.groupBox2.Location = new System.Drawing.Point(10, 496);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(843, 69);
-            this.groupBox2.TabIndex = 6;
+            this.groupBox2.Size = new System.Drawing.Size(843, 164);
+            this.groupBox2.TabIndex = 13;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Analysis";
             // 
@@ -338,19 +120,17 @@
             this.rtbAnalysis.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rtbAnalysis.Location = new System.Drawing.Point(3, 16);
             this.rtbAnalysis.Name = "rtbAnalysis";
-            this.rtbAnalysis.Size = new System.Drawing.Size(837, 50);
+            this.rtbAnalysis.Size = new System.Drawing.Size(837, 145);
             this.rtbAnalysis.TabIndex = 0;
             this.rtbAnalysis.Text = "";
-            this.rtbAnalysis.TextChanged += new System.EventHandler(this.rtb_TextChanged);
             // 
             // GroupBox6
             // 
             this.GroupBox6.Controls.Add(this.rtbDescription);
-            this.GroupBox6.Dock = System.Windows.Forms.DockStyle.Top;
-            this.GroupBox6.Location = new System.Drawing.Point(0, 282);
+            this.GroupBox6.Location = new System.Drawing.Point(10, 321);
             this.GroupBox6.Name = "GroupBox6";
-            this.GroupBox6.Size = new System.Drawing.Size(843, 43);
-            this.GroupBox6.TabIndex = 5;
+            this.GroupBox6.Size = new System.Drawing.Size(843, 164);
+            this.GroupBox6.TabIndex = 12;
             this.GroupBox6.TabStop = false;
             this.GroupBox6.Text = "Description";
             // 
@@ -359,10 +139,9 @@
             this.rtbDescription.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rtbDescription.Location = new System.Drawing.Point(3, 16);
             this.rtbDescription.Name = "rtbDescription";
-            this.rtbDescription.Size = new System.Drawing.Size(837, 24);
+            this.rtbDescription.Size = new System.Drawing.Size(837, 145);
             this.rtbDescription.TabIndex = 0;
             this.rtbDescription.Text = "";
-            this.rtbDescription.TextChanged += new System.EventHandler(this.rtb_TextChanged);
             // 
             // GroupBox3
             // 
@@ -370,11 +149,10 @@
             this.GroupBox3.Controls.Add(this.GroupBox7);
             this.GroupBox3.Controls.Add(this.GroupBox5);
             this.GroupBox3.Controls.Add(this.GroupBox4);
-            this.GroupBox3.Dock = System.Windows.Forms.DockStyle.Top;
-            this.GroupBox3.Location = new System.Drawing.Point(0, 186);
+            this.GroupBox3.Location = new System.Drawing.Point(10, 214);
             this.GroupBox3.Name = "GroupBox3";
             this.GroupBox3.Size = new System.Drawing.Size(843, 96);
-            this.GroupBox3.TabIndex = 4;
+            this.GroupBox3.TabIndex = 11;
             this.GroupBox3.TabStop = false;
             // 
             // GroupBox8
@@ -557,11 +335,10 @@
             // gbTaskStatus
             // 
             this.gbTaskStatus.Controls.Add(this.tlpTaskStatus);
-            this.gbTaskStatus.Dock = System.Windows.Forms.DockStyle.Top;
-            this.gbTaskStatus.Location = new System.Drawing.Point(0, 67);
+            this.gbTaskStatus.Location = new System.Drawing.Point(10, 84);
             this.gbTaskStatus.Name = "gbTaskStatus";
             this.gbTaskStatus.Size = new System.Drawing.Size(843, 119);
-            this.gbTaskStatus.TabIndex = 3;
+            this.gbTaskStatus.TabIndex = 10;
             this.gbTaskStatus.TabStop = false;
             this.gbTaskStatus.Text = "Task Status";
             // 
@@ -767,11 +544,11 @@
             this.tlpTaskStatus.SetColumnSpan(this.trbTaskStatus, 7);
             this.trbTaskStatus.Dock = System.Windows.Forms.DockStyle.Fill;
             this.trbTaskStatus.LargeChange = 1;
-            this.trbTaskStatus.Location = new System.Drawing.Point(11, 25);
-            this.trbTaskStatus.Margin = new System.Windows.Forms.Padding(10, 3, 10, 3);
+            this.trbTaskStatus.Location = new System.Drawing.Point(51, 25);
+            this.trbTaskStatus.Margin = new System.Windows.Forms.Padding(50, 3, 50, 3);
             this.trbTaskStatus.Maximum = 6;
             this.trbTaskStatus.Name = "trbTaskStatus";
-            this.trbTaskStatus.Size = new System.Drawing.Size(815, 45);
+            this.trbTaskStatus.Size = new System.Drawing.Size(735, 45);
             this.trbTaskStatus.TabIndex = 18;
             this.trbTaskStatus.TickStyle = System.Windows.Forms.TickStyle.Both;
             this.trbTaskStatus.ValueChanged += new System.EventHandler(this.trbTaskStatus_ValueChanged);
@@ -781,11 +558,10 @@
             this.GroupBox1.Controls.Add(this.txtTitle);
             this.GroupBox1.Controls.Add(this.label8);
             this.GroupBox1.Controls.Add(this.txtName);
-            this.GroupBox1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.GroupBox1.Location = new System.Drawing.Point(0, 27);
+            this.GroupBox1.Location = new System.Drawing.Point(10, 33);
             this.GroupBox1.Name = "GroupBox1";
             this.GroupBox1.Size = new System.Drawing.Size(843, 40);
-            this.GroupBox1.TabIndex = 2;
+            this.GroupBox1.TabIndex = 9;
             this.GroupBox1.TabStop = false;
             this.GroupBox1.Text = "Name";
             // 
@@ -831,92 +607,29 @@
             this.TextBox1.Multiline = true;
             this.TextBox1.Name = "TextBox1";
             this.TextBox1.ReadOnly = true;
-            this.TextBox1.Size = new System.Drawing.Size(843, 27);
-            this.TextBox1.TabIndex = 1;
+            this.TextBox1.Size = new System.Drawing.Size(863, 27);
+            this.TextBox1.TabIndex = 8;
             this.TextBox1.Text = "TaskTracking Form";
             this.TextBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // MenuStrip1
-            // 
-            this.MenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsmiRefresh,
-            this.tsmiNew,
-            this.tsmiUpdate});
-            this.MenuStrip1.Location = new System.Drawing.Point(0, 0);
-            this.MenuStrip1.Name = "MenuStrip1";
-            this.MenuStrip1.Size = new System.Drawing.Size(843, 24);
-            this.MenuStrip1.TabIndex = 1;
-            this.MenuStrip1.Text = "MenuStrip1";
-            // 
-            // tsmiNew
-            // 
-            this.tsmiNew.Name = "tsmiNew";
-            this.tsmiNew.Size = new System.Drawing.Size(43, 20);
-            this.tsmiNew.Text = "New";
-            this.tsmiNew.Click += new System.EventHandler(this.tsmiNew_Click);
-            // 
-            // tsmiRefresh
-            // 
-            this.tsmiRefresh.Name = "tsmiRefresh";
-            this.tsmiRefresh.Size = new System.Drawing.Size(58, 20);
-            this.tsmiRefresh.Text = "Refresh";
-            this.tsmiRefresh.Click += new System.EventHandler(this.tsmiRefresh_Click);
-            // 
-            // tpFiles
-            // 
-            this.tpFiles.Location = new System.Drawing.Point(4, 22);
-            this.tpFiles.Name = "tpFiles";
-            this.tpFiles.Padding = new System.Windows.Forms.Padding(3);
-            this.tpFiles.Size = new System.Drawing.Size(1002, 494);
-            this.tpFiles.TabIndex = 0;
-            this.tpFiles.Text = "Files";
-            this.tpFiles.UseVisualStyleBackColor = true;
-            // 
-            // tpUsers
-            // 
-            this.tpUsers.Controls.Add(this.grindUserMaintenence1);
-            this.tpUsers.Location = new System.Drawing.Point(4, 22);
-            this.tpUsers.Name = "tpUsers";
-            this.tpUsers.Padding = new System.Windows.Forms.Padding(3);
-            this.tpUsers.Size = new System.Drawing.Size(1002, 494);
-            this.tpUsers.TabIndex = 2;
-            this.tpUsers.Text = "Users";
-            this.tpUsers.UseVisualStyleBackColor = true;
-            // 
-            // tsmiUpdate
-            // 
-            this.tsmiUpdate.Name = "tsmiUpdate";
-            this.tsmiUpdate.Size = new System.Drawing.Size(57, 20);
-            this.tsmiUpdate.Text = "Update";
-            // 
-            // grindUserMaintenence1
-            // 
-            this.grindUserMaintenence1.Location = new System.Drawing.Point(87, 24);
-            this.grindUserMaintenence1.Name = "grindUserMaintenence1";
-            this.grindUserMaintenence1.Size = new System.Drawing.Size(298, 420);
-            this.grindUserMaintenence1.TabIndex = 22;
-            // 
-            // Form1
+            // TaskTrackingForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(978, 750);
-            this.Controls.Add(this.TabControl1);
-            this.Name = "Form1";
-            this.Text = "Form1";
-            this.Load += new System.EventHandler(this.Form1_Load);
-            this.TabControl1.ResumeLayout(false);
-            this.tpTask.ResumeLayout(false);
-            this.scTasksMain.Panel1.ResumeLayout(false);
-            this.scTasksMain.Panel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.scTasksMain)).EndInit();
-            this.scTasksMain.ResumeLayout(false);
-            this.spTaskListAndForm.Panel1.ResumeLayout(false);
-            this.spTaskListAndForm.Panel2.ResumeLayout(false);
-            this.spTaskListAndForm.Panel2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.spTaskListAndForm)).EndInit();
-            this.spTaskListAndForm.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dGridTasks)).EndInit();
+            this.AutoScroll = true;
+            this.Controls.Add(this.groupBox9);
+            this.Controls.Add(this.groupBox2);
+            this.Controls.Add(this.GroupBox6);
+            this.Controls.Add(this.GroupBox3);
+            this.Controls.Add(this.gbTaskStatus);
+            this.Controls.Add(this.GroupBox1);
+            this.Controls.Add(this.TextBox1);
+            this.DoubleBuffered = true;
+            this.MaximumSize = new System.Drawing.Size(880, 99999);
+            this.MinimumSize = new System.Drawing.Size(880, 0);
+            this.Name = "TaskTrackingForm";
+            this.Size = new System.Drawing.Size(863, 600);
+            this.Load += new System.EventHandler(this.TaskTrackingForm_Load);
             this.groupBox9.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.GroupBox6.ResumeLayout(false);
@@ -936,21 +649,19 @@
             ((System.ComponentModel.ISupportInitialize)(this.trbTaskStatus)).EndInit();
             this.GroupBox1.ResumeLayout(false);
             this.GroupBox1.PerformLayout();
-            this.MenuStrip1.ResumeLayout(false);
-            this.MenuStrip1.PerformLayout();
-            this.tpUsers.ResumeLayout(false);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
 
-        internal System.Windows.Forms.TabControl TabControl1;
-        internal System.Windows.Forms.TabPage tpTask;
-        internal System.Windows.Forms.SplitContainer scTasksMain;
-        internal System.Windows.Forms.SplitContainer spTaskListAndForm;
-        internal System.Windows.Forms.DataGridView dGridTasks;
+        internal System.Windows.Forms.GroupBox groupBox9;
+        private System.Windows.Forms.RichTextBox rtbReview;
+        internal System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.RichTextBox rtbAnalysis;
         internal System.Windows.Forms.GroupBox GroupBox6;
+        private System.Windows.Forms.RichTextBox rtbDescription;
         internal System.Windows.Forms.GroupBox GroupBox3;
         internal System.Windows.Forms.GroupBox GroupBox8;
         internal System.Windows.Forms.Panel Panel1;
@@ -968,21 +679,6 @@
         internal System.Windows.Forms.RadioButton rbBug;
         internal System.Windows.Forms.GroupBox gbTaskStatus;
         internal System.Windows.Forms.TableLayoutPanel tlpTaskStatus;
-        internal System.Windows.Forms.DateTimePicker dtpPromotion;
-        internal System.Windows.Forms.DateTimePicker dtpCorrection;
-        internal System.Windows.Forms.DateTimePicker dtpReview;
-        internal System.Windows.Forms.DateTimePicker dtpAnalysis;
-        internal System.Windows.Forms.DateTimePicker dtpOpen;
-        internal System.Windows.Forms.DateTimePicker dtpCollection;
-        internal System.Windows.Forms.DateTimePicker dtpClosed;
-        internal System.Windows.Forms.GroupBox GroupBox1;
-        internal System.Windows.Forms.TextBox txtName;
-        internal System.Windows.Forms.TextBox TextBox1;
-        internal System.Windows.Forms.MenuStrip MenuStrip1;
-        internal System.Windows.Forms.ToolStripMenuItem tsmiNew;
-        internal System.Windows.Forms.ToolStripMenuItem tsmiRefresh;
-        internal System.Windows.Forms.TabPage tpFiles;
-        private System.Windows.Forms.TrackBar trbTaskStatus;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
@@ -990,26 +686,18 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label7;
+        internal System.Windows.Forms.DateTimePicker dtpPromotion;
+        internal System.Windows.Forms.DateTimePicker dtpCorrection;
+        internal System.Windows.Forms.DateTimePicker dtpReview;
+        internal System.Windows.Forms.DateTimePicker dtpAnalysis;
+        internal System.Windows.Forms.DateTimePicker dtpOpen;
+        internal System.Windows.Forms.DateTimePicker dtpCollection;
+        internal System.Windows.Forms.DateTimePicker dtpClosed;
+        private System.Windows.Forms.TrackBar trbTaskStatus;
+        internal System.Windows.Forms.GroupBox GroupBox1;
         internal System.Windows.Forms.TextBox txtTitle;
         private System.Windows.Forms.Label label8;
-        internal System.Windows.Forms.GroupBox groupBox9;
-        private System.Windows.Forms.RichTextBox rtbReview;
-        internal System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.RichTextBox rtbAnalysis;
-        private System.Windows.Forms.RichTextBox rtbDescription;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colTaskName;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colTaskStatus;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn colTaskType;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colBugType;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colTargetDate;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colExecutor;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colReviewer;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn colApproved;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colModified;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colCreated;
-        private System.Windows.Forms.TabPage tpUsers;
-        private GrindUserMaintenence grindUserMaintenence1;
-        private System.Windows.Forms.ToolStripMenuItem tsmiUpdate;
+        internal System.Windows.Forms.TextBox txtName;
+        internal System.Windows.Forms.TextBox TextBox1;
     }
 }
-

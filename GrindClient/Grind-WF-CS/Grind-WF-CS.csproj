@@ -73,6 +73,12 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SortableBindingList.cs" />
+    <Compile Include="TaskTrackingForm.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="TaskTrackingForm.Designer.cs">
+      <DependentUpon>TaskTrackingForm.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
@@ -91,6 +97,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="TaskTrackingForm.resx">
+      <DependentUpon>TaskTrackingForm.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\DataSources\Person.datasource" />
     <None Include="Properties\Settings.settings">

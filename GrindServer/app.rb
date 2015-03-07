@@ -52,8 +52,7 @@ use ExceptionHandling
 
 
 
-
-
+#{Models}
 class Person < ActiveRecord::Base
   has_many :unread_objects
   has_many :tasks   
@@ -100,6 +99,9 @@ class Comment < ActiveRecord::Base
   belongs_to :task, counter_cache: true
   has_many :comments
 end
+#}{Models}
+
+
 
 
 
@@ -147,13 +149,6 @@ delete "/person/:id" do
 end
 
 
-error ActiveRecord::RecordNotFound do
-  status 404
-end
-# rescue ActiveRecord::RecordNotFound
-    # halt 404
-# end
-
 post "/task" do
   @task = Task.new(params[:task].except('id','documents','created_at','updated_at'))
   if @task.save
@@ -193,6 +188,9 @@ get '/task/:id/documents' do
 end
 
 
+error ActiveRecord::RecordNotFound do
+  status 404
+end
 
 
 
