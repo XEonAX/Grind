@@ -10,8 +10,9 @@ namespace Grind_WF_CS
         public Person person { get; set; }
         public Task task { get; set; }
         public Document document { get; set; }
+        public string Status { get; set; }
     }
-
+    
 
     public class RootPerson 
 	{
@@ -185,14 +186,16 @@ namespace Grind_WF_CS
         }
         public string DeveloperName
         {
-            get { return Form1.People.Find(x => x.id == this.developer_id).name; }
+            get { return Globals.People.Find(x => x.id == this.developer_id).name; }
         }
         public string ReviewerName
         {
-            get { return Form1.People.Find(x => x.id == this.reviewer_id).name; }
+            get { return Globals.People.Find(x => x.id == this.reviewer_id).name; }
         }
 
     }
+
+
     public enum eTaskStatus
     {
         Open = 0,

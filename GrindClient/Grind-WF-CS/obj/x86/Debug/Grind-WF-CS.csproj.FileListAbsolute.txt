@@ -9,3 +9,4 @@ J:\Root\Grind\GrindClient\Grind-WF-CS\bin\Debug\RestSharp.dll
 J:\Root\Grind\GrindClient\Grind-WF-CS\bin\Debug\RestSharp.xml
 J:\Root\Grind\GrindClient\Grind-WF-CS\obj\x86\Debug\Grind-WF-CS.csprojResolveAssemblyReference.cache
 J:\Root\Grind\GrindClient\Grind-WF-CS\obj\x86\Debug\Grind_WF_CS.PersonAdded.resources
+J:\Root\Grind\GrindClient\Grind-WF-CS\obj\x86\Debug\Grind_WF_CS.GrindUserMaintenence.resources

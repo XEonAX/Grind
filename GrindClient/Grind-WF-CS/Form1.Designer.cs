@@ -90,6 +90,8 @@
             this.ToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.RefreshToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tpFiles = new System.Windows.Forms.TabPage();
+            this.tpUsers = new System.Windows.Forms.TabPage();
+            this.grindUserMaintenence1 = new Grind_WF_CS.GrindUserMaintenence();
             this.TabControl1.SuspendLayout();
             this.tpTask.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.scTasksMain)).BeginInit();
@@ -114,12 +116,14 @@
             ((System.ComponentModel.ISupportInitialize)(this.trbTaskStatus)).BeginInit();
             this.GroupBox1.SuspendLayout();
             this.MenuStrip1.SuspendLayout();
+            this.tpUsers.SuspendLayout();
             this.SuspendLayout();
             // 
             // TabControl1
             // 
             this.TabControl1.Controls.Add(this.tpTask);
             this.TabControl1.Controls.Add(this.tpFiles);
+            this.TabControl1.Controls.Add(this.tpUsers);
             this.TabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.TabControl1.HotTrack = true;
             this.TabControl1.Location = new System.Drawing.Point(0, 0);
@@ -864,6 +868,24 @@
             this.tpFiles.Text = "Files";
             this.tpFiles.UseVisualStyleBackColor = true;
             // 
+            // tpUsers
+            // 
+            this.tpUsers.Controls.Add(this.grindUserMaintenence1);
+            this.tpUsers.Location = new System.Drawing.Point(4, 22);
+            this.tpUsers.Name = "tpUsers";
+            this.tpUsers.Padding = new System.Windows.Forms.Padding(3);
+            this.tpUsers.Size = new System.Drawing.Size(1002, 494);
+            this.tpUsers.TabIndex = 2;
+            this.tpUsers.Text = "Users";
+            this.tpUsers.UseVisualStyleBackColor = true;
+            // 
+            // grindUserMaintenence1
+            // 
+            this.grindUserMaintenence1.Location = new System.Drawing.Point(87, 24);
+            this.grindUserMaintenence1.Name = "grindUserMaintenence1";
+            this.grindUserMaintenence1.Size = new System.Drawing.Size(298, 420);
+            this.grindUserMaintenence1.TabIndex = 22;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -906,6 +928,7 @@
             this.GroupBox1.PerformLayout();
             this.MenuStrip1.ResumeLayout(false);
             this.MenuStrip1.PerformLayout();
+            this.tpUsers.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -974,6 +997,8 @@
         private System.Windows.Forms.DataGridViewCheckBoxColumn colApproved;
         private System.Windows.Forms.DataGridViewTextBoxColumn colModified;
         private System.Windows.Forms.DataGridViewTextBoxColumn colCreated;
+        private System.Windows.Forms.TabPage tpUsers;
+        private GrindUserMaintenence grindUserMaintenence1;
     }
 }
 

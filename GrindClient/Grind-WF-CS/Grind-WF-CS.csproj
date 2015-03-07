@@ -49,11 +49,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Globals.cs" />
+    <Compile Include="GrindUserMaintenence.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GrindUserMaintenence.Designer.cs">
+      <DependentUpon>GrindUserMaintenence.cs</DependentUpon>
     </Compile>
     <Compile Include="Models.cs" />
     <Compile Include="PersonAdded.cs">
@@ -67,6 +75,9 @@
     <Compile Include="SortableBindingList.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GrindUserMaintenence.resx">
+      <DependentUpon>GrindUserMaintenence.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PersonAdded.resx">
       <DependentUpon>PersonAdded.cs</DependentUpon>

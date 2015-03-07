@@ -14,37 +14,37 @@ set :database, 'mysql://root@localhost/grindDB'
 
 #ActiveRecord::Base.connection.execute("set global max_allowed_packet=10000000;")
 class App < Sinatra::Application
-configure do
- #ActiveRecord::Base.logger.level = 1
-# Don't log them. We'll do that ourself
-set :dump_errors, false
- 
-# Don't capture any errors. Throw them up the stack
-set :raise_errors, true
+  configure do
+     #ActiveRecord::Base.logger.level = 1
+    # Don't log them. We'll do that ourself
+    set :dump_errors, false
+     
+    # Don't capture any errors. Throw them up the stack
+    set :raise_errors, true
 
-# Disable internal middleware for presenting errors
-# as useful HTML pages
-set :show_exceptions, false
-end
+    # Disable internal middleware for presenting errors
+    # as useful HTML pages
+    set :show_exceptions, false
+  end
 end
  
 class ExceptionHandling
-def initialize(app)
-@app = app
-end
+  def initialize(app)
+    @app = app
+  end
  
-def call(env)
-begin
-@app.call env
-rescue => ex
-env['rack.errors'].puts ex
-env['rack.errors'].puts ex.backtrace.join("\n")
-env['rack.errors'].flush
- 
-hash = { :message => ex.to_s }
-[500, {'Content-Type' => 'application/json'}, [MultiJson.dump(hash)]]
-end
-end
+  def call(env)
+    begin
+      @app.call env
+      rescue => ex
+      env['rack.errors'].puts ex
+      env['rack.errors'].puts ex.backtrace.join("\n")
+      env['rack.errors'].flush
+       
+      hash = { :Message => ex.to_s }
+      [500, {'Content-Type' => 'application/json'}, [MultiJson.dump(hash)]]
+    end
+  end
 end
 use ExceptionHandling 
 
@@ -112,11 +112,6 @@ end
 # end
 
 get '/tasks' do
-  #Task.includes([:developer, :reviewer]).all.to_json
-  #Task.joins(:developer,:reviewer).select("*, people.*").to_json
-  #Task.includes(:reviewer.name,:developer.name).all.to_json #"undefined method `name' for :reviewer:Symbol"
-  #Task.find(:all, :include => {:people => :name}).to_json #Couldn't find all Tasks with 'id': (all, {:include=>{:people=>:name}})
-  #Task.includes(:developer,:reviewer).all.as_json(include: [:developer,:reviewer]).to_json
   Task.select(:id,:name,:task_status,:is_bug,:title,:bug_type,:target_date,:created_at,:updated_at,:approved,:developer_id,:reviewer_id,).all.to_json
 end
 
@@ -124,45 +119,67 @@ get '/people' do
   Person.all.to_json  
 end
 
-get '/person/:id' do
-  Person.where(["id = ?", params[:id]]).first.to_json
-end
-
-
-# before do
-  # if request.request_method == "POST" and (request.content_type || '').include? "application/json" 
-    # request.body.rewind
-    # body_parameters = request.body.read
-    # parsed = body_parameters && body_parameters.length >= 2 ? JSON.parse(body_parameters, :symbolize_names => true) : nil
-    # params.merge!(parsed)
-    # end
-# end
 
 post '/person' do
-  # puts params[:person].except(:id)
-  # params[:person].except('id')
-  @person = Person.new(params[:person].except('id'))
+  @person = Person.new(params[:person].except('id','unread_objects_count','documents_count','tasks_count'))
   if @person.save
     redirect "person/#{@person.id}"
   end  
 end
 
-get '/task/:id' do
-  # Task.where(["id = ?", params[:id]]).to_json
-  # Task.where(["id = ?", params[:id]]).first.to_json
-  Task.includes(:developer,:reviewer,:documents).where(["id = ?", params[:id]]).first.as_json(include: [:developer,:reviewer,:documents]).to_json
+get '/person/:id' do
+  Person.where(["id = ?", params[:id]]).first.to_json
+end
+
+put "/person/:id" do
+  @person = Person.find(params[:id])
+  if @person.update(params[:person].except('unread_objects_count','documents_count','tasks_count'))
+    redirect "person/#{@person.id}"
+  end
+end
+
+delete "/person/:id" do
+  @person = Person.find(params[:id]) 
+  if @person.destroy
+    content_type :json
+    { :Status => 'Person with ID '+params[:id] +' destroyed' }.to_json
+  end
 end
 
 
+error ActiveRecord::RecordNotFound do
+  status 404
+end
+# rescue ActiveRecord::RecordNotFound
+    # halt 404
+# end
+
 post "/task" do
-  # request.body.read
-  # hash = JSON.parse(request.body.read)
-  # hash.delete("id")
   @task = Task.new(params[:task].except('id','documents','created_at','updated_at'))
   if @task.save
     redirect "task/#{@task.id}"
   end
 end
+
+get '/task/:id' do
+  Task.includes(:developer,:reviewer,:documents).where(["id = ?", params[:id]]).first.as_json(include: [:developer,:reviewer,:documents]).to_json
+end
+
+put "/task/:id" do
+  @task = Task.find(params[:id])
+  if @task.update(params[:task])
+    redirect "task/#{@task.id}"
+  end
+end
+
+delete "/task/:id" do
+  @task = Task.find(params[:id]) 
+  if @task.destroy
+    content_type :json
+    { :Status => 'Task with ID '+params[:id] +' destroyed' }.to_json
+  end
+end
+
 
 
 get '/document/:id' do
@@ -174,6 +191,9 @@ get '/task/:id/documents' do
   # Document.where(["task_id = ?", params[:id]]).all.to_json
   Task.find(params[:id]).documents.all.to_json
 end
+
+
+
 
 
 get '/make' do
