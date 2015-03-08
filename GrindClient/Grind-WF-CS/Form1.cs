@@ -23,8 +23,17 @@ namespace Grind_WF_CS
 
 
         public SortableBindingList<ClientTask> TaskList;
-        Task RetrievedTask;
-        bool UserChange = false;
+        Task CurrentTask;
+        bool UserChange = true;
+
+        enum ViewMode
+        {
+            Normal,
+            New,
+            Update,
+            ChangeCancelled
+        }
+
 
         private void Form1_Load(object sender, System.EventArgs e)
         {
@@ -35,183 +44,107 @@ namespace Grind_WF_CS
         }
 
 
-
-        private void dGridTasks_SelectionChanged(System.Object sender, System.EventArgs e)
-        {
-            Controllers.ReadTask(TaskList[dGridTasks.CurrentRow.Index].id,ref RetrievedTask);
-            FillTaskTrackingForm(RetrievedTask);
-        }
-
-        private void FillTaskTrackingForm(Task task)
-        {
-
-            UserChange = false;
-            txtName.Text = task.name;
-            txtTitle.Text = task.title;
-            dtpOpen.Enabled = true;
-            dtpAnalysis.Enabled = false;
-            dtpReview.Enabled = false;
-            dtpCorrection.Enabled = false;
-            dtpPromotion.Enabled = false;
-            dtpCollection.Enabled = false;
-            dtpClosed.Enabled = false;
-            dtpOpen.Value = task.open_date;
-            dtpAnalysis.Value = task.analysis_date;
-            dtpReview.Value = task.review_date;
-            dtpCorrection.Value = task.correction_date;
-            dtpPromotion.Value = task.promotion_date;
-            dtpCollection.Value = task.collection_date;
-            dtpClosed.Value = task.closed_date;
-            if (task.is_bug)
-                rbBug.Checked = true;
-            else
-                rbHL.Checked = true;
-            switch (task.bug_type)
-            {
-                case eBugType.HMA:
-                    rbHMA.Checked = true;
-                    break;
-                case eBugType.BackLog:
-                    rbBacklog.Checked = true;
-                    break;
-                case eBugType.CRITSIT:
-                    rbCRITSIT.Checked = true;
-                    break;
-                case eBugType.Others:
-                    rbOthers.Checked = true;
-                    break;
-                default:
-                    break;
-            }
-            trbTaskStatus.Enabled = true;
-            trbTaskStatus.Value = (int)task.task_status;
-            cobExecutor.Text = Globals.People.Find(x => x.id == task.developer_id).name;
-            cobReviewer.Text = Globals.People.Find(x => x.id == task.reviewer_id).name;
-            rtbDescription.Rtf = task.description;
-            rtbAnalysis.Rtf = task.analysis;
-            rtbReview.Rtf = task.review;
-
-            UserChange = true;
-
-        }
-
-        private void BuildTaskFromForm(ref Task task)
-        {
-
-            task.name = txtName.Text;
-            task.title = txtTitle.Text;
-
-            if (rbBug.Checked)
-                task.is_bug = true;
-            else
-                task.is_bug = false;
-
-            if (rbHMA.Checked)
-                task.bug_type = eBugType.HMA;
-            else if (rbCRITSIT.Checked)
-                task.bug_type = eBugType.CRITSIT;
-            else if (rbBacklog.Checked)
-                task.bug_type = eBugType.BackLog;
-            else
-                task.bug_type = eBugType.Others;
-            task.task_status = (eTaskStatus)trbTaskStatus.Value;
-            task.approved = cbApproved.Checked;
-            task.developer_id = Globals.People.Find(x => x.name == cobExecutor.SelectedItem.ToString()).id;
-            task.reviewer_id = Globals.People.Find(x => x.name == cobReviewer.SelectedItem.ToString()).id;
-            task.open_date = dtpOpen.Value;
-            task.analysis_date = dtpAnalysis.Value;
-            task.review_date = dtpReview.Value;
-            task.correction_date = dtpCorrection.Value;
-            task.promotion_date = dtpPromotion.Value;
-            task.collection_date = dtpCollection.Value;
-            task.closed_date = dtpClosed.Value;
-            task.description = rtbDescription.Rtf;
-            task.analysis = rtbAnalysis.Rtf;
-            task.review = rtbReview.Rtf;
-        
-        }
-
-        private void trbTaskStatus_ValueChanged(object sender, EventArgs e)
-        {
-            int enableddtpCount = trbTaskStatus.Value;
-            foreach (Control ctl in tlpTaskStatus.Controls.Cast<Control>().OrderBy(c => c.TabIndex))
-            {
-                if (ctl is DateTimePicker)
-                {
-                    if (enableddtpCount >= 0)
-                    {
-                        ctl.Enabled = true;
-                        enableddtpCount--;
-                    }
-                    else
-                    {
-                        ctl.Enabled = false;
-                        enableddtpCount--;
-                    }
-                }
-
-            }
-        }
-
         private void tsmiNew_Click(object sender, EventArgs e)
         {
             if (tsmiNew.Text == "New")
             {
                 //New Task mode
-                tsmiNew.Text = "Save";
-                tsmiUpdate.Text = "Cancel";
-                dGridTasks.Enabled = false;
-                FillTaskTrackingForm(new Task());
+                SetMode(ViewMode.New); 
+                //FillTaskTrackingForm(new Task());
+                ttfrmControl.FillFormfromTask(new Task());
+
 
             }
-            else if (tsmiNew.Text == "Save")
+            else if (tsmiNew.Text == "Save" && tsmiUpdate.Text == "Cancel")
             {
                 //New Task Save
                 Task task = new Task();
-                BuildTaskFromForm(ref task);
+                //BuildTaskFromForm(ref task);
+                ttfrmControl.BuildTaskfromTaskFilledForm(ref task);
                 Controllers.CreateTask(ref task);
+                UserChange = false;
                 Controllers.ReadTasks(ref TaskList);
+                UserChange = true;
+                //dGridTasks.DataSource = TaskList;
+                if (dGridTasks.RowCount>0)
+                    dGridTasks.CurrentCell = dGridTasks.Rows[dGridTasks.Rows.GetLastRow(DataGridViewElementStates.None)].Cells[1];
 
-                tsmiNew.Text = "New";
-                tsmiUpdate.Text = "Update";
-                dGridTasks.Enabled = true;
+                ttfrmControl.FillFormfromTask(task);
+                SetMode(ViewMode.Normal);
+            }
+            else if (tsmiNew.Text == "Cancel" && tsmiUpdate.Text == "Save")
+            {
+                //int OldTaskId = CurrentTask.id;
+                ////Update Mode Cancel
+                //UserChange = false;
+                //Controllers.ReadTasks(ref TaskList);
+                //UserChange = true;
+                //if (dGridTasks.RowCount > 0)
+                //{
+                //    dGridTasks.CurrentCell = dGridTasks[1, GetIndexByIdFromTaskList(OldTaskId)];
+                //}
+                ttfrmControl.FillFormfromTask(CurrentTask);
+                SetMode(ViewMode.Normal);
 
-                FillTaskTrackingForm(task);
             }
-            else if (tsmiNew.Text == "Cancel" && tsmiUpdate.Text == "Update")
-            { 
-                //Update Mode Cancel
-                Controllers.ReadTasks(ref TaskList);
-                tsmiNew.Text = "New";
-                tsmiUpdate.Text = "Update";
-                dGridTasks.Enabled = true;
-                           
-            }
-            
+
         }
-        
+
         private void tsmiRefresh_Click(System.Object sender, System.EventArgs e)
         {
             Controllers.ReadPeople(ref Globals.People);
             Controllers.ReadTasks(ref TaskList);
-            cobExecutor.Items.AddRange(Globals.People.Select(x => x.name).ToArray());
-            cobReviewer.Items.AddRange(Globals.People.Select(x => x.name).ToArray());
-
+            //cobExecutor.Items.AddRange(Globals.People.Select(x => x.name).ToArray());
+            //cobReviewer.Items.AddRange(Globals.People.Select(x => x.name).ToArray());
+            ttfrmControl.FillPeopleDropDown();
             dGridTasks.DataSource = TaskList;
+            SetMode(ViewMode.Normal);
         }
 
-        private void rtb_TextChanged(object sender, EventArgs e)
+        private void tsmiUpdate_Click(object sender, EventArgs e)
         {
-            if (sender is RichTextBox)
+            if (tsmiUpdate.Text == "Update")
             {
-                if (!UserChange && ((RichTextBox)sender).Rtf.Length > Math.Pow(2, 20))
+                SetMode(ViewMode.Update);
+            }
+            else if (tsmiUpdate.Text == "Save" && tsmiNew.Text == "Cancel")
+            {
+                int OldTaskId = CurrentTask.id;
+                ttfrmControl.BuildTaskfromTaskFilledForm(ref CurrentTask);
+                Controllers.UpdateTask(ref CurrentTask);
+
+
+                UserChange = false;
+                Controllers.ReadTasks(ref TaskList);
+                
+                if (dGridTasks.RowCount > 0)
                 {
-                    ((RichTextBox)sender).BackColor = Color.Red;
+                    dGridTasks.CurrentCell = dGridTasks[1, GetIndexByIdFromTaskList(OldTaskId)];
+Controllers.ReadTask((int)dGridTasks.CurrentRow.Cells["colId"].Value, ref CurrentTask);
                 }
-                else
-                {
-                    ((RichTextBox)sender).BackColor = Color.White;
-                }
+                
+                //FillTaskTrackingForm(RetrievedTask);
+                UserChange = true;
+                ttfrmControl.FillFormfromTask(CurrentTask);
+                SetMode(ViewMode.Normal);
+            }
+            else if (tsmiUpdate.Text == "Cancel" && tsmiNew.Text == "Save")
+            {
+                ttfrmControl.FillFormfromTask(CurrentTask);
+                //tsmiRefresh_Click(null, EventArgs.Empty);
+                SetMode(ViewMode.Normal);
+            }
+        }
+
+
+        private void dGridTasks_SelectionChanged(System.Object sender, System.EventArgs e)
+        {
+            if (UserChange && dGridTasks.CurrentRow != null)
+            {
+                Controllers.ReadTask((int)dGridTasks.CurrentRow.Cells["colId"].Value, ref CurrentTask);
+                //FillTaskTrackingForm(RetrievedTask);
+                ttfrmControl.FillFormfromTask(CurrentTask);
+
             }
         }
 
@@ -235,6 +168,42 @@ namespace Grind_WF_CS
 
 
         }
+
+        private void SetMode(ViewMode viewMode)
+        {
+            switch (viewMode)
+            {
+                case ViewMode.Normal:
+                    dGridTasks.Enabled = true;
+                    ttfrmControl.DisableForm();
+                    tsmiNew.Text = "New";
+                    tsmiUpdate.Text = "Update";
+                    break;
+                case ViewMode.New:
+                    dGridTasks.Enabled = false;
+                    ttfrmControl.EnableForm();
+                    tsmiNew.Text = "Save";
+                    tsmiUpdate.Text = "Cancel";
+                    break;
+                case ViewMode.Update:
+                    dGridTasks.Enabled = false;
+                    ttfrmControl.EnableForm();
+                    tsmiNew.Text = "Cancel";
+                    tsmiUpdate.Text = "Save";
+                    break;
+                case ViewMode.ChangeCancelled:
+                    SetMode(ViewMode.Normal);
+                    break;
+                default:
+                    break;
+            }
+        }
+        #region Lambdas
+        private int GetIndexByIdFromTaskList(int id)
+        {
+            return TaskList.ToList().FindIndex(x => x.id == id);
+        }
+        #endregion
     }
 
 

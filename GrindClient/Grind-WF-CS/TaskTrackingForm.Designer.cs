@@ -28,13 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.groupBox9 = new System.Windows.Forms.GroupBox();
+            this.gbReview = new System.Windows.Forms.GroupBox();
             this.rtbReview = new System.Windows.Forms.RichTextBox();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.gbAnalysis = new System.Windows.Forms.GroupBox();
             this.rtbAnalysis = new System.Windows.Forms.RichTextBox();
-            this.GroupBox6 = new System.Windows.Forms.GroupBox();
+            this.gbDescription = new System.Windows.Forms.GroupBox();
             this.rtbDescription = new System.Windows.Forms.RichTextBox();
-            this.GroupBox3 = new System.Windows.Forms.GroupBox();
+            this.gbTaskTypes = new System.Windows.Forms.GroupBox();
             this.GroupBox8 = new System.Windows.Forms.GroupBox();
             this.Panel1 = new System.Windows.Forms.Panel();
             this.cobReviewer = new System.Windows.Forms.ComboBox();
@@ -66,15 +66,15 @@
             this.dtpCollection = new System.Windows.Forms.DateTimePicker();
             this.dtpClosed = new System.Windows.Forms.DateTimePicker();
             this.trbTaskStatus = new System.Windows.Forms.TrackBar();
-            this.GroupBox1 = new System.Windows.Forms.GroupBox();
+            this.gbName = new System.Windows.Forms.GroupBox();
             this.txtTitle = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.txtName = new System.Windows.Forms.TextBox();
-            this.TextBox1 = new System.Windows.Forms.TextBox();
-            this.groupBox9.SuspendLayout();
-            this.groupBox2.SuspendLayout();
-            this.GroupBox6.SuspendLayout();
-            this.GroupBox3.SuspendLayout();
+            this.label9 = new System.Windows.Forms.Label();
+            this.gbReview.SuspendLayout();
+            this.gbAnalysis.SuspendLayout();
+            this.gbDescription.SuspendLayout();
+            this.gbTaskTypes.SuspendLayout();
             this.GroupBox8.SuspendLayout();
             this.Panel1.SuspendLayout();
             this.GroupBox7.SuspendLayout();
@@ -83,18 +83,19 @@
             this.gbTaskStatus.SuspendLayout();
             this.tlpTaskStatus.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trbTaskStatus)).BeginInit();
-            this.GroupBox1.SuspendLayout();
+            this.gbName.SuspendLayout();
             this.SuspendLayout();
             // 
-            // groupBox9
+            // gbReview
             // 
-            this.groupBox9.Controls.Add(this.rtbReview);
-            this.groupBox9.Location = new System.Drawing.Point(10, 671);
-            this.groupBox9.Name = "groupBox9";
-            this.groupBox9.Size = new System.Drawing.Size(843, 164);
-            this.groupBox9.TabIndex = 14;
-            this.groupBox9.TabStop = false;
-            this.groupBox9.Text = "Review";
+            this.gbReview.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.gbReview.Controls.Add(this.rtbReview);
+            this.gbReview.Location = new System.Drawing.Point(579, 671);
+            this.gbReview.Name = "gbReview";
+            this.gbReview.Size = new System.Drawing.Size(843, 164);
+            this.gbReview.TabIndex = 14;
+            this.gbReview.TabStop = false;
+            this.gbReview.Text = "Review";
             // 
             // rtbReview
             // 
@@ -104,16 +105,18 @@
             this.rtbReview.Size = new System.Drawing.Size(837, 145);
             this.rtbReview.TabIndex = 0;
             this.rtbReview.Text = "";
+            this.rtbReview.TextChanged += new System.EventHandler(this.rtb_TextChanged);
             // 
-            // groupBox2
+            // gbAnalysis
             // 
-            this.groupBox2.Controls.Add(this.rtbAnalysis);
-            this.groupBox2.Location = new System.Drawing.Point(10, 496);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(843, 164);
-            this.groupBox2.TabIndex = 13;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Analysis";
+            this.gbAnalysis.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.gbAnalysis.Controls.Add(this.rtbAnalysis);
+            this.gbAnalysis.Location = new System.Drawing.Point(579, 496);
+            this.gbAnalysis.Name = "gbAnalysis";
+            this.gbAnalysis.Size = new System.Drawing.Size(843, 164);
+            this.gbAnalysis.TabIndex = 13;
+            this.gbAnalysis.TabStop = false;
+            this.gbAnalysis.Text = "Analysis";
             // 
             // rtbAnalysis
             // 
@@ -123,16 +126,18 @@
             this.rtbAnalysis.Size = new System.Drawing.Size(837, 145);
             this.rtbAnalysis.TabIndex = 0;
             this.rtbAnalysis.Text = "";
+            this.rtbAnalysis.TextChanged += new System.EventHandler(this.rtb_TextChanged);
             // 
-            // GroupBox6
+            // gbDescription
             // 
-            this.GroupBox6.Controls.Add(this.rtbDescription);
-            this.GroupBox6.Location = new System.Drawing.Point(10, 321);
-            this.GroupBox6.Name = "GroupBox6";
-            this.GroupBox6.Size = new System.Drawing.Size(843, 164);
-            this.GroupBox6.TabIndex = 12;
-            this.GroupBox6.TabStop = false;
-            this.GroupBox6.Text = "Description";
+            this.gbDescription.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.gbDescription.Controls.Add(this.rtbDescription);
+            this.gbDescription.Location = new System.Drawing.Point(579, 321);
+            this.gbDescription.Name = "gbDescription";
+            this.gbDescription.Size = new System.Drawing.Size(843, 164);
+            this.gbDescription.TabIndex = 12;
+            this.gbDescription.TabStop = false;
+            this.gbDescription.Text = "Description";
             // 
             // rtbDescription
             // 
@@ -142,18 +147,20 @@
             this.rtbDescription.Size = new System.Drawing.Size(837, 145);
             this.rtbDescription.TabIndex = 0;
             this.rtbDescription.Text = "";
+            this.rtbDescription.TextChanged += new System.EventHandler(this.rtb_TextChanged);
             // 
-            // GroupBox3
+            // gbTaskTypes
             // 
-            this.GroupBox3.Controls.Add(this.GroupBox8);
-            this.GroupBox3.Controls.Add(this.GroupBox7);
-            this.GroupBox3.Controls.Add(this.GroupBox5);
-            this.GroupBox3.Controls.Add(this.GroupBox4);
-            this.GroupBox3.Location = new System.Drawing.Point(10, 214);
-            this.GroupBox3.Name = "GroupBox3";
-            this.GroupBox3.Size = new System.Drawing.Size(843, 96);
-            this.GroupBox3.TabIndex = 11;
-            this.GroupBox3.TabStop = false;
+            this.gbTaskTypes.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.gbTaskTypes.Controls.Add(this.GroupBox8);
+            this.gbTaskTypes.Controls.Add(this.GroupBox7);
+            this.gbTaskTypes.Controls.Add(this.GroupBox5);
+            this.gbTaskTypes.Controls.Add(this.GroupBox4);
+            this.gbTaskTypes.Location = new System.Drawing.Point(579, 214);
+            this.gbTaskTypes.Name = "gbTaskTypes";
+            this.gbTaskTypes.Size = new System.Drawing.Size(843, 96);
+            this.gbTaskTypes.TabIndex = 11;
+            this.gbTaskTypes.TabStop = false;
             // 
             // GroupBox8
             // 
@@ -334,8 +341,9 @@
             // 
             // gbTaskStatus
             // 
+            this.gbTaskStatus.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.gbTaskStatus.Controls.Add(this.tlpTaskStatus);
-            this.gbTaskStatus.Location = new System.Drawing.Point(10, 84);
+            this.gbTaskStatus.Location = new System.Drawing.Point(579, 84);
             this.gbTaskStatus.Name = "gbTaskStatus";
             this.gbTaskStatus.Size = new System.Drawing.Size(843, 119);
             this.gbTaskStatus.TabIndex = 10;
@@ -553,24 +561,25 @@
             this.trbTaskStatus.TickStyle = System.Windows.Forms.TickStyle.Both;
             this.trbTaskStatus.ValueChanged += new System.EventHandler(this.trbTaskStatus_ValueChanged);
             // 
-            // GroupBox1
+            // gbName
             // 
-            this.GroupBox1.Controls.Add(this.txtTitle);
-            this.GroupBox1.Controls.Add(this.label8);
-            this.GroupBox1.Controls.Add(this.txtName);
-            this.GroupBox1.Location = new System.Drawing.Point(10, 33);
-            this.GroupBox1.Name = "GroupBox1";
-            this.GroupBox1.Size = new System.Drawing.Size(843, 40);
-            this.GroupBox1.TabIndex = 9;
-            this.GroupBox1.TabStop = false;
-            this.GroupBox1.Text = "Name";
+            this.gbName.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.gbName.Controls.Add(this.txtTitle);
+            this.gbName.Controls.Add(this.label8);
+            this.gbName.Controls.Add(this.txtName);
+            this.gbName.Location = new System.Drawing.Point(579, 33);
+            this.gbName.Name = "gbName";
+            this.gbName.Size = new System.Drawing.Size(843, 40);
+            this.gbName.TabIndex = 9;
+            this.gbName.TabStop = false;
+            this.gbName.Text = "Name";
             // 
             // txtTitle
             // 
             this.txtTitle.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtTitle.Location = new System.Drawing.Point(233, 16);
+            this.txtTitle.Location = new System.Drawing.Point(216, 16);
             this.txtTitle.Name = "txtTitle";
-            this.txtTitle.Size = new System.Drawing.Size(607, 20);
+            this.txtTitle.Size = new System.Drawing.Size(624, 20);
             this.txtTitle.TabIndex = 3;
             this.txtTitle.Tag = "TaskName";
             // 
@@ -582,9 +591,9 @@
             this.label8.Margin = new System.Windows.Forms.Padding(6, 0, 3, 0);
             this.label8.Name = "label8";
             this.label8.Padding = new System.Windows.Forms.Padding(0, 4, 0, 0);
-            this.label8.Size = new System.Drawing.Size(49, 17);
+            this.label8.Size = new System.Drawing.Size(32, 17);
             this.label8.TabIndex = 2;
-            this.label8.Text = "Abstract:";
+            this.label8.Text = "Tiltle:";
             this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // txtName
@@ -596,45 +605,43 @@
             this.txtName.TabIndex = 1;
             this.txtName.Tag = "TaskName";
             // 
-            // TextBox1
+            // label9
             // 
-            this.TextBox1.BackColor = System.Drawing.Color.ForestGreen;
-            this.TextBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.TextBox1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.TextBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.TextBox1.ForeColor = System.Drawing.Color.White;
-            this.TextBox1.Location = new System.Drawing.Point(0, 0);
-            this.TextBox1.Multiline = true;
-            this.TextBox1.Name = "TextBox1";
-            this.TextBox1.ReadOnly = true;
-            this.TextBox1.Size = new System.Drawing.Size(863, 27);
-            this.TextBox1.TabIndex = 8;
-            this.TextBox1.Text = "TaskTracking Form";
-            this.TextBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.label9.BackColor = System.Drawing.Color.Green;
+            this.label9.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label9.ForeColor = System.Drawing.Color.White;
+            this.label9.Location = new System.Drawing.Point(0, 0);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(2000, 30);
+            this.label9.TabIndex = 15;
+            this.label9.Text = "Task Tracking Form";
+            this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // TaskTrackingForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
-            this.Controls.Add(this.groupBox9);
-            this.Controls.Add(this.groupBox2);
-            this.Controls.Add(this.GroupBox6);
-            this.Controls.Add(this.GroupBox3);
+            this.AutoSize = true;
+            this.Controls.Add(this.label9);
+            this.Controls.Add(this.gbReview);
+            this.Controls.Add(this.gbAnalysis);
+            this.Controls.Add(this.gbDescription);
+            this.Controls.Add(this.gbTaskTypes);
             this.Controls.Add(this.gbTaskStatus);
-            this.Controls.Add(this.GroupBox1);
-            this.Controls.Add(this.TextBox1);
+            this.Controls.Add(this.gbName);
             this.DoubleBuffered = true;
-            this.MaximumSize = new System.Drawing.Size(880, 99999);
+            this.MaximumSize = new System.Drawing.Size(2000, 2000);
             this.MinimumSize = new System.Drawing.Size(880, 0);
             this.Name = "TaskTrackingForm";
-            this.Size = new System.Drawing.Size(863, 600);
+            this.Size = new System.Drawing.Size(2000, 1115);
             this.Load += new System.EventHandler(this.TaskTrackingForm_Load);
-            this.groupBox9.ResumeLayout(false);
-            this.groupBox2.ResumeLayout(false);
-            this.GroupBox6.ResumeLayout(false);
-            this.GroupBox3.ResumeLayout(false);
-            this.GroupBox3.PerformLayout();
+            this.gbReview.ResumeLayout(false);
+            this.gbAnalysis.ResumeLayout(false);
+            this.gbDescription.ResumeLayout(false);
+            this.gbTaskTypes.ResumeLayout(false);
+            this.gbTaskTypes.PerformLayout();
             this.GroupBox8.ResumeLayout(false);
             this.Panel1.ResumeLayout(false);
             this.GroupBox7.ResumeLayout(false);
@@ -647,22 +654,21 @@
             this.tlpTaskStatus.ResumeLayout(false);
             this.tlpTaskStatus.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trbTaskStatus)).EndInit();
-            this.GroupBox1.ResumeLayout(false);
-            this.GroupBox1.PerformLayout();
+            this.gbName.ResumeLayout(false);
+            this.gbName.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
 
-        internal System.Windows.Forms.GroupBox groupBox9;
+        internal System.Windows.Forms.GroupBox gbReview;
         private System.Windows.Forms.RichTextBox rtbReview;
-        internal System.Windows.Forms.GroupBox groupBox2;
+        internal System.Windows.Forms.GroupBox gbAnalysis;
         private System.Windows.Forms.RichTextBox rtbAnalysis;
-        internal System.Windows.Forms.GroupBox GroupBox6;
+        internal System.Windows.Forms.GroupBox gbDescription;
         private System.Windows.Forms.RichTextBox rtbDescription;
-        internal System.Windows.Forms.GroupBox GroupBox3;
+        internal System.Windows.Forms.GroupBox gbTaskTypes;
         internal System.Windows.Forms.GroupBox GroupBox8;
         internal System.Windows.Forms.Panel Panel1;
         internal System.Windows.Forms.ComboBox cobReviewer;
@@ -694,10 +700,10 @@
         internal System.Windows.Forms.DateTimePicker dtpCollection;
         internal System.Windows.Forms.DateTimePicker dtpClosed;
         private System.Windows.Forms.TrackBar trbTaskStatus;
-        internal System.Windows.Forms.GroupBox GroupBox1;
+        internal System.Windows.Forms.GroupBox gbName;
         internal System.Windows.Forms.TextBox txtTitle;
         private System.Windows.Forms.Label label8;
         internal System.Windows.Forms.TextBox txtName;
-        internal System.Windows.Forms.TextBox TextBox1;
+        private System.Windows.Forms.Label label9;
     }
 }

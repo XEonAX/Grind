@@ -66,7 +66,7 @@ namespace Grind_WF_CS
         public static bool UpdateObject(ref RootObject rootObject, ref RestClient rClient, string requestResource, string requestResourceId, out IRestResponse rResponse)
         {
             RestRequest rRequest = new RestRequest();
-            rRequest.DateFormat = "yyyy-MM-ddTHH:mm:sssssZ";
+            rRequest.DateFormat = "yyyy-MM-dd";
             rRequest.Resource = requestResource;
             rRequest.Method = Method.PUT;
             rRequest.AddUrlSegment("id", requestResourceId);
@@ -209,11 +209,18 @@ namespace Grind_WF_CS
         }
         public static bool ReadTasks(ref SortableBindingList<ClientTask> tasks, ref RestClient rClient, out IRestResponse rResponse)
         {
-            JsonDeserializer JSONDeserilizer = new JsonDeserializer();
+            JsonDeserializer rJSONDeserializer = new JsonDeserializer();
             if (ReadObject(ref rClient, "tasks", "", out rResponse))
             {
-                tasks = JSONDeserilizer.Deserialize<SortableBindingList<ClientTask>>(rResponse);
+                if (tasks == null) tasks = new SortableBindingList<ClientTask>();
+                tasks.Clear();
+                foreach (ClientTask item in rJSONDeserializer.Deserialize<SortableBindingList<ClientTask>>(rResponse))
+                {
+                    tasks.Add(item);
+                }    
+                //tasks = rJSONDeserializer.Deserialize<SortableBindingList<ClientTask>>(rResponse);
                 return true;
+        
             }
             else
             {

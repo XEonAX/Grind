@@ -113,6 +113,7 @@ end
   # Task.all.to_json
 # end
 
+#{GET Lists}
 get '/tasks' do
   Task.select(:id,:name,:task_status,:is_bug,:title,:bug_type,:target_date,:created_at,:updated_at,:approved,:developer_id,:reviewer_id,).all.to_json
 end
@@ -120,8 +121,9 @@ end
 get '/people' do
   Person.all.to_json  
 end
+#}{GET Lists}
 
-
+#{Person CRUD}
 post '/person' do
   @person = Person.new(params[:person].except('id','unread_objects_count','documents_count','tasks_count'))
   if @person.save
@@ -147,8 +149,9 @@ delete "/person/:id" do
     { :Status => 'Person with ID '+params[:id] +' destroyed' }.to_json
   end
 end
+#}{Person CRUD}
 
-
+#{Task CRUD}
 post "/task" do
   @task = Task.new(params[:task].except('id','documents','created_at','updated_at'))
   if @task.save
@@ -174,9 +177,9 @@ delete "/task/:id" do
     { :Status => 'Task with ID '+params[:id] +' destroyed' }.to_json
   end
 end
+#}{Task CRUD}
 
-
-
+#{GET Document}
 get '/document/:id' do
   Document.where(["id = ?", params[:id]]).first.to_json
 end
@@ -186,7 +189,7 @@ get '/task/:id/documents' do
   # Document.where(["task_id = ?", params[:id]]).all.to_json
   Task.find(params[:id]).documents.all.to_json
 end
-
+#}{GET Document}
 
 error ActiveRecord::RecordNotFound do
   status 404
