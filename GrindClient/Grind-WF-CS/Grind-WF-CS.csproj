@@ -47,6 +47,9 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="websocket-sharp">
+      <HintPath>..\packages\WebSocketSharp.1.0.3-rc7\lib\websocket-sharp.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers.cs" />
@@ -64,11 +67,11 @@
       <DependentUpon>GrindUserMaintenence.cs</DependentUpon>
     </Compile>
     <Compile Include="Models.cs" />
-    <Compile Include="PersonAdded.cs">
+    <Compile Include="WebSocketClient.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="PersonAdded.Designer.cs">
-      <DependentUpon>PersonAdded.cs</DependentUpon>
+    <Compile Include="WebSocketClient.Designer.cs">
+      <DependentUpon>WebSocketClient.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -85,8 +88,8 @@
     <EmbeddedResource Include="GrindUserMaintenence.resx">
       <DependentUpon>GrindUserMaintenence.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="PersonAdded.resx">
-      <DependentUpon>PersonAdded.cs</DependentUpon>
+    <EmbeddedResource Include="WebSocketClient.resx">
+      <DependentUpon>WebSocketClient.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
