@@ -10,3 +10,10 @@ J:\Root\Grind\GrindClient\Grind-WPF-CS\obj\x86\Debug\Grind-WPF-CS.csproj.Generat
 J:\Root\Grind\GrindClient\Grind-WPF-CS\obj\x86\Debug\Grind-WPF-CS.exe
 J:\Root\Grind\GrindClient\Grind-WPF-CS\obj\x86\Debug\Grind-WPF-CS.pdb
 J:\Root\Grind\GrindClient\Grind-WPF-CS\obj\x86\Debug\App.baml
+J:\Root\Grind\GrindClient\Grind-WPF-CS\obj\x86\Debug\Simple Styles.baml
+J:\Root\Grind\GrindClient\Grind-WPF-CS\obj\x86\Debug\TaskTrackingFormWPF.baml
+J:\Root\Grind\GrindClient\Grind-WPF-CS\obj\x86\Debug\TaskTrackingFormWPF.g.cs
+J:\Root\Grind\GrindClient\Grind-WPF-CS\obj\x86\Debug\GeneratedInternalTypeHelper.g.cs
+J:\Root\Grind\GrindClient\Grind-WPF-CS\obj\x86\Debug\Grind-WPF-CS_MarkupCompile.lref
+J:\Root\Grind\GrindClient\Grind-WPF-CS\bin\Debug\RestSharp.dll
+J:\Root\Grind\GrindClient\Grind-WPF-CS\bin\Debug\RestSharp.xml

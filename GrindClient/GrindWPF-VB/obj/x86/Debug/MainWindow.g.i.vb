@@ -85,7 +85,35 @@ Partial Public Class MainWindow
     #End ExternalSource
     
     
-    #ExternalSource("..\..\..\MainWindow.xaml",45)
+    #ExternalSource("..\..\..\MainWindow.xaml",41)
+    <System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")>  _
+    Friend WithEvents Label1 As System.Windows.Controls.Label
+    
+    #End ExternalSource
+    
+    
+    #ExternalSource("..\..\..\MainWindow.xaml",42)
+    <System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")>  _
+    Friend WithEvents TextBox1 As System.Windows.Controls.TextBox
+    
+    #End ExternalSource
+    
+    
+    #ExternalSource("..\..\..\MainWindow.xaml",43)
+    <System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")>  _
+    Friend WithEvents Label2 As System.Windows.Controls.Label
+    
+    #End ExternalSource
+    
+    
+    #ExternalSource("..\..\..\MainWindow.xaml",44)
+    <System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")>  _
+    Friend WithEvents TextBox2 As System.Windows.Controls.TextBox
+    
+    #End ExternalSource
+    
+    
+    #ExternalSource("..\..\..\MainWindow.xaml",49)
     <System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")>  _
     Friend WithEvents tiDocuments As System.Windows.Controls.TabItem
     
@@ -103,7 +131,7 @@ Partial Public Class MainWindow
             Return
         End If
         _contentLoaded = true
-        Dim resourceLocater As System.Uri = New System.Uri("/GrindWPF-VB;component/mainwindow.xaml", System.UriKind.Relative)
+        Dim resourceLocater As System.Uri = New System.Uri("/Grind.WPF.VB;component/mainwindow.xaml", System.UriKind.Relative)
         
         #ExternalSource("..\..\..\MainWindow.xaml",1)
         System.Windows.Application.LoadComponent(Me, resourceLocater)
@@ -143,6 +171,22 @@ Partial Public Class MainWindow
             Return
         End If
         If (connectionId = 7) Then
+            Me.Label1 = CType(target,System.Windows.Controls.Label)
+            Return
+        End If
+        If (connectionId = 8) Then
+            Me.TextBox1 = CType(target,System.Windows.Controls.TextBox)
+            Return
+        End If
+        If (connectionId = 9) Then
+            Me.Label2 = CType(target,System.Windows.Controls.Label)
+            Return
+        End If
+        If (connectionId = 10) Then
+            Me.TextBox2 = CType(target,System.Windows.Controls.TextBox)
+            Return
+        End If
+        If (connectionId = 11) Then
             Me.tiDocuments = CType(target,System.Windows.Controls.TabItem)
             Return
         End If

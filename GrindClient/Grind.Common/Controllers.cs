@@ -6,7 +6,7 @@ using RestSharp;
 using RestSharp.Deserializers;
 using RestSharp.Serializers;
 
-namespace Grind_WF_CS
+namespace Grind.Common
 {
     public  class Controllers
     {

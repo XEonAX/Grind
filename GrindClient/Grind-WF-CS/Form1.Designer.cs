@@ -1,4 +1,4 @@
-﻿namespace Grind_WF_CS
+﻿namespace Grind.WF.CS
 {
     partial class Form1
     {
@@ -39,8 +39,8 @@
             this.tsmiUpdate = new System.Windows.Forms.ToolStripMenuItem();
             this.tpFiles = new System.Windows.Forms.TabPage();
             this.tpUsers = new System.Windows.Forms.TabPage();
-            this.ttfrmControl = new Grind_WF_CS.TaskTrackingForm();
-            this.grindUserMaintenence1 = new Grind_WF_CS.GrindUserMaintenence();
+            this.ttfrmControl = new Grind.WF.CS.TaskTrackingForm();
+            this.grindUserMaintenence1 = new Grind.WF.CS.GrindUserMaintenence();
             this.colId = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colTaskName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colTaskStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();

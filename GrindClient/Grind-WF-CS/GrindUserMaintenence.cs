@@ -6,8 +6,8 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-
-namespace Grind_WF_CS
+using Grind.Common;
+namespace Grind.WF.CS
 {
     public partial class GrindUserMaintenence : UserControl
     {

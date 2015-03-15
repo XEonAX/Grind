@@ -1,4 +1,4 @@
-﻿namespace Grind_WF_CS
+﻿namespace Grind.WF.CS
 {
     partial class GrindUserMaintenence
     {

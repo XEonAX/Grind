@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Grind_WF_CS
+namespace Grind.Common
 {
     public class RootObject
     {
@@ -96,7 +96,8 @@ namespace Grind_WF_CS
             analysis_date = DateTime.Now.AddDays(1*7);
             review_date = DateTime.Now.AddDays(1*7);
             correction_date = DateTime.Now.AddDays(1*7);
-            promotion_date = DateTime.Now.AddDays(1*7);
+            promotion_date = DateTime.Now.AddDays(1 * 7);
+            target_date = DateTime.Now.AddDays(1 * 7);
             collection_date = DateTime.Now.AddDays(2*7);
             closed_date = DateTime.Now.AddDays(3*7);
             developer_id = Globals.People.First().id;

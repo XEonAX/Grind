@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.ComponentModel;
 
-namespace Grind_WF_CS
+namespace Grind.Common
 {
 
         /// <summary>

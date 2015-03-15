@@ -8,7 +8,7 @@
     <ProjectGuid>{E15DC9EF-43C2-4A28-9F6E-81F610191BAC}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Grind_WF_CS</RootNamespace>
+    <RootNamespace>Grind.WF.CS</RootNamespace>
     <AssemblyName>Grind-WF-CS</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
@@ -52,21 +52,18 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controllers.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="Globals.cs" />
     <Compile Include="GrindUserMaintenence.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="GrindUserMaintenence.Designer.cs">
       <DependentUpon>GrindUserMaintenence.cs</DependentUpon>
     </Compile>
-    <Compile Include="Models.cs" />
     <Compile Include="WebSocketClient.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -75,7 +72,6 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SortableBindingList.cs" />
     <Compile Include="TaskTrackingForm.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -99,6 +95,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <EmbeddedResource Include="TaskTrackingForm.resx">
       <DependentUpon>TaskTrackingForm.cs</DependentUpon>
@@ -115,7 +112,15 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Common\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Grind.Common\Grind.Common.csproj">
+      <Project>{EBE1CCAC-7CE0-417C-A86F-6EC683B3A40F}</Project>
+      <Name>Grind.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

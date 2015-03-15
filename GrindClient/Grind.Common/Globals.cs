@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Grind_WF_CS
+namespace Grind.Common
 {
     public class Globals
     {

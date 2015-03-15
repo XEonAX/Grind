@@ -516,7 +516,7 @@ Partial Class Form1
         '
         'bsTask
         '
-        Me.bsTask.DataSource = GetType(Grind_WF.Task)
+        Me.bsTask.DataSource = GetType(Task)
         '
         'dtpCorrection
         '
@@ -723,14 +723,14 @@ Partial Class Form1
         '
         'ToolStripMenuItem1
         '
-        Me.ToolStripMenuItem1.Image = Global.Grind_WF.My.Resources.Resources._112_Plus_Green_16x16_72
+        Me.ToolStripMenuItem1.Image = Global.Grind.WF.VB.My.Resources.Resources._112_Plus_Green_16x16_72
         Me.ToolStripMenuItem1.Name = "ToolStripMenuItem1"
         Me.ToolStripMenuItem1.Size = New System.Drawing.Size(59, 20)
         Me.ToolStripMenuItem1.Text = "New"
         '
         'RefreshToolStripMenuItem
         '
-        Me.RefreshToolStripMenuItem.Image = Global.Grind_WF.My.Resources.Resources._112_RefreshArrow_Blue_16x16_72
+        Me.RefreshToolStripMenuItem.Image = Global.Grind.WF.VB.My.Resources.Resources._112_RefreshArrow_Blue_16x16_72
         Me.RefreshToolStripMenuItem.Name = "RefreshToolStripMenuItem"
         Me.RefreshToolStripMenuItem.Size = New System.Drawing.Size(74, 20)
         Me.RefreshToolStripMenuItem.Text = "Refresh"

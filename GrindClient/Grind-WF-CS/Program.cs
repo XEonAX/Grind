@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace Grind_WF_CS
+namespace Grind.WF.CS
 {
     static class Program
     {
@@ -15,7 +15,7 @@ namespace Grind_WF_CS
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new WebSocketClient());
+            Application.Run(new Form1());
         }
     }
 }

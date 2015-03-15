@@ -54,7 +54,7 @@ Partial Public Class Chat
             Return
         End If
         _contentLoaded = true
-        Dim resourceLocater As System.Uri = New System.Uri("/GrindWPF-VB;component/chat.xaml", System.UriKind.Relative)
+        Dim resourceLocater As System.Uri = New System.Uri("/Grind.WPF.VB;component/chat.xaml", System.UriKind.Relative)
         
         #ExternalSource("..\..\..\Chat.xaml",1)
         System.Windows.Application.LoadComponent(Me, resourceLocater)

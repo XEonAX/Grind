@@ -5,7 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Windows;
 
-namespace Grind_WPF_CS
+namespace Grind.WPF.CS
 {
     /// <summary>
     /// Interaction logic for App.xaml
