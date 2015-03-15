@@ -78,9 +78,9 @@ namespace Grind.WF.CS
             trbTaskStatus.Value = (int)task.task_status;
             cobExecutor.Text = Globals.People.Find(x => x.id == task.developer_id).name;
             cobReviewer.Text = Globals.People.Find(x => x.id == task.reviewer_id).name;
-            rtbDescription.Rtf = task.description;
-            rtbAnalysis.Rtf = task.analysis;
-            rtbReview.Rtf = task.review;
+            rtbDescription.Rtf = (string)task.description;
+            rtbAnalysis.Rtf = (string)task.analysis;
+            rtbReview.Rtf = (string)task.review;
             UserChange = true;
         }
 

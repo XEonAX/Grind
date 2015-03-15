@@ -134,7 +134,7 @@
                         
                     </Grid>
                 </GroupBox>
-                <GroupBox Header="Task Options"  Grid.Row="3">
+                <GroupBox Header="Task Options"  Grid.Row="3" Name="gbTaskOptions">
                     <DockPanel>
                         <GroupBox Header="Task Type">
                             <Grid>

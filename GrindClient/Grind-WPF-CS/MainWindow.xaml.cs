@@ -12,6 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Grind.Common;
+using System.Diagnostics;
 namespace Grind.WPF.CS
 {
     /// <summary>
@@ -23,5 +24,167 @@ namespace Grind.WPF.CS
         {
             InitializeComponent();
         }
+        public SortableBindingList<ClientTask> TaskList;
+        Task CurrentTask;
+        bool UserChange = true;
+        enum ViewMode
+        {
+            Normal,
+            New,
+            Update,
+            ChangeCancelled
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            dGridTasks.AutoGenerateColumns = false;
+            dGridTasks.ItemsSource = TaskList;
+            new Controllers("http://localhost:4567/");
+            new Globals();
+        }
+
+        private void btnNew_Click(object sender, RoutedEventArgs e)
+        {
+            if (((string )btnNew.Content) == "New")
+            {
+                //New Task mode
+                SetMode(ViewMode.New);
+                //FillTaskTrackingForm(new Task());
+                ttfrmControl.FillFormfromTask(new Task());
+
+
+            }
+            else if (((string )btnNew.Content) == "Save" && ((string )btnUpdate.Content) == "Cancel")
+            {
+                //New Task Save
+                Task task = new Task();
+                //BuildTaskFromForm(ref task);
+                ttfrmControl.BuildTaskfromTaskFilledForm(ref task);
+                Controllers.CreateTask(ref task);
+                UserChange = false;
+                Controllers.ReadTasks(ref TaskList);
+                UserChange = true;
+                //dGridTasks.DataSource = TaskList;
+                //if (dGridTasks.RowCount > 0)
+                //    dGridTasks.CurrentCell = dGridTasks.Rows[dGridTasks.Rows.GetLastRow(DataGridViewElementStates.None)].Cells[1];
+
+                ttfrmControl.FillFormfromTask(task);
+                SetMode(ViewMode.Normal);
+            }
+            else if (((string)btnNew.Content) == "Cancel" && ((string)btnUpdate.Content) == "Save")
+            {
+                //int OldTaskId = CurrentTask.id;
+                ////Update Mode Cancel
+                //UserChange = false;
+                //Controllers.ReadTasks(ref TaskList);
+                //UserChange = true;
+                //if (dGridTasks.RowCount > 0)
+                //{
+                //    dGridTasks.CurrentCell = dGridTasks[1, GetIndexByIdFromTaskList(OldTaskId)];
+                //}
+                ttfrmControl.FillFormfromTask(CurrentTask);
+                SetMode(ViewMode.Normal);
+
+            }
+        }
+        private void SetMode(ViewMode viewMode)
+        {
+            switch (viewMode)
+            {
+                case ViewMode.Normal:
+                    dGridTasks.IsEnabled = true;
+                    ttfrmControl.DisableForm();
+                    btnNew.Content = "New";
+                    btnUpdate.Content = "Update";
+                    break;
+                case ViewMode.New:
+                    dGridTasks.IsEnabled = false;
+                    ttfrmControl.EnableForm();
+                    btnNew.Content = "Save";
+                    btnUpdate.Content = "Cancel";
+                    break;
+                case ViewMode.Update:
+                    dGridTasks.IsEnabled = false;
+                    ttfrmControl.EnableForm();
+                    btnNew.Content = "Cancel";
+                    btnUpdate.Content = "Save";
+                    break;
+                case ViewMode.ChangeCancelled:
+                    SetMode(ViewMode.Normal);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void btnRefresh_Click(object sender, RoutedEventArgs e)
+        {
+            Controllers.ReadPeople(ref Globals.People);
+            Controllers.ReadTasks(ref TaskList);
+            //cobExecutor.Items.AddRange(Globals.People.Select(x => x.name).ToArray());
+            //cobReviewer.Items.AddRange(Globals.People.Select(x => x.name).ToArray());
+            ttfrmControl.FillPeopleDropDown();
+            dGridTasks.ItemsSource = TaskList;
+            SetMode(ViewMode.Normal);
+        }
+
+        private void btnUpdate_Click(object sender, RoutedEventArgs e)
+        {
+            if (btnUpdate.Content == "Update")
+            {
+                SetMode(ViewMode.Update);
+            }
+            else if (btnUpdate.Content == "Save" && btnNew.Content == "Cancel")
+            {
+                int OldTaskId = CurrentTask.id;
+                ttfrmControl.BuildTaskfromTaskFilledForm(ref CurrentTask);
+                Controllers.UpdateTask(ref CurrentTask);
+
+
+                UserChange = false;
+                Controllers.ReadTasks(ref TaskList);
+
+                if (TaskList.Count > 0)
+                {
+                    dGridTasks.SelectedIndex = GetIndexByIdFromTaskList(OldTaskId);
+                    //dGridTasks.CurrentCell = DataGrid.GetCell(1, GetIndexByIdFromTaskList(OldTaskId));
+                    Controllers.ReadTask(((ClientTask)dGridTasks.SelectedCells[0].Item).id, ref CurrentTask);
+                    //Controllers.ReadTask((int)dGridTasks.CurrentItem.Cells["colId"].Value, ref CurrentTask);
+                }
+
+                //FillTaskTrackingForm(RetrievedTask);
+                UserChange = true;
+                ttfrmControl.FillFormfromTask(CurrentTask);
+                SetMode(ViewMode.Normal);
+            }
+            else if (btnUpdate.Content == "Cancel" && btnNew.Content == "Save")
+            {
+                ttfrmControl.FillFormfromTask(CurrentTask);
+                //tsmiRefresh_Click(null, EventArgs.Empty);
+                SetMode(ViewMode.Normal);
+            }
+        }
+
+
+        #region Lambdas
+        private int GetIndexByIdFromTaskList(int id)
+        {
+            return TaskList.ToList().FindIndex(x => x.id == id);
+        }
+        #endregion
+
+        private void dGridTasks_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (UserChange && dGridTasks.CurrentItem != null)
+            {
+                Debug.Print(">>>>>>>>>>>" + dGridTasks.SelectedCells[0].Item.ToString());
+                Controllers.ReadTask(((ClientTask)dGridTasks.SelectedCells[0].Item).id, ref CurrentTask);
+                //FillTaskTrackingForm(RetrievedTask);
+                ttfrmControl.FillFormfromTask(CurrentTask);
+
+            }
+        }
+
+
     }
 }

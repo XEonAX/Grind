@@ -12,6 +12,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Linq;
 using Grind.Common;
+using System.IO;
+using System.Windows.Markup;
 namespace Grind.WPF.CS
 {
     /// <summary>
@@ -50,13 +52,13 @@ namespace Grind.WPF.CS
             UserChange = false;
             txtName.Text = task.name;
             txtTitle.Text = task.title;
-            dtpOpen.IsEnabled = true;
-            dtpAnalysis.IsEnabled = false;
-            dtpReview.IsEnabled = false;
-            dtpCorrection.IsEnabled = false;
-            dtpPromotion.IsEnabled = false;
-            dtpCollection.IsEnabled = false;
-            dtpClosed.IsEnabled = false;
+            //dtpOpen.IsEnabled = true;
+            //dtpAnalysis.IsEnabled = false;
+            //dtpReview.IsEnabled = false;
+            //dtpCorrection.IsEnabled = false;
+            //dtpPromotion.IsEnabled = false;
+            //dtpCollection.IsEnabled = false;
+            //dtpClosed.IsEnabled = false;
             dtpOpen.SelectedDate = task.open_date.Date;
             dtpAnalysis.SelectedDate = task.analysis_date.Date;
             dtpReview.SelectedDate = task.review_date.Date;
@@ -89,6 +91,14 @@ namespace Grind.WPF.CS
             sldTaskStatus.Value = (int)task.task_status;
             cbExecutor.Text = Globals.People.Find(x => x.id == task.developer_id).name;
             cbReviewer.Text = Globals.People.Find(x => x.id == task.reviewer_id).name;
+            //if (task.description == null) task.description = "";
+            //if (task.analysis == null) task.analysis = new object();
+            //if (task.review == null) task.review = new object();
+
+            rtbDescription.Document = Globals.XamlPackageToWPFRichText(task.description);
+            rtbAnalysis.Document = Globals.XamlPackageToWPFRichText(task.analysis);
+            rtbReview.Document = Globals.XamlPackageToWPFRichText(task.review);
+
             //rtbDescription.Rtf = task.description;
             //rtbAnalysis.Rtf = task.analysis;
             //rtbReview.Rtf = task.review;
@@ -124,12 +134,37 @@ namespace Grind.WPF.CS
             task.promotion_date = ((DateTime)dtpPromotion.SelectedDate).Date.Add(TimeZoneInfo.Local.BaseUtcOffset);
             task.collection_date = ((DateTime)dtpCollection.SelectedDate).Date.Add(TimeZoneInfo.Local.BaseUtcOffset);
             task.closed_date = ((DateTime)dtpClosed.SelectedDate).Date.Add(TimeZoneInfo.Local.BaseUtcOffset);
+            task.description = Globals.WPFRichTextToXamlPackage(rtbDescription.Document);
+            task.analysis = Globals.WPFRichTextToXamlPackage(rtbAnalysis.Document);
+            task.review = Globals.WPFRichTextToXamlPackage(rtbReview.Document);
+ 
+            
             //task.description = rtbDescription.Rtf;
             //task.analysis = rtbAnalysis.Rtf;
             //task.review = rtbReview.Rtf;
         }
 
-       
+        public void EnableForm()
+        {
+            gbTaskOptions.IsEnabled = true;
+            sldTaskStatus.IsEnabled = true;
+            txtName.IsReadOnly = false;
+            txtTitle.IsReadOnly = false;
+            rtbAnalysis.IsReadOnly = false;
+            rtbDescription.IsReadOnly = false;
+            rtbReview.IsReadOnly = false;
+        }
+
+        public void DisableForm()
+        {
+            gbTaskOptions.IsEnabled = false;
+            sldTaskStatus.IsEnabled = false;
+            txtName.IsReadOnly = true;
+            txtTitle.IsReadOnly = true;
+            rtbAnalysis.IsReadOnly = true;
+            rtbDescription.IsReadOnly = true;
+            rtbReview.IsReadOnly = true;
+        }
 
 
 
@@ -169,4 +204,6 @@ namespace Grind.WPF.CS
     }
 
     #endregion
+
+
 }
