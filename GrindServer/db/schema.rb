@@ -34,14 +34,16 @@ ActiveRecord::Schema.define(version: 20150131130010) do
   end
 
   create_table "people", force: :cascade do |t|
-    t.string  "name",                 limit: 255
-    t.string  "trigram",              limit: 255
-    t.boolean "active",               limit: 1
-    t.integer "level",                limit: 4
-    t.string  "internal_object_id",   limit: 255
-    t.integer "unread_objects_count", limit: 4
-    t.integer "documents_count",      limit: 4
-    t.integer "tasks_count",          limit: 4
+    t.string   "name",                 limit: 255
+    t.string   "trigram",              limit: 255
+    t.boolean  "active",               limit: 1
+    t.integer  "level",                limit: 4
+    t.string   "internal_object_id",   limit: 255
+    t.integer  "unread_objects_count", limit: 4
+    t.integer  "documents_count",      limit: 4
+    t.integer  "tasks_count",          limit: 4
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "tasks", force: :cascade do |t|

@@ -35,7 +35,7 @@
             this.btnDelete = new System.Windows.Forms.Button();
             this.btnAdd = new System.Windows.Forms.Button();
             this.dupLevel = new System.Windows.Forms.DomainUpDown();
-            this.cbActive = new System.Windows.Forms.CheckBox();
+            this.chkActive = new System.Windows.Forms.CheckBox();
             this.label9 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
@@ -66,7 +66,7 @@
             this.groupBox1.Controls.Add(this.btnDelete);
             this.groupBox1.Controls.Add(this.btnAdd);
             this.groupBox1.Controls.Add(this.dupLevel);
-            this.groupBox1.Controls.Add(this.cbActive);
+            this.groupBox1.Controls.Add(this.chkActive);
             this.groupBox1.Controls.Add(this.label9);
             this.groupBox1.Controls.Add(this.label10);
             this.groupBox1.Controls.Add(this.label11);
@@ -143,13 +143,13 @@
             // 
             // cbActive
             // 
-            this.cbActive.AutoSize = true;
-            this.cbActive.Location = new System.Drawing.Point(16, 98);
-            this.cbActive.Name = "cbActive";
-            this.cbActive.Size = new System.Drawing.Size(56, 17);
-            this.cbActive.TabIndex = 35;
-            this.cbActive.Text = "Active";
-            this.cbActive.UseVisualStyleBackColor = true;
+            this.chkActive.AutoSize = true;
+            this.chkActive.Location = new System.Drawing.Point(16, 98);
+            this.chkActive.Name = "cbActive";
+            this.chkActive.Size = new System.Drawing.Size(56, 17);
+            this.chkActive.TabIndex = 35;
+            this.chkActive.Text = "Active";
+            this.chkActive.UseVisualStyleBackColor = true;
             // 
             // label9
             // 
@@ -241,7 +241,7 @@
         private System.Windows.Forms.Button btnDelete;
         private System.Windows.Forms.Button btnAdd;
         private System.Windows.Forms.DomainUpDown dupLevel;
-        private System.Windows.Forms.CheckBox cbActive;
+        private System.Windows.Forms.CheckBox chkActive;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Label label11;

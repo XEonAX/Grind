@@ -13,6 +13,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Grind.Common;
 using System.Diagnostics;
+using System.IO;
 namespace Grind.WPF.CS
 {
     /// <summary>
@@ -119,7 +120,7 @@ namespace Grind.WPF.CS
 
         private void btnRefresh_Click(object sender, RoutedEventArgs e)
         {
-            Controllers.ReadPeople(ref Globals.People);
+            Controllers.ReadPeople(out Globals.People);
             Controllers.ReadTasks(ref TaskList);
             //cobExecutor.Items.AddRange(Globals.People.Select(x => x.name).ToArray());
             //cobReviewer.Items.AddRange(Globals.People.Select(x => x.name).ToArray());
@@ -148,7 +149,7 @@ namespace Grind.WPF.CS
                 {
                     dGridTasks.SelectedIndex = GetIndexByIdFromTaskList(OldTaskId);
                     //dGridTasks.CurrentCell = DataGrid.GetCell(1, GetIndexByIdFromTaskList(OldTaskId));
-                    Controllers.ReadTask(((ClientTask)dGridTasks.SelectedCells[0].Item).id, ref CurrentTask);
+                    Controllers.ReadTask(((ClientTask)dGridTasks.SelectedCells[0].Item).id, out CurrentTask);
                     //Controllers.ReadTask((int)dGridTasks.CurrentItem.Cells["colId"].Value, ref CurrentTask);
                 }
 
@@ -178,7 +179,7 @@ namespace Grind.WPF.CS
             if (UserChange && dGridTasks.CurrentItem != null)
             {
                 Debug.Print(">>>>>>>>>>>" + dGridTasks.SelectedCells[0].Item.ToString());
-                Controllers.ReadTask(((ClientTask)dGridTasks.SelectedCells[0].Item).id, ref CurrentTask);
+                Controllers.ReadTask(((ClientTask)dGridTasks.SelectedCells[0].Item).id, out CurrentTask);
                 //FillTaskTrackingForm(RetrievedTask);
                 ttfrmControl.FillFormfromTask(CurrentTask);
 

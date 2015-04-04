@@ -31,7 +31,7 @@ namespace Grind.WF.CS
             person.name = txtName.Text;
             person.trigram = txtTrigram.Text;
             person.internal_object_id = txtIntObjId.Text;
-            person.active = cbActive.Checked;
+            person.active = chkActive.Checked;
             person.level = (eLevel)dupLevel.SelectedIndex;
             Controllers.CreatePerson(ref person);
             btnRefresh_Click(null, EventArgs.Empty);
@@ -42,7 +42,7 @@ namespace Grind.WF.CS
         private void btnRefresh_Click(object sender, EventArgs e)
         {
             Refreshed = false;
-            Controllers.ReadPeople(ref Globals.People);
+            Controllers.ReadPeople(out Globals.People);
             lbPeople.DataSource = Globals.People.Select(x => x.name).ToList();
             //if (OldSelectedIndex > lbPeople.Items.Count-1)
             //    OldSelectedIndex = lbPeople.Items.Count - 1;
@@ -73,7 +73,7 @@ namespace Grind.WF.CS
             person.name = txtName.Text;
             person.trigram = txtTrigram.Text;
             person.internal_object_id = txtIntObjId.Text;
-            person.active = cbActive.Checked;
+            person.active = chkActive.Checked;
             person.level = (eLevel)dupLevel.SelectedIndex;
             Controllers.UpdatePerson(ref person);
             btnRefresh_Click(null, EventArgs.Empty);
@@ -102,7 +102,7 @@ namespace Grind.WF.CS
             txtName.Text = person.name;
             txtTrigram.Text = person.trigram;
             txtIntObjId.Text = person.internal_object_id;
-            cbActive.Checked = person.active;
+            chkActive.Checked = person.active;
             dupLevel.SelectedIndex = (int)person.level;
         }
 

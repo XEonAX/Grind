@@ -7,7 +7,9 @@
 	x:Class="Grind.WPF.CS.TaskTrackingFormWPF"
 	x:Name="UserControl"
 	d:DesignWidth="745"
-    xmlns:local="clr-namespace:Grind.WPF.CS">
+    xmlns:local="clr-namespace:Grind.WPF.CS"
+    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit">
+    <!--xmlns:wf="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"-->
     <UserControl.Resources>
         <local:SliderLeftRightMarginConverter x:Key="sliderLeftRightMarginConverter"></local:SliderLeftRightMarginConverter>
         <local:IsEnabledConverter x:Key="isEnabledConverter"></local:IsEnabledConverter>
@@ -190,13 +192,22 @@
                     </DockPanel>
                 </GroupBox>
                 <GroupBox Header="Description" Grid.Row="4">
-                    <RichTextBox Name="rtbDescription" />
+                    <xctk:RichTextBox Name="rtbDescription" />
+                    <!--<WindowsFormsHost ClipToBounds="True">
+                        <wf:RichTextBox x:Name="rtbDescription"/>
+                    </WindowsFormsHost>-->
                 </GroupBox>
                 <GroupBox Header="Analysis" Grid.Row="5">
-                    <RichTextBox Name="rtbAnalysis" />
+                    <xctk:RichTextBox Name="rtbAnalysis" />
+                    <!--<WindowsFormsHost>
+                        <wf:RichTextBox x:Name="rtbAnalysis"/>
+                    </WindowsFormsHost>-->
                 </GroupBox>
                 <GroupBox Header="Review" Grid.Row="6">
-                    <RichTextBox Name="rtbReview" />
+                    <xctk:RichTextBox Name="rtbReview" />
+                    <!--<WindowsFormsHost>
+                        <wf:RichTextBox x:Name="rtbReview"/>
+                    </WindowsFormsHost>-->
                 </GroupBox>
 
             </Grid>

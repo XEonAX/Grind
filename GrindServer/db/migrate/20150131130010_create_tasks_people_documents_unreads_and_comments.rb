@@ -36,6 +36,8 @@ class CreateTasksPeopleDocumentsUnreadsAndComments < ActiveRecord::Migration
       t.integer :unread_objects_count
       t.integer :documents_count
       t.integer :tasks_count
+      t.datetime :created_at
+      t.datetime :updated_at
     end
     create_table :documents do |t|
       t.string :name

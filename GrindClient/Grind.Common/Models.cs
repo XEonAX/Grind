@@ -8,7 +8,10 @@ namespace Grind.Common
     public class RootObject
     {
         public Person person { get; set; }
-        public Task task { get; set; }
+        public Task task { 
+            get; 
+            set; 
+        }
         public Document document { get; set; }
         public string Status { get; set; }
     }
@@ -29,6 +32,14 @@ namespace Grind.Common
         public Document document { get; set; }
     }
 
+    public class TimeStamp
+    {
+        public int id { get; set; }
+        public Model type { get; set; }
+        public DateTime created_at { get; set; }
+        public DateTime updated_at { get; set; }
+    }
+
     public class Person
     {
         public int id { get; set; }
@@ -40,6 +51,8 @@ namespace Grind.Common
         public int unread_objects_count { get; set; }
         public int documents_count { get; set; }
         public int tasks_count { get; set; }
+        public DateTime created_at { get; set; }
+        public DateTime updated_at { get; set; }
         //public int Id { get; set; }
         //public string Name { get; set; }
         //public string Trigram { get; set; }
@@ -132,7 +145,13 @@ namespace Grind.Common
     }
 
 
-
+    public enum Model
+	{
+	    task=0,
+        person,
+        document,
+        comment
+	}
     public enum eTaskStatus
     {
         Open = 0,

@@ -1,0 +1,17 @@
+J:\Root\Grind\GrindClient\GrindWPF-VB\bin\Release\Grind.WPF.VB.exe
+J:\Root\Grind\GrindClient\GrindWPF-VB\bin\Release\Grind.WPF.VB.pdb
+J:\Root\Grind\GrindClient\GrindWPF-VB\bin\Release\Grind.WPF.VB.xml
+J:\Root\Grind\GrindClient\GrindWPF-VB\bin\Release\RestSharp.dll
+J:\Root\Grind\GrindClient\GrindWPF-VB\bin\Release\RestSharp.xml
+J:\Root\Grind\GrindClient\GrindWPF-VB\obj\x86\Release\Chat.baml
+J:\Root\Grind\GrindClient\GrindWPF-VB\obj\x86\Release\MainWindow.baml
+J:\Root\Grind\GrindClient\GrindWPF-VB\obj\x86\Release\Chat.g.vb
+J:\Root\Grind\GrindClient\GrindWPF-VB\obj\x86\Release\MainWindow.g.vb
+J:\Root\Grind\GrindClient\GrindWPF-VB\obj\x86\Release\Application.g.vb
+J:\Root\Grind\GrindClient\GrindWPF-VB\obj\x86\Release\Grind.WPF.VB_MarkupCompile.cache
+J:\Root\Grind\GrindClient\GrindWPF-VB\obj\x86\Release\Grind.WPF.VB.g.resources
+J:\Root\Grind\GrindClient\GrindWPF-VB\obj\x86\Release\Grind.WPF.VB.Resources.resources
+J:\Root\Grind\GrindClient\GrindWPF-VB\obj\x86\Release\Grind.WPF.VB.vbproj.GenerateResource.Cache
+J:\Root\Grind\GrindClient\GrindWPF-VB\obj\x86\Release\Grind.WPF.VB.exe
+J:\Root\Grind\GrindClient\GrindWPF-VB\obj\x86\Release\Grind.WPF.VB.xml
+J:\Root\Grind\GrindClient\GrindWPF-VB\obj\x86\Release\Grind.WPF.VB.pdb

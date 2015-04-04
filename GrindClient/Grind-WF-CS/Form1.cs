@@ -92,7 +92,7 @@ namespace Grind.WF.CS
 
         private void tsmiRefresh_Click(System.Object sender, System.EventArgs e)
         {
-            Controllers.ReadPeople(ref Globals.People);
+            Controllers.ReadPeople(out Globals.People);
             Controllers.ReadTasks(ref TaskList);
             //cobExecutor.Items.AddRange(Globals.People.Select(x => x.name).ToArray());
             //cobReviewer.Items.AddRange(Globals.People.Select(x => x.name).ToArray());
@@ -120,7 +120,7 @@ namespace Grind.WF.CS
                 if (dGridTasks.RowCount > 0)
                 {
                     dGridTasks.CurrentCell = dGridTasks[1, GetIndexByIdFromTaskList(OldTaskId)];
-Controllers.ReadTask((int)dGridTasks.CurrentRow.Cells["colId"].Value, ref CurrentTask);
+                    Controllers.ReadTask((int)dGridTasks.CurrentRow.Cells["colId"].Value, out CurrentTask);
                 }
                 
                 //FillTaskTrackingForm(RetrievedTask);
@@ -141,7 +141,7 @@ Controllers.ReadTask((int)dGridTasks.CurrentRow.Cells["colId"].Value, ref Curren
         {
             if (UserChange && dGridTasks.CurrentRow != null)
             {
-                Controllers.ReadTask((int)dGridTasks.CurrentRow.Cells["colId"].Value, ref CurrentTask);
+                Controllers.ReadTask((int)dGridTasks.CurrentRow.Cells["colId"].Value, out CurrentTask);
                 //FillTaskTrackingForm(RetrievedTask);
                 ttfrmControl.FillFormfromTask(CurrentTask);
 

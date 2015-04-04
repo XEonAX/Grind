@@ -95,13 +95,18 @@ namespace Grind.WPF.CS
             //if (task.analysis == null) task.analysis = new object();
             //if (task.review == null) task.review = new object();
 
-            rtbDescription.Document = Globals.XamlPackageToWPFRichText(task.description);
-            rtbAnalysis.Document = Globals.XamlPackageToWPFRichText(task.analysis);
-            rtbReview.Document = Globals.XamlPackageToWPFRichText(task.review);
+            //rtbDescription.Document = Globals.XamlPackageToWPFRichText(task.description);
+            //rtbAnalysis.Document = Globals.XamlPackageToWPFRichText(task.analysis);
+            //rtbReview.Document = Globals.XamlPackageToWPFRichText(task.review);
 
             //rtbDescription.Rtf = task.description;
             //rtbAnalysis.Rtf = task.analysis;
             //rtbReview.Rtf = task.review;
+
+
+            rtbDescription.Text = task.description;
+            rtbAnalysis.Text = task.analysis;
+            rtbReview.Text = task.review;
             UserChange = true;
         }
 
@@ -134,11 +139,16 @@ namespace Grind.WPF.CS
             task.promotion_date = ((DateTime)dtpPromotion.SelectedDate).Date.Add(TimeZoneInfo.Local.BaseUtcOffset);
             task.collection_date = ((DateTime)dtpCollection.SelectedDate).Date.Add(TimeZoneInfo.Local.BaseUtcOffset);
             task.closed_date = ((DateTime)dtpClosed.SelectedDate).Date.Add(TimeZoneInfo.Local.BaseUtcOffset);
-            task.description = Globals.WPFRichTextToXamlPackage(rtbDescription.Document);
-            task.analysis = Globals.WPFRichTextToXamlPackage(rtbAnalysis.Document);
-            task.review = Globals.WPFRichTextToXamlPackage(rtbReview.Document);
- 
-            
+            //task.description = Globals.WPFRichTextToXamlPackage(rtbDescription.Document);
+            //task.analysis = Globals.WPFRichTextToXamlPackage(rtbAnalysis.Document);
+            //task.review = Globals.WPFRichTextToXamlPackage(rtbReview.Document);
+
+
+
+            task.description = rtbDescription.Text;
+            task.analysis = rtbAnalysis.Text;
+            task.review = rtbReview.Text;
+
             //task.description = rtbDescription.Rtf;
             //task.analysis = rtbAnalysis.Rtf;
             //task.review = rtbReview.Rtf;
@@ -153,6 +163,9 @@ namespace Grind.WPF.CS
             rtbAnalysis.IsReadOnly = false;
             rtbDescription.IsReadOnly = false;
             rtbReview.IsReadOnly = false;
+            //rtbAnalysis.ReadOnly = false;
+            //rtbDescription.ReadOnly = false;
+            //rtbReview.ReadOnly = false;
         }
 
         public void DisableForm()
@@ -164,6 +177,9 @@ namespace Grind.WPF.CS
             rtbAnalysis.IsReadOnly = true;
             rtbDescription.IsReadOnly = true;
             rtbReview.IsReadOnly = true;
+            //rtbAnalysis.ReadOnly = true;
+            //rtbDescription.ReadOnly = true;
+            //rtbReview.ReadOnly = true;
         }
 
 
