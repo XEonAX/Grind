@@ -4,27 +4,12 @@ J:\Root\Grind\GrindClient\Grind-WPF-CS\bin\Debug\Grind-WPF-CS.pdb
 J:\Root\Grind\GrindClient\Grind-WPF-CS\bin\Debug\Grind.Common.dll
 J:\Root\Grind\GrindClient\Grind-WPF-CS\bin\Debug\PresentationFramework.Aero.dll
 J:\Root\Grind\GrindClient\Grind-WPF-CS\bin\Debug\RestSharp.dll
-J:\Root\Grind\GrindClient\Grind-WPF-CS\bin\Debug\Xceed.Wpf.AvalonDock.dll
-J:\Root\Grind\GrindClient\Grind-WPF-CS\bin\Debug\Xceed.Wpf.AvalonDock.Themes.Aero.dll
-J:\Root\Grind\GrindClient\Grind-WPF-CS\bin\Debug\Xceed.Wpf.AvalonDock.Themes.Metro.dll
-J:\Root\Grind\GrindClient\Grind-WPF-CS\bin\Debug\Xceed.Wpf.AvalonDock.Themes.VS2010.dll
-J:\Root\Grind\GrindClient\Grind-WPF-CS\bin\Debug\Xceed.Wpf.DataGrid.dll
 J:\Root\Grind\GrindClient\Grind-WPF-CS\bin\Debug\Xceed.Wpf.Toolkit.dll
 J:\Root\Grind\GrindClient\Grind-WPF-CS\bin\Debug\NDatabase3.dll
 J:\Root\Grind\GrindClient\Grind-WPF-CS\bin\Debug\Grind.Common.pdb
 J:\Root\Grind\GrindClient\Grind-WPF-CS\bin\Debug\RestSharp.xml
 J:\Root\Grind\GrindClient\Grind-WPF-CS\bin\Debug\NDatabase3.pdb
 J:\Root\Grind\GrindClient\Grind-WPF-CS\bin\Debug\NDatabase3.xml
-J:\Root\Grind\GrindClient\Grind-WPF-CS\bin\Debug\de\Xceed.Wpf.AvalonDock.resources.dll
-J:\Root\Grind\GrindClient\Grind-WPF-CS\bin\Debug\es\Xceed.Wpf.AvalonDock.resources.dll
-J:\Root\Grind\GrindClient\Grind-WPF-CS\bin\Debug\fr\Xceed.Wpf.AvalonDock.resources.dll
-J:\Root\Grind\GrindClient\Grind-WPF-CS\bin\Debug\hu\Xceed.Wpf.AvalonDock.resources.dll
-J:\Root\Grind\GrindClient\Grind-WPF-CS\bin\Debug\it\Xceed.Wpf.AvalonDock.resources.dll
-J:\Root\Grind\GrindClient\Grind-WPF-CS\bin\Debug\pt-BR\Xceed.Wpf.AvalonDock.resources.dll
-J:\Root\Grind\GrindClient\Grind-WPF-CS\bin\Debug\ro\Xceed.Wpf.AvalonDock.resources.dll
-J:\Root\Grind\GrindClient\Grind-WPF-CS\bin\Debug\ru\Xceed.Wpf.AvalonDock.resources.dll
-J:\Root\Grind\GrindClient\Grind-WPF-CS\bin\Debug\sv\Xceed.Wpf.AvalonDock.resources.dll
-J:\Root\Grind\GrindClient\Grind-WPF-CS\bin\Debug\zh-Hans\Xceed.Wpf.AvalonDock.resources.dll
 J:\Root\Grind\GrindClient\Grind-WPF-CS\obj\x86\Debug\Grind.WPF.CS.csprojResolveAssemblyReference.cache
 J:\Root\Grind\GrindClient\Grind-WPF-CS\obj\x86\Debug\Simple Styles.baml
 J:\Root\Grind\GrindClient\Grind-WPF-CS\obj\x86\Debug\UserMaintenanceControl.baml
