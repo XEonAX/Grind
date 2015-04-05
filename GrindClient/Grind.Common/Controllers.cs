@@ -8,6 +8,8 @@ using RestSharp.Serializers;
 using NDatabase;
 using NDatabase.Api;
 using System.Diagnostics;
+using NDatabase.Api.Query;
+using System.Windows.Controls.Primitives;
 namespace Grind.Common
 {
     public class Controllers
@@ -17,12 +19,22 @@ namespace Grind.Common
         public static IRestResponse rRestResponse;
         public static string Message;
         public static IOdb CacheDB;
+        public static StatusBarItem bMessage;
+        public static StatusBarItem bState;
+
         public Controllers(string baseUrl)
         {
             rRestClient = new RestClient(baseUrl);
             CacheDB = OdbFactory.Open(@"CacheDB.ndb");
-
         }
+        public Controllers(string baseUrl, ref StatusBarItem sbiMessage, ref StatusBarItem sbiState)
+        {
+            rRestClient = new RestClient(baseUrl);
+            CacheDB = OdbFactory.Open(@"CacheDB.ndb");
+            bMessage = sbiMessage;
+            bState = sbiState;
+        }
+
         #endregion
 
         #region Base Object CRUD Methods
@@ -38,10 +50,14 @@ namespace Grind.Common
             rResponse = rClient.Execute(rRequest);
             if (rResponse.StatusCode == System.Net.HttpStatusCode.OK)
             {
+                SetState("Creation Successful.");
                 return true;
             }
             else
+            {
+                SetState(rResponse.ErrorMessage + " " + rRestResponse.StatusCode.ToString());
                 return false;
+            }
         }
 
         /// <summary>
@@ -62,10 +78,15 @@ namespace Grind.Common
             rResponse = rClient.Execute(rRequest);
             if (rResponse.StatusCode == System.Net.HttpStatusCode.OK)
             {
+                SetState("Online");
                 return true;
             }
             else
+            {
+                SetState(rResponse.ErrorMessage);
                 return false;
+            }
+
         }
 
         public static bool UpdateObject(ref RootObject rootObject, ref RestClient rClient, string requestResource, string requestResourceId, out IRestResponse rResponse)
@@ -80,10 +101,14 @@ namespace Grind.Common
             rResponse = rClient.Execute(rRequest);
             if (rResponse.StatusCode == System.Net.HttpStatusCode.OK)
             {
+                SetState("Update Successful");
                 return true;
             }
             else
+            {
+                SetState(rResponse.ErrorMessage);
                 return false;
+            }
         }
 
         public static bool DeleteObject(ref RestClient rClient, string requestResource, string requestResourceId, out IRestResponse rResponse)
@@ -97,9 +122,15 @@ namespace Grind.Common
             rResponse = rClient.Execute(rRequest);
             Globals.rootObject = JSONDeserilizer.Deserialize<RootObject>(rResponse);
             if (rResponse.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                SetState("Delete Successful");
                 return true;
+            }
             else
+            {
+                SetState(rResponse.ErrorMessage);
                 return false;
+            }
         }
         #endregion
 
@@ -138,6 +169,7 @@ namespace Grind.Common
                 JsonDeserializer JSONDeserilizer = new JsonDeserializer();
                 if (ReadObject(ref rClient, "people", "", out rResponse))
                 {
+
                     people = JSONDeserilizer.Deserialize<List<Person>>(rResponse);
                     CacheDB.Store<List<Person>>(people);
                     CacheDB.Commit();
@@ -147,8 +179,8 @@ namespace Grind.Common
                 {
                     if (cpeople != null)
                     {
+                        SetMessage("Offline Cache People");
                         people = cpeople;
-                        global::System.Windows.Forms.MessageBox.Show("CachedPeople!!");
                     }
                     else
                         people = null;
@@ -158,6 +190,7 @@ namespace Grind.Common
             }
             else
             {
+                SetMessage("Up to date Cached People");
                 people = cpeople;
                 rResponse = null;
                 return true;//We have good people in cache
@@ -198,8 +231,9 @@ namespace Grind.Common
                 JsonDeserializer JSONDeserilizer = new JsonDeserializer();
                 if (ReadObject(ref rClient, "task/{id}", taskId.ToString(), out rResponse))
                 {
+
                     task = JSONDeserilizer.Deserialize<Task>(rResponse);
-                    Debug.Print("Task Added to Cache");
+                    SetMessage("Task Added to Cache:" + task.name);
                     CacheDB.Store<Task>(task);
                     CacheDB.Commit();
                     return true;
@@ -209,7 +243,7 @@ namespace Grind.Common
                     if (ctask != null)
                     {
                         task = ctask;
-                        global::System.Windows.Forms.MessageBox.Show("CachedTAsk!!");
+                        SetMessage("Offline Task From Cache:" + ctask.name);
                     }
                     else
                         task = null;
@@ -219,6 +253,7 @@ namespace Grind.Common
             }
             else
             {
+                SetMessage("Up to date Task From Cache:" + ctask.name);
                 task = ctask;
                 //We have Cached Task
                 rResponse = null;
@@ -248,26 +283,27 @@ namespace Grind.Common
         #endregion
 
         #region Tasks Read Methods
-        public static bool ReadTasks(ref SortableBindingList<ClientTask> tasks)
+        public static bool ReadTasks(ref SortableBindingList<TaskListItem> tasks)
         {
             return ReadTasks(ref tasks, ref rRestClient, out rRestResponse);
         }
-        public static bool ReadTasks(ref SortableBindingList<ClientTask> tasks, ref RestClient rClient, out IRestResponse rResponse)
+        public static bool ReadTasks(ref SortableBindingList<TaskListItem> tasks, ref RestClient rClient, out IRestResponse rResponse)
         {
-            SortableBindingList<ClientTask> ctasks;
+            SortableBindingList<TaskListItem> ctasks;
             if (RetrieveLatestTasksFromServer(out ctasks))
             {
                 JsonDeserializer rJSONDeserializer = new JsonDeserializer();
                 if (ReadObject(ref rClient, "tasks", "", out rResponse))
                 {
-                    if (tasks == null) tasks = new SortableBindingList<ClientTask>();
+                    
+                    if (tasks == null) tasks = new SortableBindingList<TaskListItem>();
                     tasks.Clear();
-                    foreach (ClientTask item in rJSONDeserializer.Deserialize<SortableBindingList<ClientTask>>(rResponse))
+                    foreach (TaskListItem item in rJSONDeserializer.Deserialize<SortableBindingList<TaskListItem>>(rResponse))
                     {
                         tasks.Add(item);
                     }
-                    Debug.Print("Tasks Added to Cache");
-                    CacheDB.Store<SortableBindingList<ClientTask>>(tasks);
+                    SetMessage("TaskList Added to Cache");
+                    CacheDB.Store<SortableBindingList<TaskListItem>>(tasks);
                     CacheDB.Commit();
                     //tasks = rJSONDeserializer.Deserialize<SortableBindingList<ClientTask>>(rResponse);
                     return true;
@@ -275,11 +311,11 @@ namespace Grind.Common
                 }
                 else
                 {
-
+                    //SetState("Offline1");
                     if (ctasks != null)
                     {
                         tasks = ctasks;
-                        global::System.Windows.Forms.MessageBox.Show("CachedTAsk!!");
+                        SetMessage("Offline TaskList From Cache");
                     }
                     else
                         tasks = null;
@@ -320,11 +356,12 @@ namespace Grind.Common
         #region Helper Methods
         public static bool RetrieveLatestPeopleFromServer(out List<Person> people)
         {
-            IQueryable<List<Person>> qPeople = from _people in CacheDB.AsQueryable<List<Person>>()
-                                               select _people;
-            if (qPeople.Count() == 1)
+            //IQueryable<List<Person>> osPeople = from _people in CacheDB.AsQueryable<List<Person>>()
+            //                                   select _people;
+            IObjectSet<List<Person>> osPeople = CacheDB.QueryAndExecute<List<Person>>();
+            if (osPeople.Count() == 1)
             {
-                people = qPeople.First();
+                people = osPeople.First();
                 List<TimeStamp> LatestPeopleTimeStamps = LatestTimeStamps(Model.person);
                 if (LatestPeopleTimeStamps != null)
                 {
@@ -354,12 +391,13 @@ namespace Grind.Common
                 }
                 else
                 {
+                    SetState("Offline2");
                     //We have unconfirmed people
                     return true;
                 }
             }
             else
-                foreach (List<Person> __people in qPeople)
+                foreach (List<Person> __people in osPeople)
                 {
                     //How the hell did it enter here??
                     //Kill all group of people that exist in cache.
@@ -370,64 +408,57 @@ namespace Grind.Common
             people = null;
             return true;
         }
-        public static bool RetrieveLatestTasksFromServer(out SortableBindingList<ClientTask> tasks)
+        public static bool RetrieveLatestTasksFromServer(out SortableBindingList<TaskListItem> tasks)
         {
-            IQueryable<SortableBindingList<ClientTask>> qTasks = from _tasks in CacheDB.AsQueryable<SortableBindingList<ClientTask>>()
-                                                                 select _tasks;
-            if (qTasks.Count() == 1)
+            //IQueryable<SortableBindingList<ClientTask>> osTasks = from _tasks in CacheDB.AsQueryable<SortableBindingList<ClientTask>>()
+            //                                                     select _tasks;
+
+            IObjectSet<SortableBindingList<TaskListItem>> osTasks = CacheDB.QueryAndExecute<SortableBindingList<TaskListItem>>();
+            if (osTasks.Count() == 1)
             {
-                tasks = qTasks.First();
+                tasks = osTasks.First();
                 List<TimeStamp> LatestTasksTimeStamps = LatestTimeStamps(Model.task);
                 if (LatestTasksTimeStamps != null)
                 {
                     if (tasks.Count == LatestTasksTimeStamps.Count)
                     {
                         Debug.Print("Same no of Tasks Detected in Cache");
-                        foreach (ClientTask task in tasks)
+                        foreach (TaskListItem task in tasks)
                         {
-                            //if (task != null)
-                            //{
-                                if (task==null || LatestTasksTimeStamps.Find(x => (x.id == task.id && x.updated_at == task.updated_at)) == null)
-                                {
-                                    Debug.Print("task not found on server. So we need a refresh.");
-                                    CacheDB.Delete<SortableBindingList<ClientTask>>(tasks);//Delete because it's stale
-                                    CacheDB.Commit();
-                                    tasks = null;
-                                    return true;
-                                }
-                            //}
-                            //else 
-                            //{
-                            //    CacheDB.Delete<SortableBindingList<ClientTask>>(tasks);//Delete because it's stale
-                            //    CacheDB.Commit();
-                            //    tasks = null;
-                            //    return true;
-                            //}
+                            if (task == null || LatestTasksTimeStamps.Find(x => (x.id == task.id && x.updated_at == task.updated_at)) == null)
+                            {
+                                Debug.Print("task not found on server. So we need a refresh.");
+                                CacheDB.Delete<SortableBindingList<TaskListItem>>(tasks);//Delete because it's stale
+                                CacheDB.Commit();
+                                tasks = null;
+                                return true;
+                            }
 
                         }
                         return false;
                     }
                     else
                     {
-                        Debug.Print("Stale tasks found. So deleting them.");
-                        CacheDB.Delete<SortableBindingList<ClientTask>>(tasks);//Delete because it's stale
+                        SetMessage("Stale tasks found. So deleting them.");
+                        CacheDB.Delete<SortableBindingList<TaskListItem>>(tasks);//Delete because it's stale
                         CacheDB.Commit();
                         tasks = null;
                     }
                 }
                 else
                 {
+                    SetState("Offline3");
                     //We have unconfirmed people
                     return true;
                 }
             }
             else
-                foreach (SortableBindingList<ClientTask> __task in qTasks)
+                foreach (SortableBindingList<TaskListItem> __task in osTasks)
                 {
                     //How the hell did it enter here??
                     //delete all group of tasks that exist in cache.
                     //We need to start afresh
-                    CacheDB.Delete<SortableBindingList<ClientTask>>(__task);
+                    CacheDB.Delete<SortableBindingList<TaskListItem>>(__task);
                     CacheDB.Commit();
                 }
             tasks = null;
@@ -435,35 +466,41 @@ namespace Grind.Common
         }
         public static bool RetrieveLatestTaskFromServer(int id, out Task task)
         {
-            IQueryable<Task> qTasks = from _tasks in CacheDB.AsQueryable<Task>()
-                                      where
-                                          _tasks.id.Equals(id)
-                                      select _tasks;
-            if (qTasks.Count() == 1 || qTasks.Count() == 2)
+            //IQueryable<Task> osTasks = from _tasks in CacheDB.AsQueryable<Task>()
+            //                          where
+            //                              _tasks.id.Equals(id)
+            //                          select _tasks;
+            IQuery queryById = CacheDB.Query<Task>();
+            queryById.Descend("id").Constrain(id).Equal();
+            //IEnumerable<Task> osTasks = queryById.Execute<Task>().Where(x=>x.GetType()==typeof(Task));
+            IEnumerable<Task> osTasks = queryById.Execute<Task>();
+
+            if (osTasks.Count() == 1)
             {
-                task = qTasks.First();
+                task = osTasks.First();
                 DateTime? dtTaskLastUpdateAt = TaskLastUpdateAt(id);
                 if (dtTaskLastUpdateAt != null)//if false retrieve from Server
                     if (dtTaskLastUpdateAt == task.updated_at)
                     {
-                        Debug.Print("Task from Cache");
+                        SetMessage("Task from Cache");
                         return false;
                     }
                     else
                     {
-                        Debug.Print("Stale Task Deleted from Cache");
+                        SetMessage("Stale Task Deleted from Cache");
                         CacheDB.Delete<Task>(task);//Delete because it's stale
                         CacheDB.Commit();
                         task = null;
                     }
                 else
                 {
+                    SetState("Offline4");
                     //We have unconfirmed Task
                     return true;
                 }
             }
             else
-                foreach (Task _task in qTasks)
+                foreach (Task _task in osTasks)
                 {
                     //How the hell did it enter here??
                     //Delete all tasks with this IDthat exist in cache.
@@ -492,6 +529,7 @@ namespace Grind.Common
             JsonDeserializer JSONDeserilizer = new JsonDeserializer();
             if (ReadObject(ref rClient, @"timestamp/" + type.ToString() + @"/{id}", id.ToString(), out rResponse))
             {
+
                 timestamp = JSONDeserilizer.Deserialize<TimeStamp>(rResponse);
                 return true;
             }
@@ -520,6 +558,7 @@ namespace Grind.Common
             JsonDeserializer JSONDeserilizer = new JsonDeserializer();
             if (ReadObject(ref rClient, @"timestamps/" + type.ToString(), "", out rResponse))
             {
+
                 timestamps = JSONDeserilizer.Deserialize<List<TimeStamp>>(rResponse);
                 return true;
             }
@@ -529,22 +568,53 @@ namespace Grind.Common
                 return false;
             }
         }
-        public static bool ReadPeopleFromCache(out List<Person> people)
+        //public static bool ReadPeopleFromCache(out List<Person> people)
+        //{
+        //    IQueryable<List<Person>> qPeople = from _people in CacheDB.AsQueryable<List<Person>>()
+        //                                       select _people;
+        //    if (qPeople.Count() > 0)
+        //    {
+        //        people = qPeople.First();
+        //        return true;
+        //    }
+        //    else
+        //    {
+        //        people = null;
+        //        return false;
+        //    }
+        //}
+
+        public static void SetMessage(string Message)
         {
-            IQueryable<List<Person>> qPeople = from _people in CacheDB.AsQueryable<List<Person>>()
-                                               select _people;
-            if (qPeople.Count() > 0)
-            {
-                people = qPeople.First();
-                return true;
-            }
-            else
-            {
-                people = null;
-                return false;
-            }
+            if (bMessage != null)
+                bMessage.Content = Message + Environment.NewLine + bMessage.Content;
         }
 
+        public static void SetState(string State)
+        {
+            if (bState != null)
+                bState.Content = State + Environment.NewLine + bState.Content;
+        }
+
+        public static string GetResponseError()
+        {
+            String Error = "";
+            if (rRestResponse!=null)
+            {
+                if (rRestResponse.StatusCode!=System.Net.HttpStatusCode.OK)
+                {
+                    if (rRestResponse.ContentType == @"application/json")
+                    {
+                        JsonDeserializer JSONDeserilizer = new JsonDeserializer();
+                        RootObject RO = JSONDeserilizer.Deserialize<RootObject>(rRestResponse);
+                        Error = Environment.NewLine + RO.Message;
+                    }
+                    else
+                        Error = Environment.NewLine + (rRestResponse.StatusCode.ToString() + rRestResponse.ErrorMessage).Trim();
+                }
+            }
+            return Error;
+        }
         #endregion
     }
 }

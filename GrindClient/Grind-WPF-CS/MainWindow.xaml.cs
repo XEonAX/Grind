@@ -25,7 +25,7 @@ namespace Grind.WPF.CS
         {
             InitializeComponent();
         }
-        public SortableBindingList<ClientTask> TaskList;
+        public SortableBindingList<TaskListItem> TaskList;
         Task CurrentTask;
         bool UserChange = true;
         enum ViewMode
@@ -40,13 +40,21 @@ namespace Grind.WPF.CS
         {
             dGridTasks.AutoGenerateColumns = false;
             dGridTasks.ItemsSource = TaskList;
-            new Controllers("http://localhost:4567/");
+            new Controllers("http://localhost:4567/", ref sbiMessage, ref sbiState);
             new Globals();
+
+            Controllers.ReadPeople(out Globals.People);
+            Controllers.ReadTasks(ref TaskList);
+            //cobExecutor.Items.AddRange(Globals.People.Select(x => x.name).ToArray());
+            //cobReviewer.Items.AddRange(Globals.People.Select(x => x.name).ToArray());
+            ttfrmControl.FillPeopleDropDown();
+            dGridTasks.ItemsSource = TaskList;
+            SetMode(ViewMode.Normal);
         }
 
         private void btnNew_Click(object sender, RoutedEventArgs e)
         {
-            if (((string )btnNew.Content) == "New")
+            if (((string)btnNew.Content) == "New")
             {
                 //New Task mode
                 SetMode(ViewMode.New);
@@ -55,22 +63,36 @@ namespace Grind.WPF.CS
 
 
             }
-            else if (((string )btnNew.Content) == "Save" && ((string )btnUpdate.Content) == "Cancel")
+            else if (((string)btnNew.Content) == "Save" && ((string)btnUpdate.Content) == "Cancel")
             {
                 //New Task Save
                 Task task = new Task();
                 //BuildTaskFromForm(ref task);
                 ttfrmControl.BuildTaskfromTaskFilledForm(ref task);
-                Controllers.CreateTask(ref task);
-                UserChange = false;
-                Controllers.ReadTasks(ref TaskList);
-                UserChange = true;
-                //dGridTasks.DataSource = TaskList;
-                //if (dGridTasks.RowCount > 0)
-                //    dGridTasks.CurrentCell = dGridTasks.Rows[dGridTasks.Rows.GetLastRow(DataGridViewElementStates.None)].Cells[1];
+                if (Controllers.CreateTask(ref task))
+                {
+                    UserChange = false;
+                    Controllers.ReadTasks(ref TaskList);
+                    UserChange = true;
+                    //dGridTasks.DataSource = TaskList;
+                    //if (dGridTasks.RowCount > 0)
+                    //    dGridTasks.CurrentCell = dGridTasks.Rows[dGridTasks.Rows.GetLastRow(DataGridViewElementStates.None)].Cells[1];
 
-                ttfrmControl.FillFormfromTask(task);
-                SetMode(ViewMode.Normal);
+                    ttfrmControl.FillFormfromTask(task);
+                    SetMode(ViewMode.Normal);
+                }
+                else
+                {
+                    string ErrMsg = "";
+                    //if (Controllers.rRestResponse != null && Controllers.rRestResponse.Content != null)
+                    //{
+                    //    ErrMsg = Environment.NewLine + Controllers.rRestResponse.Content;
+                    //}
+                    ErrMsg = Controllers.GetResponseError();
+                    MessageBox.Show("There was some problem while Saving the Task." + ErrMsg, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+
+                }
+
             }
             else if (((string)btnNew.Content) == "Cancel" && ((string)btnUpdate.Content) == "Save")
             {
@@ -139,24 +161,34 @@ namespace Grind.WPF.CS
             {
                 int OldTaskId = CurrentTask.id;
                 ttfrmControl.BuildTaskfromTaskFilledForm(ref CurrentTask);
-                Controllers.UpdateTask(ref CurrentTask);
-
-
-                UserChange = false;
-                Controllers.ReadTasks(ref TaskList);
-
-                if (TaskList.Count > 0)
+                if (Controllers.UpdateTask(ref CurrentTask))
                 {
-                    dGridTasks.SelectedIndex = GetIndexByIdFromTaskList(OldTaskId);
-                    //dGridTasks.CurrentCell = DataGrid.GetCell(1, GetIndexByIdFromTaskList(OldTaskId));
-                    Controllers.ReadTask(((ClientTask)dGridTasks.SelectedCells[0].Item).id, out CurrentTask);
-                    //Controllers.ReadTask((int)dGridTasks.CurrentItem.Cells["colId"].Value, ref CurrentTask);
-                }
 
-                //FillTaskTrackingForm(RetrievedTask);
-                UserChange = true;
-                ttfrmControl.FillFormfromTask(CurrentTask);
-                SetMode(ViewMode.Normal);
+                    UserChange = false;
+                    Controllers.ReadTasks(ref TaskList);
+
+                    if (TaskList.Count > 0)
+                    {
+                        dGridTasks.SelectedIndex = GetIndexByIdFromTaskList(OldTaskId);
+                        //dGridTasks.CurrentCell = DataGrid.GetCell(1, GetIndexByIdFromTaskList(OldTaskId));
+                        Controllers.ReadTask(((TaskListItem)dGridTasks.SelectedCells[0].Item).id, out CurrentTask);
+                        //Controllers.ReadTask((int)dGridTasks.CurrentItem.Cells["colId"].Value, ref CurrentTask);
+                    }
+
+                    //FillTaskTrackingForm(RetrievedTask);
+                    UserChange = true;
+                    ttfrmControl.FillFormfromTask(CurrentTask);
+                    SetMode(ViewMode.Normal);
+                }
+                else
+                {
+                    string ErrMsg = "";
+                    if (Controllers.rRestResponse != null && Controllers.rRestResponse.Content != null)
+                    {
+                        ErrMsg = Environment.NewLine + Controllers.rRestResponse.Content;
+                    }
+                    MessageBox.Show("There was some problem while Updating the Task." + ErrMsg, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
             else if (btnUpdate.Content == "Cancel" && btnNew.Content == "Save")
             {
@@ -179,7 +211,7 @@ namespace Grind.WPF.CS
             if (UserChange && dGridTasks.CurrentItem != null)
             {
                 Debug.Print(">>>>>>>>>>>" + dGridTasks.SelectedCells[0].Item.ToString());
-                Controllers.ReadTask(((ClientTask)dGridTasks.SelectedCells[0].Item).id, out CurrentTask);
+                Controllers.ReadTask(((TaskListItem)dGridTasks.SelectedCells[0].Item).id, out CurrentTask);
                 //FillTaskTrackingForm(RetrievedTask);
                 ttfrmControl.FillFormfromTask(CurrentTask);
 

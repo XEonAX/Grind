@@ -22,7 +22,7 @@ namespace Grind.WF.CS
         }
 
 
-        public SortableBindingList<ClientTask> TaskList;
+        public SortableBindingList<TaskListItem> TaskList;
         Task CurrentTask;
         bool UserChange = true;
 

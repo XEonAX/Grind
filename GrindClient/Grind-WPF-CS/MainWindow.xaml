@@ -3,48 +3,59 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:local="clr-namespace:Grind.WPF.CS" mc:Ignorable="d" x:Class="Grind.WPF.CS.MainWindow"
         Title="MainWindow" VerticalAlignment="Top" Height="553" Width="757" HorizontalAlignment="Left" Loaded="Window_Loaded" xmlns:my="clr-namespace:Grind_WPF_CS">
-	<Grid>
-		
+    <Grid>
+    	<Grid.RowDefinitions>
+    		<RowDefinition/>
+    		<RowDefinition Height="20"/>
+    	</Grid.RowDefinitions>
+
+        <StatusBar Height="20" VerticalAlignment="Bottom" Grid.Row="1">
+    		<StatusBarItem x:Name="sbiMessage" Content="Message" HorizontalAlignment="Left" ToolTip="{Binding ElementName=sbiMessage, Path=Content}" />
+    		<StatusBarItem x:Name="sbiState" Content="State" HorizontalAlignment="Right" ToolTip="{Binding ElementName=sbiState, Path=Content}"/>
+    	</StatusBar>
+
+
         <TabControl >
-            <TabItem Header="Tasks" Name="tbTasks">
-                    <Border BorderThickness="1" BorderBrush="#FF688BAE">
-                        <Grid x:Name="MainGrid">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="28"  />
-                                <RowDefinition Height="200"  />
-                                <RowDefinition Height="6"/>
-                                <RowDefinition />
-                            </Grid.RowDefinitions>
-                            <StackPanel Grid.Row="0" VerticalAlignment="Center" Orientation="Horizontal" Margin="2,0,0,0">
-                                <Button  Content="Refresh" Margin="2,0" Name="btnRefresh" Click="btnRefresh_Click" />
-                                <Button Content="New" Margin="2,0" Name="btnNew" Click="btnNew_Click" />
-                                <Button  Content="Update" Margin="2,0" Name="btnUpdate" Click="btnUpdate_Click" />
-                                <CheckBox Content="Online" Height="16" Name="chkOnline" IsThreeState="True" HorizontalAlignment="Right" />
+            <TabItem Header="Tasks" x:Name="tbTasks">
+                <Border BorderThickness="1" BorderBrush="#FF688BAE">
+                    <Grid x:Name="MainGrid">
+                        <Grid.RowDefinitions>
+                        	<RowDefinition Height="28"  />
+                        	<RowDefinition MaxHeight="{Binding Height, ElementName=MainGrid}" />
+                        	<RowDefinition Height="6"/>
+                        	<RowDefinition />
+                        	<RowDefinition Height="20"/>
+                        </Grid.RowDefinitions>
+                        <StackPanel Grid.Row="0" VerticalAlignment="Center" Orientation="Horizontal" Margin="2,0,0,0">
+                            <Button  Content="Refresh" Margin="2,0" x:Name="btnRefresh" Click="btnRefresh_Click" />
+                            <Button Content="New" Margin="2,0" x:Name="btnNew" Click="btnNew_Click" />
+                            <Button  Content="Update" Margin="2,0" x:Name="btnUpdate" Click="btnUpdate_Click" />
+                            <CheckBox Content="Online" Height="16" x:Name="chkOnline" IsThreeState="True" HorizontalAlignment="Right" />
 
-                            </StackPanel>
+                        </StackPanel>
 
-                            <DataGrid Grid.Row="1" IsReadOnly="True" ClipboardCopyMode="IncludeHeader" CanUserResizeRows="False" BorderBrush="{x:Null}" Name="dGridTasks" SelectionChanged="dGridTasks_SelectionChanged">
-                                <DataGrid.Columns>
-                                    <DataGridTextColumn Header="Task Name" IsReadOnly="True" Width="2*" Binding="{Binding taskName}"/>
-                                    <DataGridTextColumn Header="Task Status" IsReadOnly="True" Width="70" Binding="{Binding task_status}"/>
-                                    <DataGridCheckBoxColumn Header="Is Bug" IsReadOnly="True" Width="40" Binding="{Binding is_bug}"/>
-                                    <DataGridTextColumn Header="Bug Type" IsReadOnly="True" Width="60" Binding="{Binding bug_type}"/>
-                                    <DataGridCheckBoxColumn Header="Approved" IsReadOnly="True" Width="60" Binding="{Binding approved}"/>
-                                    <DataGridTextColumn Header="Target Date" IsReadOnly="True" Width="1*" Binding="{Binding Path=target_date, StringFormat={}{0:dd - MMM - yyyy}}"/>
-                                    <DataGridTextColumn Header="Executor" IsReadOnly="True" Width="1*" Binding="{Binding DeveloperName}"/>
-                                    <DataGridTextColumn Header="Reviewer" IsReadOnly="True" Width="1*" Binding="{Binding ReviewerName}"/>
-                                    <DataGridTextColumn Header="Created" IsReadOnly="True" Width="1*" Binding="{Binding created_at, StringFormat=\{0:d\}}"/>
-                                    <DataGridTextColumn Header="Modified" IsReadOnly="True" Width="1*" Binding="{Binding updated_at, StringFormat=\{0:d\}}"/>
-                                </DataGrid.Columns>
-                            </DataGrid>
-                            <GridSplitter HorizontalAlignment="Stretch" Grid.Row="2" ResizeDirection="Rows" ResizeBehavior="PreviousAndNext" Foreground="Black" Background="#FF688CAF" />
-                            <local:TaskTrackingFormWPF Grid.Row="3" x:Name="ttfrmControl" />
+                        <DataGrid Grid.Row="1" IsReadOnly="True" ClipboardCopyMode="IncludeHeader" CanUserResizeRows="False" BorderBrush="{x:Null}" x:Name="dGridTasks" SelectionChanged="dGridTasks_SelectionChanged">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Task Name" IsReadOnly="True" Width="2*" Binding="{Binding taskName}"/>
+                                <DataGridTextColumn Header="Task Status" IsReadOnly="True" Width="70" Binding="{Binding task_status}"/>
+                                <DataGridCheckBoxColumn Header="Is Bug" IsReadOnly="True" Width="40" Binding="{Binding is_bug}"/>
+                                <DataGridTextColumn Header="Bug Type" IsReadOnly="True" Width="60" Binding="{Binding bug_type}"/>
+                                <DataGridCheckBoxColumn Header="Approved" IsReadOnly="True" Width="60" Binding="{Binding approved}"/>
+                                <DataGridTextColumn Header="Target Date" IsReadOnly="True" Width="1*" Binding="{Binding target_date, StringFormat=\{0:dd - MMM - yyyy\}}"/>
+                                <DataGridTextColumn Header="Executor" IsReadOnly="True" Width="1*" Binding="{Binding DeveloperName}"/>
+                                <DataGridTextColumn Header="Reviewer" IsReadOnly="True" Width="1*" Binding="{Binding ReviewerName}"/>
+                                <DataGridTextColumn Header="Created" IsReadOnly="True" Width="1*" Binding="{Binding created_at, StringFormat=\{0:d\}}"/>
+                                <DataGridTextColumn Header="Modified" IsReadOnly="True" Width="1*" Binding="{Binding updated_at, StringFormat=\{0:d\}}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <GridSplitter HorizontalAlignment="Stretch" Grid.Row="2" ResizeDirection="Rows" ResizeBehavior="PreviousAndNext" Foreground="Black" Background="#FF688CAF" />
+                        <local:TaskTrackingFormWPF Grid.Row="3" x:Name="ttfrmControl" />
 
 
-                        </Grid>
-                    </Border>
+                    </Grid>
+                </Border>
             </TabItem>
-            <TabItem Header="Users" Name="tbUsers">
+            <TabItem Header="Users" x:Name="tbUsers">
                 <my:UserMaintenanceControl x:Name="userMaintenanceControl1" />
             </TabItem>
         </TabControl>

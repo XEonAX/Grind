@@ -8,12 +8,9 @@ namespace Grind.Common
     public class RootObject
     {
         public Person person { get; set; }
-        public Task task { 
-            get; 
-            set; 
-        }
+        public Task task { get;set; }
         public Document document { get; set; }
-        public string Status { get; set; }
+        public string Message { get; set; }
     }
     
 
@@ -85,7 +82,7 @@ namespace Grind.Common
         //public DateTime CreatedAt { get; set; }
         //public DateTime UpdatedAt { get; set; }
     }
-    public class ClientTask : Task
+    public class TaskListItem
     {
         public string taskName
         {
@@ -99,6 +96,26 @@ namespace Grind.Common
         {
             get { return Globals.People.Find(x => x.id == this.reviewer_id).name; }
         }
+
+        public int id { get; set; }
+        public int developer_id { get; set; }
+        public int reviewer_id { get; set; }
+        public string name { get; set; }
+        public eTaskStatus task_status { get; set; }
+        public eBugType bug_type { get; set; }
+        public string title { get; set; }
+        public bool approved { get; set; }
+        public bool is_bug { get; set; }
+        //public DateTime open_date { get; set; }
+        //public DateTime analysis_date { get; set; }
+        //public DateTime review_date { get; set; }
+        //public DateTime correction_date { get; set; }
+        //public DateTime promotion_date { get; set; }
+        //public DateTime collection_date { get; set; }
+        //public DateTime closed_date { get; set; }
+        public DateTime target_date { get; set; }
+        public DateTime created_at { get; set; }
+        public DateTime updated_at { get; set; }
     }
 
     public class Task 
