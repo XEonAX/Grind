@@ -14,53 +14,53 @@
 ActiveRecord::Schema.define(version: 20150131130010) do
 
   create_table "comments", force: :cascade do |t|
-    t.text     "comment",    limit: 65535
-    t.integer  "person_id",  limit: 4
+    t.text     "comment"
+    t.integer  "person_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "parent_id",  limit: 4
-    t.integer  "task_id",    limit: 4
+    t.integer  "parent_id"
+    t.integer  "task_id"
   end
 
   create_table "documents", force: :cascade do |t|
-    t.string   "name",               limit: 255
-    t.binary   "data",               limit: 65535
-    t.string   "path",               limit: 255
-    t.integer  "task_id",            limit: 4
-    t.integer  "developer_id",       limit: 4
-    t.string   "internal_object_id", limit: 255
+    t.string   "name"
+    t.binary   "data"
+    t.string   "path"
+    t.integer  "task_id"
+    t.integer  "developer_id"
+    t.string   "internal_object_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "people", force: :cascade do |t|
-    t.string   "name",                 limit: 255
-    t.string   "trigram",              limit: 255
-    t.boolean  "active",               limit: 1
-    t.integer  "level",                limit: 4
-    t.string   "internal_object_id",   limit: 255
-    t.integer  "unread_objects_count", limit: 4
-    t.integer  "documents_count",      limit: 4
-    t.integer  "tasks_count",          limit: 4
+    t.string   "name"
+    t.string   "trigram"
+    t.boolean  "active"
+    t.integer  "level"
+    t.string   "internal_object_id"
+    t.integer  "unread_objects_count"
+    t.integer  "documents_count"
+    t.integer  "tasks_count"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "tasks", force: :cascade do |t|
-    t.string   "name",               limit: 255
-    t.integer  "task_status",        limit: 4
-    t.integer  "bug_type",           limit: 4
-    t.string   "title",              limit: 255
-    t.boolean  "is_bug",             limit: 1
-    t.string   "internal_object_id", limit: 255
-    t.boolean  "approved",           limit: 1
-    t.binary   "description",        limit: 16777215
-    t.binary   "analysis",           limit: 16777215
-    t.binary   "review",             limit: 16777215
-    t.integer  "developer_id",       limit: 4
-    t.integer  "reviewer_id",        limit: 4
-    t.integer  "comments_count",     limit: 4
-    t.integer  "documents_count",    limit: 4
+    t.string   "name"
+    t.integer  "task_status"
+    t.integer  "bug_type"
+    t.string   "title"
+    t.boolean  "is_bug"
+    t.string   "internal_object_id"
+    t.boolean  "approved"
+    t.binary   "description"
+    t.binary   "analysis"
+    t.binary   "review"
+    t.integer  "developer_id"
+    t.integer  "reviewer_id"
+    t.integer  "comments_count"
+    t.integer  "documents_count"
     t.date     "open_date"
     t.date     "analysis_date"
     t.date     "review_date"
@@ -74,9 +74,9 @@ ActiveRecord::Schema.define(version: 20150131130010) do
   end
 
   create_table "unread_objects", force: :cascade do |t|
-    t.string   "person_id",          limit: 255
-    t.string   "internal_object_id", limit: 255
-    t.string   "unread_cause",       limit: 255
+    t.string   "person_id"
+    t.string   "internal_object_id"
+    t.string   "unread_cause"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

@@ -12,8 +12,11 @@ set :server, 'thin'
 set :sockets, []
 
 use Rack::PostBodyContentTypeParser
-
-set :database, 'mysql://root@localhost/grindDB'
+ActiveRecord::Base.establish_connection(
+  :adapter => 'sqlite3',
+  :database =>  'Grind.Server.sqlite3.db'
+)
+#set :database, 'mysql://root@localhost/grindDB'
 #ActiveRecord::Base.logger.level = 1
 
 #ActiveRecord::Base.connection.execute("set global max_allowed_packet=10000000;")
@@ -284,6 +287,10 @@ post "/task" do
   if @task.save
     redirect "task/#{@task.id}"
   end
+end
+
+get '/task/:id' do
+  Task.includes(:documents).where(["id = ?", params[:id]]).first.as_json(include: [:documents]).to_json
 end
 
 get '/task/:id' do

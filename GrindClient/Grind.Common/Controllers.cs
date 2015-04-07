@@ -21,7 +21,7 @@ namespace Grind.Common
         public static IOdb CacheDB;
         public static StatusBarItem bMessage;
         public static StatusBarItem bState;
-
+        private static string lastMessage, lastState;
         public Controllers(string baseUrl)
         {
             rRestClient = new RestClient(baseUrl);
@@ -586,14 +586,17 @@ namespace Grind.Common
 
         public static void SetMessage(string Message)
         {
-            if (bMessage != null)
+            
+            if (bMessage != null && lastMessage!=Message)
                 bMessage.Content = Message + Environment.NewLine + bMessage.Content;
+            lastMessage = Message;
         }
 
         public static void SetState(string State)
         {
-            if (bState != null)
+            if (bState != null && lastState!=State)
                 bState.Content = State + Environment.NewLine + bState.Content;
+            lastState = State;
         }
 
         public static string GetResponseError()
