@@ -40,7 +40,7 @@ namespace Grind.WPF.CS
         {
             dGridTasks.AutoGenerateColumns = false;
             dGridTasks.ItemsSource = TaskList;
-            new Controllers("http://localhost:4567/", ref sbiMessage, ref sbiState);
+            Controllers.ControllersInit("http://localhost:4567/", ref sbiMessage, ref sbiState);
             new Globals();
 
             Controllers.ReadPeople(out Globals.People);
@@ -69,7 +69,7 @@ namespace Grind.WPF.CS
                 Task task = new Task();
                 //BuildTaskFromForm(ref task);
                 ttfrmControl.BuildTaskfromTaskFilledForm(ref task);
-                if (Controllers.CreateTask(ref task))
+                if (RetCode.successful == Controllers.CreateTask(ref task))
                 {
                     UserChange = false;
                     Controllers.ReadTasks(ref TaskList);
@@ -161,7 +161,7 @@ namespace Grind.WPF.CS
             {
                 int OldTaskId = CurrentTask.id;
                 ttfrmControl.BuildTaskfromTaskFilledForm(ref CurrentTask);
-                if (Controllers.UpdateTask(ref CurrentTask))
+                if (RetCode.successful==Controllers.UpdateTask(ref CurrentTask))
                 {
 
                     UserChange = false;
@@ -171,7 +171,7 @@ namespace Grind.WPF.CS
                     {
                         dGridTasks.SelectedIndex = GetIndexByIdFromTaskList(OldTaskId);
                         //dGridTasks.CurrentCell = DataGrid.GetCell(1, GetIndexByIdFromTaskList(OldTaskId));
-                        Controllers.ReadTask(((TaskListItem)dGridTasks.SelectedCells[0].Item).id, out CurrentTask);
+                        Controllers.ReadTask(((Task)dGridTasks.SelectedCells[0].Item).id, out CurrentTask);
                         //Controllers.ReadTask((int)dGridTasks.CurrentItem.Cells["colId"].Value, ref CurrentTask);
                     }
 
@@ -211,13 +211,21 @@ namespace Grind.WPF.CS
             if (UserChange && dGridTasks.CurrentItem != null)
             {
                 Debug.Print(">>>>>>>>>>>" + dGridTasks.SelectedCells[0].Item.ToString());
-                Controllers.ReadTask(((TaskListItem)dGridTasks.SelectedCells[0].Item).id, out CurrentTask);
+                Controllers.ReadTask(((Task)dGridTasks.SelectedCells[0].Item).id, out CurrentTask);
                 //FillTaskTrackingForm(RetrievedTask);
                 ttfrmControl.FillFormfromTask(CurrentTask);
 
             }
         }
 
+        private void chkOffline_Checked(object sender, RoutedEventArgs e)
+        {
+            Controllers.setOffline();
+        }
 
+        private void chkOffline_Unchecked(object sender, RoutedEventArgs e)
+        {
+            Controllers.setOnline();
+        }
     }
 }

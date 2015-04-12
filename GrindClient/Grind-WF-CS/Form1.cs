@@ -39,7 +39,7 @@ namespace Grind.WF.CS
         {
             dGridTasks.AutoGenerateColumns = false;
             dGridTasks.DataSource = TaskList;
-            new Controllers("http://localhost:4567/");
+            Controllers.ControllersInit("http://localhost:4567/");
             new Globals();
         }
 

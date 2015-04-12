@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Reflection;
 
 namespace Grind.Common
 {
@@ -32,14 +33,13 @@ namespace Grind.Common
     public class TimeStamp
     {
         public int id { get; set; }
-        public Model type { get; set; }
         public DateTime created_at { get; set; }
         public DateTime updated_at { get; set; }
     }
 
-    public class Person
+    public class Person : TimeStamp
     {
-        public int id { get; set; }
+        //public int id { get; set; }
         public string name { get; set; }
         public string trigram { get; set; }
         public bool active { get; set; }
@@ -48,8 +48,8 @@ namespace Grind.Common
         public int unread_objects_count { get; set; }
         public int documents_count { get; set; }
         public int tasks_count { get; set; }
-        public DateTime created_at { get; set; }
-        public DateTime updated_at { get; set; }
+        //public DateTime created_at { get; set; }
+        //public DateTime updated_at { get; set; }
         //public int Id { get; set; }
         //public string Name { get; set; }
         //public string Trigram { get; set; }
@@ -59,19 +59,49 @@ namespace Grind.Common
         //public int UnreadObjectsCount { get; set; }
         //public int DocumentsCount { get; set; }
         //public int TasksCount { get; set; }
+        public override bool Equals(object obj)
+        {
+            Person otherPerson = obj as Person;
+            if (otherPerson == null)
+                return false;
+            return id.Equals(otherPerson.id)
+                && updated_at.Equals(otherPerson.updated_at)
+                && trigram.Equals(otherPerson.trigram)
+                && active.Equals(otherPerson.active)
+                && level.Equals(otherPerson.level)
+                && internal_object_id.Equals(otherPerson.internal_object_id)
+                && created_at.Equals(otherPerson.created_at);
+            }
+        public override int GetHashCode()
+        {
+            unchecked // Overflow is fine, just wrap
+            {
+                int hash = (int)2166136261;
+                // Suitable nullity checks etc, of course :)
+                hash = hash * 16777619 ^ id.GetHashCode();
+                hash = hash * 16777619 ^ trigram.GetHashCode();
+                hash = hash * 16777619 ^ active.GetHashCode();
+                hash = hash * 16777619 ^ level.GetHashCode();
+                hash = hash * 16777619 ^ internal_object_id.GetHashCode();
+                hash = hash * 16777619 ^ created_at.GetHashCode();
+                hash = hash * 16777619 ^ updated_at.GetHashCode();
+                return hash;
+            }
+        }
     }
 
-    public class Document
+    public class Document : TimeStamp
     {
         public int task_id { get; set; }
-        public int id { get; set; }
+        //public int id { get; set; }
         public string name { get; set; }
         public string data { get; set; }
         public string path { get; set; }
         public int developer_id { get; set; }
         public string internal_object_id { get; set; }
-        public string created_at { get; set; }
-        public string updated_at { get; set; }
+        //public string created_at { get; set; }
+        //public string updated_at { get; set; }
+        
         //public int TaskId { get; set; }
         //public int Id { get; set; }
         //public string Name { get; set; }
@@ -82,8 +112,10 @@ namespace Grind.Common
         //public DateTime CreatedAt { get; set; }
         //public DateTime UpdatedAt { get; set; }
     }
-    public class TaskListItem
+
+    public class TaskListItem : Task
     {
+       
         public string taskName
         {
             get { return this.name + " - " + this.title; }
@@ -97,28 +129,28 @@ namespace Grind.Common
             get { return Globals.People.Find(x => x.id == this.reviewer_id).name; }
         }
 
-        public int id { get; set; }
-        public int developer_id { get; set; }
-        public int reviewer_id { get; set; }
-        public string name { get; set; }
-        public eTaskStatus task_status { get; set; }
-        public eBugType bug_type { get; set; }
-        public string title { get; set; }
-        public bool approved { get; set; }
-        public bool is_bug { get; set; }
-        //public DateTime open_date { get; set; }
-        //public DateTime analysis_date { get; set; }
-        //public DateTime review_date { get; set; }
-        //public DateTime correction_date { get; set; }
-        //public DateTime promotion_date { get; set; }
-        //public DateTime collection_date { get; set; }
-        //public DateTime closed_date { get; set; }
-        public DateTime target_date { get; set; }
-        public DateTime created_at { get; set; }
-        public DateTime updated_at { get; set; }
+        //public int id { get; set; }
+        //public int developer_id { get; set; }
+        //public int reviewer_id { get; set; }
+        //public string name { get; set; }
+        //public eTaskStatus task_status { get; set; }
+        //public eBugType bug_type { get; set; }
+        //public string title { get; set; }
+        //public bool approved { get; set; }
+        //public bool is_bug { get; set; }
+        ////public DateTime open_date { get; set; }
+        ////public DateTime analysis_date { get; set; }
+        ////public DateTime review_date { get; set; }
+        ////public DateTime correction_date { get; set; }
+        ////public DateTime promotion_date { get; set; }
+        ////public DateTime collection_date { get; set; }
+        ////public DateTime closed_date { get; set; }
+        //public DateTime target_date { get; set; }
+        //public DateTime created_at { get; set; }
+        //public DateTime updated_at { get; set; }
     }
 
-    public class Task 
+    public class Task : TimeStamp
     {
         public Task()
         {
@@ -133,7 +165,21 @@ namespace Grind.Common
             developer_id = Globals.People.First().id;
             reviewer_id = Globals.People.First().id;
         }
-        public int id { get; set; }
+        public TLI As<TLI>() where TLI : TaskListItem
+        {
+            var type = typeof(TLI);
+            var instance = Activator.CreateInstance(type);
+
+            PropertyInfo[] properties = type.GetProperties();
+            foreach (var property in properties)
+            {
+                if (property.CanWrite) property.SetValue(instance, property.GetValue(this, null), null);
+            }
+
+            return (TLI)instance;
+        }
+
+        //public int id { get; set; }
         public int developer_id { get; set; }
         public int reviewer_id { get; set; }
         public string name { get; set; }
@@ -156,9 +202,24 @@ namespace Grind.Common
         public DateTime collection_date { get; set; }
         public DateTime closed_date { get; set; }
         public DateTime target_date { get; set; }
-        public DateTime created_at { get; set; }
-        public DateTime updated_at { get; set; }
+        //public DateTime created_at { get; set; }
+        //public DateTime updated_at { get; set; }
         public List<Document> documents { get; set; }
+        //public new Model type { get { return Model.task; } }
+        
+        //public bool isLatest { get {
+
+        //    TimeStamp timestamp;
+        //    if (Controllers.GetLatestTimeStamp(out timestamp, Model.task, this.id))
+        //    {
+        //        if (timestamp.updated_at > this.updated_at)
+        //            return false;
+        //        else
+        //            return true;
+        //    }
+        //    else
+        //        return false;
+
     }
 
 
@@ -192,5 +253,15 @@ namespace Grind.Common
         Admin,
         User,
         Viewer
+    }
+    public enum RetCode
+    {
+        maybe=-1,
+        no,
+        yes,
+        False,
+        True,
+        unsuccessful,
+        successful
     }
 }

@@ -7,4 +7,3 @@ J:\Root\Grind\GrindClient\Grind.Common\bin\Debug\NDatabase3.xml
 J:\Root\Grind\GrindClient\Grind.Common\bin\Debug\RestSharp.xml
 J:\Root\Grind\GrindClient\Grind.Common\obj\Debug\Grind.Common.dll
 J:\Root\Grind\GrindClient\Grind.Common\obj\Debug\Grind.Common.pdb
-J:\Root\Grind\GrindClient\Grind.Common\obj\Debug\Grind.Common.csprojResolveAssemblyReference.cache
