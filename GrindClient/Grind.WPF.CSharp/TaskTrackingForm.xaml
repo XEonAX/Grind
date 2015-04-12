@@ -1,0 +1,217 @@
+﻿<UserControl
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	mc:Ignorable="d"
+	x:Class="Grind.WPF.CSharp.TaskTrackingForm"
+	x:Name="UserControl"
+	d:DesignWidth="745"
+    xmlns:local="clr-namespace:Grind.WPF.CSharp"
+    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit">
+    <!--xmlns:wf="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"-->
+    <UserControl.Resources>
+        <local:SliderLeftRightMarginConverter x:Key="sliderLeftRightMarginConverter"></local:SliderLeftRightMarginConverter>
+        <local:IsEnabledConverter x:Key="isEnabledConverter"></local:IsEnabledConverter>
+    </UserControl.Resources>
+    <Grid x:Name="LayoutRoot">
+        <ScrollViewer >
+            <Grid >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="35"/>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="120"/>
+                    <RowDefinition Height="92"/>
+                    <RowDefinition Height="200"/>
+                    <RowDefinition Height="200"/>
+                    <RowDefinition Height="200"/>
+                    <RowDefinition Height="200"/>
+                    <RowDefinition Height="200"/>
+
+                </Grid.RowDefinitions>
+                <Label Content="Task Tracking Form" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="DarkOrange" Foreground="White" FontWeight="Bold" FontSize="16"/>
+                <DockPanel LastChildFill="True" Grid.Row="1">
+                    <Label Content="Name"/>
+                    <TextBox  Text="" VerticalAlignment="Center" Margin="0" HorizontalAlignment="Left" Width="184" Name="txtName" />
+                    <Label Content="Title" HorizontalAlignment="Left" Margin="5,0,0,0"/>
+                    <TextBox  Text="" VerticalAlignment="Center" Margin="0,0,5,0" Name="txtTitle" />
+                </DockPanel>
+                <GroupBox  Grid.Row="2" Header="Task Status" >
+                    <Grid Name="grdTaskStatus">
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+                        <Border BorderThickness="2,2,2,2" Grid.RowSpan="3" Grid.ColumnSpan="7" BorderBrush="#FF6493EB" CornerRadius="4"/>
+	<Border BorderThickness="2,2,1,2" Grid.Column="1" Grid.RowSpan="3" BorderBrush="#FF6493EB"/>
+<Border BorderThickness="1,2" Grid.Column="2" Grid.RowSpan="3" BorderBrush="#FF6493EB"/>
+<Border BorderThickness="1,2" Grid.Column="3" Grid.RowSpan="3" BorderBrush="#FF6493EB"/>
+<Border BorderThickness="1,2" Grid.Column="4" Grid.RowSpan="3" BorderBrush="#FF6493EB"/>
+<Border BorderThickness="1,2,2,2" Grid.Column="5" Grid.RowSpan="3" BorderBrush="#FF6493EB"/>
+
+                        <DatePicker Grid.Row="2" BorderBrush="{x:Null}" Name="dtpOpen" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Center">
+                            <DatePicker.IsEnabled>
+                                <MultiBinding  Converter="{StaticResource isEnabledConverter}">
+                                    <Binding ElementName="sldTaskStatus" Path="Value"/>
+                                    <Binding RelativeSource="{RelativeSource Self}"/>
+                                </MultiBinding>
+                            </DatePicker.IsEnabled>
+                        </DatePicker>
+                        <DatePicker Grid.Row="2" Grid.Column="1" BorderBrush="{x:Null}" Name="dtpAnalysis" VerticalContentAlignment="Center" >
+                            <DatePicker.IsEnabled>
+                                <MultiBinding  Converter="{StaticResource isEnabledConverter}">
+                                    <Binding ElementName="sldTaskStatus" Path="Value"/>
+                                    <Binding RelativeSource="{RelativeSource Self}"/>
+                                </MultiBinding>
+                            </DatePicker.IsEnabled>
+                        </DatePicker>
+                        <DatePicker Grid.Row="2" Grid.Column="2" BorderBrush="{x:Null}" Name="dtpReview" VerticalContentAlignment="Center" >
+                            <DatePicker.IsEnabled>
+                                <MultiBinding  Converter="{StaticResource isEnabledConverter}">
+                                    <Binding ElementName="sldTaskStatus" Path="Value"/>
+                                    <Binding RelativeSource="{RelativeSource Self}"/>
+                                </MultiBinding>
+                            </DatePicker.IsEnabled>
+                        </DatePicker>
+                        <DatePicker Grid.Row="2" Grid.Column="3" BorderBrush="{x:Null}" Name="dtpCorrection" VerticalContentAlignment="Center" >
+                            <DatePicker.IsEnabled>
+                                <MultiBinding  Converter="{StaticResource isEnabledConverter}">
+                                    <Binding ElementName="sldTaskStatus" Path="Value"/>
+                                    <Binding RelativeSource="{RelativeSource Self}"/>
+                                </MultiBinding>
+                            </DatePicker.IsEnabled>
+                        </DatePicker>
+                        <DatePicker Grid.Row="2" Grid.Column="4" BorderBrush="{x:Null}" Name="dtpPromotion" VerticalContentAlignment="Center" >
+                            <DatePicker.IsEnabled>
+                                <MultiBinding  Converter="{StaticResource isEnabledConverter}">
+                                    <Binding ElementName="sldTaskStatus" Path="Value"/>
+                                    <Binding RelativeSource="{RelativeSource Self}"/>
+                                </MultiBinding>
+                            </DatePicker.IsEnabled>
+                        </DatePicker>
+                        <DatePicker Grid.Row="2" Grid.Column="5" BorderBrush="{x:Null}" Name="dtpCollection" VerticalContentAlignment="Center" >
+                            <DatePicker.IsEnabled>
+                                <MultiBinding  Converter="{StaticResource isEnabledConverter}">
+                                    <Binding ElementName="sldTaskStatus" Path="Value"/>
+                                    <Binding RelativeSource="{RelativeSource Self}"/>
+                                </MultiBinding>
+                            </DatePicker.IsEnabled>
+                        </DatePicker>
+                        <DatePicker Grid.Row="2" Grid.Column="6" BorderBrush="{x:Null}" Name="dtpClosed" VerticalContentAlignment="Center" >
+                            <DatePicker.IsEnabled>
+                                <MultiBinding  Converter="{StaticResource isEnabledConverter}">
+                                    <Binding ElementName="sldTaskStatus" Path="Value"/>
+                                    <Binding RelativeSource="{RelativeSource Self}"/>
+                                </MultiBinding>
+                            </DatePicker.IsEnabled>
+                        </DatePicker>
+                        <Label Content="Open" VerticalAlignment="Center" Name="lblOpen" HorizontalContentAlignment="Center" />
+                        <Label Content="Analysis" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="1" />
+                        <Label Content="Review" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="2" />
+                        <Label Content="Correction" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="3" />
+                        <Label Content="Promotion" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="4" />
+                        <Label Content="Collection" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="5" />
+                        <Label Content="Closed" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="6" />
+                        <Slider Grid.ColumnSpan="7" Grid.Row="1" Margin="{Binding ElementName=lblOpen, Path=ActualWidth, Converter={StaticResource sliderLeftRightMarginConverter}}" Maximum="6" TickPlacement="Both" SmallChange="1" IsSnapToTickEnabled="True" IsMoveToPointEnabled="True" RenderTransformOrigin="0,0.5" Name="sldTaskStatus" HorizontalContentAlignment="Stretch" VerticalAlignment="Center" VerticalContentAlignment="Center">
+                            <Slider.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform ScaleY="0.75"/>
+                                    <SkewTransform/>
+                                    <RotateTransform/>
+                                    <TranslateTransform/>
+                                </TransformGroup>
+                            </Slider.RenderTransform>
+                        </Slider>
+                        
+                    </Grid>
+                </GroupBox>
+                <GroupBox Header="Task Options"  Grid.Row="3" Name="gbTaskOptions">
+                    <DockPanel>
+                        <GroupBox Header="Task Type">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="1.3*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                </Grid.ColumnDefinitions>
+                                <RadioButton Content="Bug" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="3,0" Name="rbBug" />
+                                <RadioButton Content="HL" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="3,0" Name="rbHL" />
+                            </Grid>
+
+                        </GroupBox>
+                        <GroupBox Header="Bug Type">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="1*"/>
+
+                                </Grid.ColumnDefinitions>
+                                <RadioButton Content="HMA" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="3,0" Name="rbHMA" />
+                                <RadioButton Content="BackLog" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="3,0" Name="rbBacklog" />
+                                <RadioButton Content="CRITSIT" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="3,0" Name="rbCRITSIT" />
+                                <RadioButton Content="Others" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="3,0" Name="rbOthers" />
+
+                            </Grid>
+                        </GroupBox>
+                        <GroupBox Header="Approval">
+                            <CheckBox Content="Approved" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3,0" Name="chkApproval" />
+
+                        </GroupBox>
+                        <GroupBox Header="Concerned Persons">
+                            <Grid >
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="1*"/>
+                                    <RowDefinition Height="1*"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                </Grid.ColumnDefinitions>
+                                <ComboBox Style="{DynamicResource SimpleComboBox}" Grid.Column="0" Grid.Row="0" Margin="3" Name="cbExecutor" />
+                                <ComboBox Style="{DynamicResource SimpleComboBox}" Grid.Column="1" Grid.Row="0" Margin="3" Name="cbReviewer" />
+                                <ComboBox Style="{DynamicResource SimpleComboBox}" Grid.Column="0" Grid.Row="1" Margin="3"/>
+                                <ComboBox Style="{DynamicResource SimpleComboBox}" Grid.Column="1" Grid.Row="1" Margin="3"/>
+
+                            </Grid>
+
+                        </GroupBox>
+
+
+                    </DockPanel>
+                </GroupBox>
+                <GroupBox Header="Description" Grid.Row="4">
+                    <xctk:RichTextBox Name="rtbDescription" />
+                    <!--<WindowsFormsHost ClipToBounds="True">
+                        <wf:RichTextBox x:Name="rtbDescription"/>
+                    </WindowsFormsHost>-->
+                </GroupBox>
+                <GroupBox Header="Analysis" Grid.Row="5">
+                    <xctk:RichTextBox Name="rtbAnalysis" />
+                    <!--<WindowsFormsHost>
+                        <wf:RichTextBox x:Name="rtbAnalysis"/>
+                    </WindowsFormsHost>-->
+                </GroupBox>
+                <GroupBox Header="Review" Grid.Row="6">
+                    <xctk:RichTextBox Name="rtbReview" />
+                    <!--<WindowsFormsHost>
+                        <wf:RichTextBox x:Name="rtbReview"/>
+                    </WindowsFormsHost>-->
+                </GroupBox>
+
+            </Grid>
+
+        </ScrollViewer>
+    </Grid>
+</UserControl>
