@@ -27,7 +27,7 @@ namespace Grind.Winforms.CSharp
         private void button1_Click(object sender, EventArgs e)
         {
             ws.Connect();
-            ws.Send("HOLASD");
+            //ws.Send("{'HOLASD':'ass'}");
             
         }
 
@@ -35,8 +35,8 @@ namespace Grind.Winforms.CSharp
 
         private void WebSocketClient_Load(object sender, EventArgs e)
         {
-            ws = new WebSocket("ws://localhost:4567/ws?name=asgardian");
-            //ws = new WebSocket("ws://localhost:8080/?name=asgardian");
+            //ws = new WebSocket("ws://localhost:4567/ws?name=asgardian");
+            ws = new WebSocket("ws://localhost:8080/?name=asgardian");
 
             ws.OnOpen += new EventHandler(ws_OnOpen);
             ws.OnMessage += new EventHandler<MessageEventArgs>(ws_OnMessage);
@@ -60,6 +60,7 @@ namespace Grind.Winforms.CSharp
         void ws_OnMessage(object sender, MessageEventArgs e)
         {
             Debug.Print("Messaged: " +e.Data);
+            listBox1.Items.Add(e.Data);
             //listBox1.Items.Add(e.Data);
         }
 
