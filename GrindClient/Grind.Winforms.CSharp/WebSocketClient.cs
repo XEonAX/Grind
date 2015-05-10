@@ -60,7 +60,7 @@ namespace Grind.Winforms.CSharp
         void ws_OnMessage(object sender, MessageEventArgs e)
         {
             Debug.Print("Messaged: " +e.Data);
-            listBox1.Items.Add(e.Data);
+            //listBox1.Items.Add(e.Data);
             //listBox1.Items.Add(e.Data);
         }
 
@@ -73,6 +73,12 @@ namespace Grind.Winforms.CSharp
         private void button2_Click(object sender, EventArgs e)
         {
             ws.Send(textBox1.Text);
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            ws.Close(CloseStatusCode.Normal, "Zango");
+
         }
     }
 }

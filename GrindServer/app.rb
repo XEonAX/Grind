@@ -109,9 +109,6 @@ EventMachine.run do
       # Disable internal middleware for presenting errors
       # as useful HTML pages
       set :show_exceptions, false
-      # MaxNameLength = 15
-      # attr_accessor :clients
-      # @clients = {}
     end
     # end
 
@@ -143,7 +140,6 @@ EventMachine.run do
 
     # {Person CRUD}
     post '/person' do
-      puts params.inspect
       @person = Person.new(params[:person].except('id', 'unread_objects_count', 'documents_count', 'tasks_count', 'created_at', 'updated_at'))
       redirect 'person/#{@person.id}' if @person.save
     end
@@ -220,6 +216,7 @@ EventMachine.run do
 
   EventMachine::WebSocket.start(host: '0.0.0.0', port: 8080) do |ws|
     ws.onopen do
+      puts 'New Connection Opened' + ws.inspect
       # Subscribe the new user to the channel with the callback function for the push action
       new_user = @channel.subscribe { |msg| ws.send msg }
 
@@ -239,6 +236,7 @@ EventMachine.run do
     end
 
     ws.onmessage do |msg|
+      puts 'Message received ' + msg
       # Add the timestamp to the message
       message = JSON.parse(msg).merge('timestamp' => timestamp).to_json
 
@@ -251,13 +249,14 @@ EventMachine.run do
     end
 
     ws.onclose do
+      puts 'Websocket Closed' + ws.inspect
       @channel.unsubscribe(@users[ws.object_id])
       @users.delete(ws.object_id)
 
       # Broadcast the notification to all users
       @channel.push ({
         'nickname' => '',
-        'message' => 'One user left. #{@users.length} users in chat',
+        'message' => "One user left. #{@users.length} users in chat",
         'timestamp' => timestamp }.to_json)
     end
   end
