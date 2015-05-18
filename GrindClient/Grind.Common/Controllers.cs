@@ -10,6 +10,12 @@ using NDatabase.Api;
 using System.Diagnostics;
 using NDatabase.Api.Query;
 using System.Windows.Controls.Primitives;
+//using System.Data.SQLite;
+using System.Data;
+using System.Reflection;
+using System.Collections;
+using Grind.Common;
+
 namespace Grind.Common
 {
     public static class Controllers
@@ -18,24 +24,36 @@ namespace Grind.Common
         public static RestClient rRestClient;
         public static IRestResponse rRestResponse;
         public static string Message;
-        public static IOdb CacheDB;
+        //public static IOdb CacheDB;
         public static StatusBarItem bMessage;
         public static StatusBarItem bState;
         private static string lastMessage, lastState;
         private static bool isOnline = true;
         private static JsonDeserializer rJSONDeserializer = new JsonDeserializer();
+
+
         public static void ControllersInit(string baseUrl)
         {
             rRestClient = new RestClient(baseUrl);
-            CacheDB = OdbFactory.Open(@"CacheDB.ndb");
+            //CacheDB = OdbFactory.Open(@"CacheDB.ndb");
+            //grindDBConnection = new SQLiteConnection(@"data source=Grind.db");
+            //grindDBConnection.Open();
+
         }
+
+        //private static List<TimeStamp> Cache.PeopleTS = new List<TimeStamp>();
+        //private static List<TimeStamp> Cache.TasksTS = new List<TimeStamp>();
+
         public static void ControllersInit(string baseUrl, ref StatusBarItem sbiMessage, ref StatusBarItem sbiState)
         {
             rRestClient = new RestClient(baseUrl);
-            CacheDB = OdbFactory.Open(@"CacheDB.ndb");
+            //CacheDB = OdbFactory.Open(@"CacheDB.ndb");
+            Cache.SqliteHelperInit(@"data source=Grind.db");
             bMessage = sbiMessage;
             bState = sbiState;
         }
+
+
 
         #endregion
 
@@ -100,7 +118,7 @@ namespace Grind.Common
         public static RetCode CreateObject(ref RootObject rootObject, ref RestClient rClient, string requestResource, out IRestResponse rResponse)
         {
             RestRequest rRequest = new RestRequest();
-            rRequest.DateFormat = "yyyy-MM-ddTHH:mm:sssssZ";
+            rRequest.DateFormat = "yyyy-MM-ddTHH:mm:ss.sss";
             rRequest.Resource = requestResource;
             rRequest.Method = Method.POST;
             rRequest.RequestFormat = DataFormat.Json;
@@ -121,7 +139,8 @@ namespace Grind.Common
         {
             RestRequest rRequest = new RestRequest();
             rRequest.Resource = requestResource;// "task/{id}";
-            rRequest.DateFormat = "yyyy-MM-ddTHH:mm:sssssZ";
+            rRequest.DateFormat = "yyyy-MM-ddTHH:mm:ss.sss";
+            //rRequest.DateFormat = "yyyy-MM-ddTHH:mm:sssssZ";
             if (requestResource.Contains("{id}")) rRequest.AddUrlSegment("id", requestResourceId);
             rRequest.Method = Method.GET;
             rResponse = rClient.Execute(rRequest);
@@ -140,7 +159,7 @@ namespace Grind.Common
         public static RetCode UpdateObject(ref RootObject rootObject, ref RestClient rClient, string requestResource, string requestResourceId, out IRestResponse rResponse)
         {
             RestRequest rRequest = new RestRequest();
-            rRequest.DateFormat = "yyyy-MM-dd";
+            rRequest.DateFormat = "yyyy-MM-ddTHH:mm:ss.sss";
             rRequest.Resource = requestResource;
             rRequest.Method = Method.PUT;
             rRequest.AddUrlSegment("id", requestResourceId);
@@ -210,7 +229,7 @@ namespace Grind.Common
         }
         public static RetCode ReadPeople(out List<Person> people, ref RestClient rClient, out IRestResponse rResponse)
         {
-            List<Person> cpeople = ReadCachedObjects<Person>();
+            List<Person> cpeople = Cache.GetObjects<Person>();
             if (isOnline)
             {
                 List<TimeStamp> lts = LatestTimeStamps(Model.person);
@@ -220,13 +239,13 @@ namespace Grind.Common
                     {
 
                         people = rJSONDeserializer.Deserialize<List<Person>>(rResponse);
-                        if (people.Except(cpeople).Count()>0)
+                        if (lts.Except(Cache.PeopleTS).ToList().Count > 0)
                         {
-                            people.Except(cpeople).ToList().ForEach(x => CacheDB.Store<Person>(x));
+                            Cache.DeleteOldObjects<Person>(lts);
+                            Cache.AddObjects<Person>(people.Except(cpeople).ToList());
+                            //people.Except(cpeople).ToList().ForEach(x => CacheDB.Store<Person>(x));
                         }
-                        CacheDB.Commit();
-
-                        UpdateCachedPeople(lts);
+                        //CacheDB.Commit();
                         return RetCode.successful;
                     }
                     else
@@ -282,7 +301,7 @@ namespace Grind.Common
         public static RetCode ReadTask(int taskId, out Task task, ref RestClient rClient, out IRestResponse rResponse)
         {
             task = null;
-            Task ctask = ReadCachedObject<Task>(taskId);
+            Task ctask = Cache.GetObject<Task>(taskId);
             if (isOnline)
             {
                 TimeStamp lt = LatestTimeStamp(Model.task, taskId);
@@ -299,8 +318,8 @@ namespace Grind.Common
                         }
                         else
                         {
-                            CacheDB.Delete<Task>(ctask);
-                            CacheDB.Commit();
+                            Cache.DeleteObject<Task>(ctask.id);
+                            //CacheDB.Commit();
                         }
                     }
                     //If it reaches her it means No cached task or stale task
@@ -308,8 +327,9 @@ namespace Grind.Common
                     {
                         task = rJSONDeserializer.Deserialize<Task>(rResponse);
                         SetMessage("Task Added to Cache:" + task.name);
-                        CacheDB.Store<Task>(task);
-                        CacheDB.Commit();
+                        Cache.AddObject<Task>(task);
+                        //CacheDB.Store<Task>(task);
+                        //CacheDB.Commit();
                         return RetCode.successful;
                     }
                     else
@@ -368,7 +388,7 @@ namespace Grind.Common
         }
         public static RetCode ReadTasks(ref SortableBindingList<TaskListItem> tasks, ref RestClient rClient, out IRestResponse rResponse)
         {
-            List<Task> cachedTasks = ReadCachedObjects<Task>();
+            List<Task> ctasks = Cache.GetObjects<Task>();
             if (isOnline)
             {
                 List<TimeStamp> lts = LatestTimeStamps(Model.task);
@@ -380,16 +400,19 @@ namespace Grind.Common
                         tasks.Clear();
                         foreach (Task item in rJSONDeserializer.Deserialize<SortableBindingList<TaskListItem>>(rResponse))
                             tasks.Add(item.As<TaskListItem>());
-                        UpdateCachedTasks(lts);
+                        if (lts.Except(Cache.TasksTS).Count() > 0) ;
+                        {
+                            Cache.DeleteOldObjects<Task>(lts);
+                        }
                         return RetCode.successful;
                     }
                     else
                     {
-                        if (cachedTasks != null)
+                        if (ctasks != null)
                         {
                             if (tasks == null) tasks = new SortableBindingList<TaskListItem>();
                             tasks.Clear();
-                            foreach (Task item in cachedTasks)
+                            foreach (Task item in ctasks)
                                 tasks.Add(item.As<TaskListItem>());
                             SetMessage("Offline TaskList From Cache");
                         }
@@ -400,11 +423,11 @@ namespace Grind.Common
                 }
                 else
                 {
-                    if (cachedTasks != null)
+                    if (ctasks != null)
                     {
                         if (tasks == null) tasks = new SortableBindingList<TaskListItem>();
                         tasks.Clear();
-                        foreach (Task item in cachedTasks)
+                        foreach (Task item in ctasks)
                             tasks.Add(item.As<TaskListItem>());
                         SetMessage("Offline TaskList From Cache");
                     }
@@ -416,11 +439,11 @@ namespace Grind.Common
             }
             else
             {
-                if (cachedTasks != null)
+                if (ctasks != null)
                 {
                     if (tasks == null) tasks = new SortableBindingList<TaskListItem>();
                     tasks.Clear();
-                    foreach (Task item in cachedTasks)
+                    foreach (Task item in ctasks)
                         tasks.Add(item.As<TaskListItem>());
                     SetMessage("Offline TaskList From Cache");
                 }
@@ -455,66 +478,10 @@ namespace Grind.Common
         #region Cache Methods
 
 
-        public static List<T> ReadCachedObjects<T>()
-        {
-            IObjectSet<T> osTasks = CacheDB.QueryAndExecute<T>();
-            return osTasks.ToList<T>();
-        }
-        public static T ReadCachedObject<T>(int id)
-        {
-            IQuery queryById = CacheDB.Query<T>();
-            queryById.Descend("id").Constrain(id).Equal();
-            IEnumerable<T> osTasks = queryById.Execute<T>();
-            if (osTasks.Count() == 0) return default(T);
-            return osTasks.First();
-        }
 
 
-        public static void UpdateCachedTasks(List<TimeStamp> timestamps)//, out List<Task> Deletions, out List<TimeStamp> Additions)
-        {
-            //Additions = timestamps.Except(CachedTasks).ToList();
-            //Deletions = new List<Task>();
-            foreach (TimeStamp item in timestamps)
-            {
-                IQueryable<Task> tasksById = from cachedtasks in CacheDB.AsQueryable<Task>()
-                                             where cachedtasks.id.Equals(item.id)
-                                             select cachedtasks;
-                if (tasksById.Count() >= 1)
-                {
-                    foreach (Task taskItem in tasksById)
-                    {
-                        if (taskItem.updated_at < item.updated_at)
-                        {
-                            CacheDB.Delete<Task>(taskItem);
-                            //Deletions.Add(taskItem);
-                        }
-                    }
-                }
-            }
-            CacheDB.Commit();
-        }
 
-        public static void UpdateCachedPeople(List<TimeStamp> timestamps)
-        {
-            foreach (TimeStamp item in timestamps)
-            {
-                IQueryable<Person> personsById = from cachedpeople in CacheDB.AsQueryable<Person>()
-                                                 where cachedpeople.id.Equals(item.id)
-                                                 select cachedpeople;
-                if (personsById.Count() == 1)
-                {
-                    foreach (Person taskItem in personsById)
-                    {
-                        if (taskItem.updated_at < item.updated_at)
-                        {
-                            CacheDB.Delete<Person>(taskItem);
-                            //Deletions.Add(taskItem);
-                        }
-                    }
-                }
-            }
-            CacheDB.Commit();
-        }
+
         #endregion
 
 
@@ -528,6 +495,8 @@ namespace Grind.Common
         //    else
         //        return null;
         //}
+
+
         public static TimeStamp LatestTimeStamp(Model type, int id)
         {
             TimeStamp timestamp;

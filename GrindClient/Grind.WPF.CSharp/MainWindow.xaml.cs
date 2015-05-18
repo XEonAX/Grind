@@ -44,6 +44,10 @@ namespace Grind.WPF.CSharp
             new Globals();
 
             Controllers.ReadPeople(out Globals.People);
+            if (Globals.People.Count == 0)
+            {
+                Globals.People.Add( new Person {id=0, name="DummyUser",level=eLevel.Master});
+            }
             Controllers.ReadTasks(ref TaskList);
             //cobExecutor.Items.AddRange(Globals.People.Select(x => x.name).ToArray());
             //cobReviewer.Items.AddRange(Globals.People.Select(x => x.name).ToArray());

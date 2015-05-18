@@ -1,24 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Reflection;
-
+using System.Linq;
 namespace Grind.Common
 {
     public class RootObject
     {
         public Person person { get; set; }
-        public Task task { get;set; }
+        public Task task { get; set; }
         public Document document { get; set; }
         public string Message { get; set; }
     }
-    
 
-    public class RootPerson 
-	{
+
+    public class RootPerson
+    {
         public Person person { get; set; }
-   	}
+    }
 
     public class RootTask
     {
@@ -30,17 +29,56 @@ namespace Grind.Common
         public Document document { get; set; }
     }
 
-    public class TimeStamp
+    public class TimeStamp : IEquatable<TimeStamp>
     {
+        public TimeStamp ()
+	{
+
+	}
         public int id { get; set; }
         public DateTime created_at { get; set; }
         public DateTime updated_at { get; set; }
+        public bool Equals(TimeStamp obj)
+        {
+            TimeStamp otherTimestamp = obj as TimeStamp;
+            if (otherTimestamp == null)
+                return false;
+            return id.Equals(otherTimestamp.id)
+                && updated_at.Equals(otherTimestamp.updated_at)
+                && created_at.Equals(otherTimestamp.created_at);
+        }
+        public TS As<TS>() where TS : TimeStamp
+        {
+            return (TS)new TimeStamp { created_at=created_at,id=id,updated_at=updated_at };
+        }
+        public override bool Equals(object obj)
+        {
+            TimeStamp otherTimestamp = obj as TimeStamp;
+            if (otherTimestamp == null)
+                return false;
+            return id.Equals(otherTimestamp.id)
+                && updated_at.Equals(otherTimestamp.updated_at)
+                && created_at.Equals(otherTimestamp.created_at);
+        }
+        public override int GetHashCode()
+        {
+            unchecked // Overflow is fine, just wrap
+            {
+                int hash = (int)2166136261;
+                // Suitable nullity checks etc, of course :)
+                hash = hash * 16777619 ^ id.GetHashCode();
+                hash = hash * 16777619 ^ created_at.GetHashCode();
+                hash = hash * 16777619 ^ updated_at.GetHashCode();
+                return hash;
+            }
+        }
     }
 
-    public class Person : TimeStamp
+    public class Person : TimeStamp, IEquatable<Person>
     {
         //public int id { get; set; }
         public string name { get; set; }
+
         public string trigram { get; set; }
         public bool active { get; set; }
         public eLevel level { get; set; }
@@ -59,11 +97,11 @@ namespace Grind.Common
         //public int UnreadObjectsCount { get; set; }
         //public int DocumentsCount { get; set; }
         //public int TasksCount { get; set; }
-        public override bool Equals(object obj)
+        public bool Equals(Person obj)
         {
             Person otherPerson = obj as Person;
             if (otherPerson == null)
-                return false;
+                return base.Equals(obj);
             return id.Equals(otherPerson.id)
                 && updated_at.Equals(otherPerson.updated_at)
                 && trigram.Equals(otherPerson.trigram)
@@ -71,7 +109,20 @@ namespace Grind.Common
                 && level.Equals(otherPerson.level)
                 && internal_object_id.Equals(otherPerson.internal_object_id)
                 && created_at.Equals(otherPerson.created_at);
-            }
+        }
+        public override bool Equals(object obj)
+        {
+            Person otherPerson = obj as Person;
+            if (otherPerson == null)
+                return base.Equals(obj);
+            return id.Equals(otherPerson.id)
+                && updated_at.Equals(otherPerson.updated_at)
+                && trigram.Equals(otherPerson.trigram)
+                && active.Equals(otherPerson.active)
+                && level.Equals(otherPerson.level)
+                && internal_object_id.Equals(otherPerson.internal_object_id)
+                && created_at.Equals(otherPerson.created_at);
+        }
         public override int GetHashCode()
         {
             unchecked // Overflow is fine, just wrap
@@ -101,7 +152,7 @@ namespace Grind.Common
         public string internal_object_id { get; set; }
         //public string created_at { get; set; }
         //public string updated_at { get; set; }
-        
+
         //public int TaskId { get; set; }
         //public int Id { get; set; }
         //public string Name { get; set; }
@@ -115,7 +166,7 @@ namespace Grind.Common
 
     public class TaskListItem : Task
     {
-       
+
         public string taskName
         {
             get { return this.name + " - " + this.title; }
@@ -150,18 +201,19 @@ namespace Grind.Common
         //public DateTime updated_at { get; set; }
     }
 
+
     public class Task : TimeStamp
     {
         public Task()
         {
-            open_date = DateTime.Now.AddDays(0*7);
-            analysis_date = DateTime.Now.AddDays(1*7);
-            review_date = DateTime.Now.AddDays(1*7);
-            correction_date = DateTime.Now.AddDays(1*7);
+            open_date = DateTime.Now.AddDays(0 * 7);
+            analysis_date = DateTime.Now.AddDays(1 * 7);
+            review_date = DateTime.Now.AddDays(1 * 7);
+            correction_date = DateTime.Now.AddDays(1 * 7);
             promotion_date = DateTime.Now.AddDays(1 * 7);
             target_date = DateTime.Now.AddDays(1 * 7);
-            collection_date = DateTime.Now.AddDays(2*7);
-            closed_date = DateTime.Now.AddDays(3*7);
+            collection_date = DateTime.Now.AddDays(2 * 7);
+            closed_date = DateTime.Now.AddDays(3 * 7);
             developer_id = Globals.People.First().id;
             reviewer_id = Globals.People.First().id;
         }
@@ -169,7 +221,7 @@ namespace Grind.Common
         {
             var type = typeof(TLI);
             var instance = Activator.CreateInstance(type);
-
+            
             PropertyInfo[] properties = type.GetProperties();
             foreach (var property in properties)
             {
@@ -180,6 +232,7 @@ namespace Grind.Common
         }
 
         //public int id { get; set; }
+
         public int developer_id { get; set; }
         public int reviewer_id { get; set; }
         public string name { get; set; }
@@ -206,7 +259,7 @@ namespace Grind.Common
         //public DateTime updated_at { get; set; }
         public List<Document> documents { get; set; }
         //public new Model type { get { return Model.task; } }
-        
+
         //public bool isLatest { get {
 
         //    TimeStamp timestamp;
@@ -224,12 +277,12 @@ namespace Grind.Common
 
 
     public enum Model
-	{
-	    task=0,
+    {
+        task = 0,
         person,
         document,
         comment
-	}
+    }
     public enum eTaskStatus
     {
         Open = 0,
@@ -256,7 +309,7 @@ namespace Grind.Common
     }
     public enum RetCode
     {
-        maybe=-1,
+        maybe = -1,
         no,
         yes,
         False,

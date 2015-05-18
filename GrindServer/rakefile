@@ -1,4 +1,4 @@
 #Rakefile
-require './app'
+require './dbsetup'
 require 'sinatra/activerecord/rake'
 require 'active_support/core_ext/numeric/bytes'

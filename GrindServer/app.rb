@@ -9,11 +9,26 @@ require 'rack/contrib'
 require 'sinatra-websocket'
 require 'thin'
 
+
+module GrindServer
+
+ActiveRecord::Base.default_timezone = :utc
 # DB Start
 ActiveRecord::Base.establish_connection(
   adapter: 'sqlite3',
   database: 'Grind.Server.sqlite3.db'
 )
+
+def self.realtime_channel
+  @realtime_channel ||= EventMachine::Channel.new
+end
+
+def self.online_people
+  @online_people ||= []
+end
+
+
+
 # Alternate Code Begin
 # set :database, 'mysql://root@localhost/grindDB'
 # ActiveRecord::Base.logger.level = 1
@@ -37,7 +52,7 @@ class ExceptionHandling
   end
 end
 
-def timestamp
+def self.timestamp
   Time.now.strftime('%H:%M:%S')
 end
 
@@ -69,9 +84,15 @@ class Task < ActiveRecord::Base
     Person.find_each do |person|
       Unread_Object.create(
         person_id: person.id,
-        internal_object_id: internal_object_id,
+        internal_object_id: self.id,
         unread_cause: 'Create')
     end
+    #puts GrindServer.realtime_channel.inspect
+
+    GrindServer.realtime_channel.push ({
+        'nickname' => 'Server',
+        'message' => "New Unread Item : Task #{self.id}" ,
+        'timestamp' => GrindServer.timestamp }.to_json)
   end
 
   public
@@ -93,7 +114,11 @@ end
 # }{Models}
 
 EventMachine.run do
+  #GrindServer.realtime_channel = EventMachine::Channel.new
+  @users = {}
+  @messages = []
   class App < Sinatra::Base
+    Time.zone = "UTC"
     use Rack::PostBodyContentTypeParser
     set :server, 'thin'
     set :sockets, []
@@ -170,13 +195,21 @@ EventMachine.run do
       redirect 'task/#{@task.id}' if @task.save
     end
 
+    post '/tasks' do
+      tasks=Task.create(params[:task])
+      { Status:  'Tasks created.' }.to_json
+      #@tasks = Task.new(params[:task])
+      #redirect 'task/#{@tasks.id}' if @tasks.save
+    end
+
+
     get '/task/:id' do
       Task.includes(:documents).where(['id = ?', params[:id]]).first.as_json(include: [:documents]).to_json
     end
 
     put '/task/:id' do
       @task = Task.find(params[:id])
-      redirect "task/#{@task.id}" if @task.update(params[:task])
+      redirect "task/#{@task.id}" if @task.update(params[:task].except('documents', 'created_at', 'updated_at'))
     end
 
     delete '/task/:id' do
@@ -204,22 +237,32 @@ EventMachine.run do
     end
     # }{GET Document}
 
+
+    get '/people/online' do
+      #puts GrindServer.online_people.to_json(:include => :query)
+      @output = []
+      GrindServer.online_people.each do |onli|
+        #puts onli.request.to_json
+        @output << onli.request["query"]
+       
+      end
+      @output.to_json
+    end
+      
     error ActiveRecord::RecordNotFound do
       status 404
     end
 
   end
 
-  @channel = EventMachine::Channel.new
-  @users = {}
-  @messages = []
+  
 
   EventMachine::WebSocket.start(host: '0.0.0.0', port: 8080) do |ws|
     ws.onopen do
-      puts 'New Connection Opened' + ws.inspect
-      # Subscribe the new user to the channel with the callback function for the push action
-      new_user = @channel.subscribe { |msg| ws.send msg }
-
+      puts 'New Connection Opened'
+      # Subscribe the new user to the GrindServer.realtime_channel with the callback function for the push action
+      new_user = GrindServer.realtime_channel.subscribe { |msg| ws.send msg }
+      GrindServer.online_people << ws
       # Add the new user to the user list
       @users[ws.object_id] = new_user
 
@@ -227,39 +270,42 @@ EventMachine.run do
       @messages.each do |message|
         ws.send message
       end
-
+      # puts GrindServer.realtime_channel.inspect
       # Broadcast the notification to all users
-      @channel.push ({
+      GrindServer.realtime_channel.push ({
         'nickname' => '',
-        'message' => 'New user joined. #{@users.length} users in chat',
-        'timestamp' => timestamp }.to_json)
+        'message' => "New user joined. #{@users.length} users in chat",
+        'timestamp' => GrindServer.timestamp }.to_json)
     end
 
     ws.onmessage do |msg|
       puts 'Message received ' + msg
       # Add the timestamp to the message
-      message = JSON.parse(msg).merge('timestamp' => timestamp).to_json
+      message = JSON.parse(msg).merge('timestamp' => GrindServer.timestamp).to_json
 
       # append the message at the end of the queue
       @messages << message
       @messages.shift if @messages.length > 10
-
-      # Broadcast the message to all users connected to the channel
-      @channel.push message
+      # puts GrindServer.realtime_channel.inspect
+      # Broadcast the message to all users connected to the GrindServer.realtime_channel
+      GrindServer.realtime_channel.push message
     end
 
     ws.onclose do
-      puts 'Websocket Closed' + ws.inspect
-      @channel.unsubscribe(@users[ws.object_id])
+      puts 'Websocket Closed'
+      GrindServer.realtime_channel.unsubscribe(@users[ws.object_id])
       @users.delete(ws.object_id)
-
+      GrindServer.online_people.delete ws
       # Broadcast the notification to all users
-      @channel.push ({
+      GrindServer.realtime_channel.push ({
         'nickname' => '',
         'message' => "One user left. #{@users.length} users in chat",
-        'timestamp' => timestamp }.to_json)
+        'timestamp' => GrindServer.timestamp }.to_json)
     end
   end
 
   Thin::Server.start App, '0.0.0.0', 4567
 end
+  
+end
+
