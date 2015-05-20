@@ -71,6 +71,10 @@ namespace Grind.Common
                         {
                             prop.SetValue(obj, Convert.ToInt32(dr[prop.Name]), null);
                         }
+                        else if (prop.PropertyType == typeof(DateTime))
+                        {
+                            prop.SetValue(obj, DateTime.SpecifyKind((DateTime)dr[prop.Name],DateTimeKind.Utc ), null);
+                        }
                         else
                             prop.SetValue(obj, dr[prop.Name], null);
                     }
@@ -102,6 +106,10 @@ namespace Grind.Common
                         else if (prop.PropertyType == typeof(Int32))
                         {
                             prop.SetValue(obj, Convert.ToInt32(dr[prop.Name]), null);
+                        }
+                        else if (prop.PropertyType == typeof(DateTime))
+                        {
+                            prop.SetValue(obj, DateTime.SpecifyKind((DateTime)dr[prop.Name], DateTimeKind.Utc), null);
                         }
                         else
                             prop.SetValue(obj, dr[prop.Name], null);

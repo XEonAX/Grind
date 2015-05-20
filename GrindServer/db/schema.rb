@@ -39,9 +39,10 @@ ActiveRecord::Schema.define(version: 20150131130010) do
     t.boolean  "active"
     t.integer  "level"
     t.string   "internal_object_id"
-    t.integer  "unread_objects_count"
-    t.integer  "documents_count"
-    t.integer  "tasks_count"
+    t.integer  "unread_objects_count", default: 0
+    t.integer  "work_tasks_count",     default: 0
+    t.integer  "review_tasks_count",   default: 0
+    t.integer  "documents_count",      default: 0
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -59,8 +60,8 @@ ActiveRecord::Schema.define(version: 20150131130010) do
     t.binary   "review"
     t.integer  "developer_id"
     t.integer  "reviewer_id"
-    t.integer  "comments_count"
-    t.integer  "documents_count"
+    t.integer  "comments_count",     default: 0
+    t.integer  "documents_count",    default: 0
     t.date     "open_date"
     t.date     "analysis_date"
     t.date     "review_date"

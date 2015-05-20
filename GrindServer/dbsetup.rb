@@ -55,7 +55,6 @@ def self.timestamp
 end
 
 # {Models}
-
 class Person < ActiveRecord::Base
   has_many :unread_objects
   has_many :tasks
@@ -71,8 +70,8 @@ class Reviewer < Person
 end
 
 class Task < ActiveRecord::Base
-  belongs_to :developer
-  belongs_to :reviewer
+  belongs_to :developer, counter_cache: :work_tasks_count
+  belongs_to :reviewer, counter_cache: :review_tasks_count
   has_many :documents
   after_save :add_task_to_unread_objects
 
@@ -158,7 +157,7 @@ end
 
     # {Person CRUD}
     post '/person' do
-      @person = Person.new(params[:person].except('id', 'unread_objects_count', 'documents_count', 'tasks_count', 'created_at', 'updated_at'))
+      @person = Person.new(params[:person].except('id', 'created_at', 'updated_at'))
       redirect 'person/#{@person.id}' if @person.save
     end
 

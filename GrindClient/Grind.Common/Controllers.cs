@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using RestSharp;
-using RestSharp.Deserializers;
+//using RestSharp.Deserializers;
 using RestSharp.Serializers;
 using NDatabase;
 using NDatabase.Api;
@@ -15,7 +15,9 @@ using System.Data;
 using System.Reflection;
 using System.Collections;
 using Grind.Common;
-
+using System.Windows.Controls;
+using System.IO;
+using Newtonsoft.Json;
 namespace Grind.Common
 {
     public static class Controllers
@@ -25,11 +27,11 @@ namespace Grind.Common
         public static IRestResponse rRestResponse;
         public static string Message;
         //public static IOdb CacheDB;
-        public static StatusBarItem bMessage;
-        public static StatusBarItem bState;
+        public static StatusBarItem xbMessage;
+        public static StatusBarItem xbState;
+        public static CheckBox xchkOffline;
         private static string lastMessage, lastState;
         private static bool isOnline = true;
-        private static JsonDeserializer rJSONDeserializer = new JsonDeserializer();
 
 
         public static void ControllersInit(string baseUrl)
@@ -44,13 +46,14 @@ namespace Grind.Common
         //private static List<TimeStamp> Cache.PeopleTS = new List<TimeStamp>();
         //private static List<TimeStamp> Cache.TasksTS = new List<TimeStamp>();
 
-        public static void ControllersInit(string baseUrl, ref StatusBarItem sbiMessage, ref StatusBarItem sbiState)
+        public static void ControllersInit(string baseUrl, ref StatusBarItem sbiMessage, ref StatusBarItem sbiState, ref CheckBox chkOffline)
         {
             rRestClient = new RestClient(baseUrl);
             //CacheDB = OdbFactory.Open(@"CacheDB.ndb");
             Cache.SqliteHelperInit(@"data source=Grind.db");
-            bMessage = sbiMessage;
-            bState = sbiState;
+            xbMessage = sbiMessage;
+            xbState = sbiState;
+            xchkOffline = chkOffline;
         }
 
 
@@ -151,6 +154,7 @@ namespace Grind.Common
             }
             else
             {
+                setOffline();
                 SetState(rResponse.ErrorMessage);
                 return RetCode.unsuccessful;
             }
@@ -179,14 +183,13 @@ namespace Grind.Common
         }
         public static RetCode DeleteObject(ref RestClient rClient, string requestResource, string requestResourceId, out IRestResponse rResponse)
         {
-            JsonDeserializer JSONDeserilizer = new JsonDeserializer();
             RestRequest rRequest = new RestRequest();
             rRequest.Resource = requestResource;// "task/{id}";
             rRequest.DateFormat = "yyyy-MM-ddTHH:mm:sssssZ";
             rRequest.AddUrlSegment("id", requestResourceId);
             rRequest.Method = Method.DELETE;
             rResponse = rClient.Execute(rRequest);
-            Globals.rootObject = JSONDeserilizer.Deserialize<RootObject>(rResponse);
+            Globals.rootObject = JsonConvert.DeserializeObject<RootObject>(rResponse.Content);
             if (rResponse.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 SetState("Delete Successful");
@@ -238,7 +241,7 @@ namespace Grind.Common
                     if (RetCode.successful == ReadObject(ref rClient, "people", "", out rResponse))
                     {
 
-                        people = rJSONDeserializer.Deserialize<List<Person>>(rResponse);
+                        people = JsonConvert.DeserializeObject<List<Person>>(rResponse.Content);
                         if (lts.Except(Cache.PeopleTS).ToList().Count > 0)
                         {
                             Cache.DeleteOldObjects<Person>(lts);
@@ -325,7 +328,7 @@ namespace Grind.Common
                     //If it reaches her it means No cached task or stale task
                     if (RetCode.successful == ReadObject(ref rClient, "task/{id}", taskId.ToString(), out rResponse))
                     {
-                        task = rJSONDeserializer.Deserialize<Task>(rResponse);
+                        task = JsonConvert.DeserializeObject<Task>(rResponse.Content);
                         SetMessage("Task Added to Cache:" + task.name);
                         Cache.AddObject<Task>(task);
                         //CacheDB.Store<Task>(task);
@@ -398,7 +401,8 @@ namespace Grind.Common
                     {
                         if (tasks == null) tasks = new SortableBindingList<TaskListItem>();
                         tasks.Clear();
-                        foreach (Task item in rJSONDeserializer.Deserialize<SortableBindingList<TaskListItem>>(rResponse))
+                        SortableBindingList<TaskListItem> DesrializedTasks = JsonConvert.DeserializeObject<SortableBindingList<TaskListItem>>(rResponse.Content);
+                        foreach (Task item in DesrializedTasks )
                             tasks.Add(item.As<TaskListItem>());
                         if (lts.Except(Cache.TasksTS).Count() > 0) ;
                         {
@@ -464,7 +468,7 @@ namespace Grind.Common
         //    JsonDeserializer JSONDeserilizer = new JsonDeserializer();
         //    if (RetCode.successful == ReadObject(ref rClient, "tasks", "", out rResponse))
         //    {
-        //        tasks = JSONDeserilizer.Deserialize<List<Task>>(rResponse);
+        //        tasks = JsonConvert.DeserializeObject<List<Task>>(rResponse.Content);
         //        return RetCode.successful;
         //    }
         //    else
@@ -512,12 +516,10 @@ namespace Grind.Common
 
         public static RetCode GetLatestTimeStamp(out TimeStamp timestamp, Model type, int id, ref RestClient rClient, out IRestResponse rResponse)
         {
-
-            JsonDeserializer JSONDeserilizer = new JsonDeserializer();
             if (RetCode.successful == ReadObject(ref rClient, @"timestamp/" + type.ToString() + @"/{id}", id.ToString(), out rResponse))
             {
 
-                timestamp = JSONDeserilizer.Deserialize<TimeStamp>(rResponse);
+                timestamp = JsonConvert.DeserializeObject<TimeStamp>(rResponse.Content);
                 return RetCode.successful;
             }
             else
@@ -545,11 +547,9 @@ namespace Grind.Common
 
         public static RetCode GetLatestTimeStamps(out List<TimeStamp> timestamps, Model type, ref RestClient rClient, out IRestResponse rResponse)
         {
-            JsonDeserializer JSONDeserilizer = new JsonDeserializer();
             if (RetCode.successful == ReadObject(ref rClient, @"timestamps/" + type.ToString(), "", out rResponse))
             {
-
-                timestamps = JSONDeserilizer.Deserialize<List<TimeStamp>>(rResponse);
+                timestamps = JsonConvert.DeserializeObject<List<TimeStamp>>(rResponse.Content);
                 return RetCode.successful;
             }
             else
@@ -577,15 +577,15 @@ namespace Grind.Common
         public static void SetMessage(string Message)
         {
 
-            if (bMessage != null && lastMessage != Message)
-                bMessage.Content = Message + Environment.NewLine + bMessage.Content;
+            if (xbMessage != null && lastMessage != Message)
+                xbMessage.Content = Message + Environment.NewLine + xbMessage.Content;
             lastMessage = Message;
         }
 
         public static void SetState(string State)
         {
-            if (bState != null && lastState != State)
-                bState.Content = State + Environment.NewLine + bState.Content;
+            if (xbState != null && lastState != State)
+                xbState.Content = State + Environment.NewLine + xbState.Content;
             lastState = State;
         }
 
@@ -598,8 +598,7 @@ namespace Grind.Common
                 {
                     if (rRestResponse.ContentType == @"application/json")
                     {
-                        JsonDeserializer JSONDeserilizer = new JsonDeserializer();
-                        RootObject RO = JSONDeserilizer.Deserialize<RootObject>(rRestResponse);
+                        RootObject RO = JsonConvert.DeserializeObject<RootObject>(rRestResponse.Content);
                         Error = Environment.NewLine + RO.Message;
                     }
                     else
@@ -612,10 +611,12 @@ namespace Grind.Common
         public static void setOffline()
         {
             isOnline = false;
+            xchkOffline.IsChecked = true;
         }
         public static void setOnline()
         {
             isOnline = true;
+            xchkOffline.IsChecked = false;
         }
 
         #endregion

@@ -85,7 +85,8 @@ namespace Grind.Common
         public string internal_object_id { get; set; }
         public int unread_objects_count { get; set; }
         public int documents_count { get; set; }
-        public int tasks_count { get; set; }
+        public int work_tasks_count { get; set; }
+        public int review_tasks_count { get; set; }
         //public DateTime created_at { get; set; }
         //public DateTime updated_at { get; set; }
         //public int Id { get; set; }

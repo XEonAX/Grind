@@ -40,9 +40,11 @@ namespace Grind.WPF.CSharp
         {
             dGridTasks.AutoGenerateColumns = false;
             dGridTasks.ItemsSource = TaskList;
-            Controllers.ControllersInit("http://localhost:4567/", ref sbiMessage, ref sbiState);
+            Controllers.ControllersInit("http://localhost:4567/", ref sbiMessage, ref sbiState, ref chkOffline);
             new Globals();
-
+            //Person x1 = new Person { created_at = DateTime.Now, updated_at = DateTime.Now, id = 3 };
+            //Cache.AddObject<Person>(x1);
+            //Person x2 = Cache.GetObject<Person>(3);
             Controllers.ReadPeople(out Globals.People);
             if (Globals.People.Count == 0)
             {

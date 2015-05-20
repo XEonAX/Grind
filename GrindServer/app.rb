@@ -12,7 +12,7 @@ require 'thin'
 
 module GrindServer
 
-ActiveRecord::Base.default_timezone = :utc
+ActiveRecord::Base.default_timezone = :local
 # DB Start
 ActiveRecord::Base.establish_connection(
   adapter: 'sqlite3',
@@ -73,8 +73,8 @@ class Reviewer < Person
 end
 
 class Task < ActiveRecord::Base
-  belongs_to :developer
-  belongs_to :reviewer
+  belongs_to :developer, counter_cache: :work_tasks_count
+  belongs_to :reviewer, counter_cache: :review_tasks_count
   has_many :documents
   after_save :add_task_to_unread_objects
 
@@ -118,7 +118,7 @@ EventMachine.run do
   @users = {}
   @messages = []
   class App < Sinatra::Base
-    Time.zone = "UTC"
+    Time.zone = "Kolkata"
     use Rack::PostBodyContentTypeParser
     set :server, 'thin'
     set :sockets, []
@@ -165,8 +165,8 @@ EventMachine.run do
 
     # {Person CRUD}
     post '/person' do
-      @person = Person.new(params[:person].except('id', 'unread_objects_count', 'documents_count', 'tasks_count', 'created_at', 'updated_at'))
-      redirect 'person/#{@person.id}' if @person.save
+      @person = Person.new(params[:person].except('id', 'created_at', 'updated_at'))
+      redirect "person/#{@person.id}" if @person.save
     end
 
     get '/person/:id' do
@@ -176,7 +176,7 @@ EventMachine.run do
     put '/person/:id' do
       @person = Person.find(params[:id])
       if @person.update(params[:person].except('unread_objects_count', 'documents_count', 'tasks_count'))
-        redirect 'person/#{@person.id}'
+        redirect "person/#{@person.id}"
       end
     end
 
@@ -192,7 +192,7 @@ EventMachine.run do
     # {Task CRUD}
     post '/task' do
       @task = Task.new(params[:task].except('id', 'documents', 'created_at', 'updated_at'))
-      redirect 'task/#{@task.id}' if @task.save
+      redirect "task/#{@task.id}" if @task.save
     end
 
     post '/tasks' do
