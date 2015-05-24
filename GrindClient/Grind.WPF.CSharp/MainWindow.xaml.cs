@@ -159,11 +159,11 @@ namespace Grind.WPF.CSharp
 
         private void btnUpdate_Click(object sender, RoutedEventArgs e)
         {
-            if (btnUpdate.Content == "Update")
+            if ((string)btnUpdate.Content == "Update")
             {
                 SetMode(ViewMode.Update);
             }
-            else if (btnUpdate.Content == "Save" && btnNew.Content == "Cancel")
+            else if ((string)btnUpdate.Content == "Save" && (string)btnNew.Content == "Cancel")
             {
                 int OldTaskId = CurrentTask.id;
                 ttfrmControl.BuildTaskfromTaskFilledForm(ref CurrentTask);
@@ -196,7 +196,7 @@ namespace Grind.WPF.CSharp
                     MessageBox.Show("There was some problem while Updating the Task." + ErrMsg, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
-            else if (btnUpdate.Content == "Cancel" && btnNew.Content == "Save")
+            else if ((string)btnUpdate.Content == "Cancel" && (string)btnNew.Content == "Save")
             {
                 ttfrmControl.FillFormfromTask(CurrentTask);
                 //tsmiRefresh_Click(null, EventArgs.Empty);

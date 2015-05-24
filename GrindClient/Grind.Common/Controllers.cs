@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using RestSharp;
 using RestSharp.Serializers;
-using NDatabase;
 using System.Diagnostics;
 using System.Windows.Controls.Primitives;
 using System.Data;
@@ -383,25 +382,25 @@ namespace Grind.Common
                         tasks.Clear();
                         SortableBindingList<TaskListItem> DesrializedTasks = JsonConvert.DeserializeObject<SortableBindingList<TaskListItem>>(rResponse.Content);
                         foreach (Task item in DesrializedTasks )
-                            tasks.Add(item.As<TaskListItem>());
-                        if (lts.Except(Cache.TasksTS).Count() > 0) ;
+                            tasks.Add(item.AsTaskListItem());
+                        if (lts.Except(Cache.TasksTS).Count() > 0)
                         {
                             Cache.DeleteOldObjects<Task>(lts);
                         }
                         return RetCode.successful;
                     }
                     else
-                    {
-                        if (ctasks != null)
-                        {
-                            if (tasks == null) tasks = new SortableBindingList<TaskListItem>();
-                            tasks.Clear();
-                            foreach (Task item in ctasks)
-                                tasks.Add(item.As<TaskListItem>());
-                            SetMessage("Offline TaskList From Cache");
-                        }
-                        else
-                            tasks = null;
+                    {                                                                                   
+                        if (ctasks != null)                                                             
+                        {                                                                               
+                            if (tasks == null) tasks = new SortableBindingList<TaskListItem>();         
+                            tasks.Clear();                                                              
+                            foreach (Task item in ctasks)                                               
+                                tasks.Add(item.AsTaskListItem());                                     
+                            SetMessage("Offline TaskList From Cache");                                  
+                        }                                                                               
+                        else                                                                            
+                            tasks = null;                                                               
                         return RetCode.unsuccessful;
                     }
                 }
@@ -412,7 +411,7 @@ namespace Grind.Common
                         if (tasks == null) tasks = new SortableBindingList<TaskListItem>();
                         tasks.Clear();
                         foreach (Task item in ctasks)
-                            tasks.Add(item.As<TaskListItem>());
+                            tasks.Add(item.AsTaskListItem());
                         SetMessage("Offline TaskList From Cache");
                     }
                     else
@@ -428,7 +427,7 @@ namespace Grind.Common
                     if (tasks == null) tasks = new SortableBindingList<TaskListItem>();
                     tasks.Clear();
                     foreach (Task item in ctasks)
-                        tasks.Add(item.As<TaskListItem>());
+                        tasks.Add(item.AsTaskListItem());
                     SetMessage("Offline TaskList From Cache");
                 }
                 else

@@ -1,15 +1,15 @@
 J:\Root\Grind\GrindClient\Grind.WPF.CSharp\bin\Debug\Grind.WPF.CSharp.exe.config
-J:\Root\Grind\GrindClient\Grind.WPF.CSharp\bin\Debug\Grind.db
 J:\Root\Grind\GrindClient\Grind.WPF.CSharp\bin\Debug\Grind.WPF.CSharp.exe
 J:\Root\Grind\GrindClient\Grind.WPF.CSharp\bin\Debug\Grind.WPF.CSharp.pdb
 J:\Root\Grind\GrindClient\Grind.WPF.CSharp\bin\Debug\Grind.Common.dll
-J:\Root\Grind\GrindClient\Grind.WPF.CSharp\bin\Debug\PresentationFramework.Aero.dll
 J:\Root\Grind\GrindClient\Grind.WPF.CSharp\bin\Debug\RestSharp.dll
 J:\Root\Grind\GrindClient\Grind.WPF.CSharp\bin\Debug\Xceed.Wpf.Toolkit.dll
 J:\Root\Grind\GrindClient\Grind.WPF.CSharp\bin\Debug\System.Data.SQLite.dll
+J:\Root\Grind\GrindClient\Grind.WPF.CSharp\bin\Debug\Newtonsoft.Json.dll
 J:\Root\Grind\GrindClient\Grind.WPF.CSharp\bin\Debug\Grind.Common.pdb
 J:\Root\Grind\GrindClient\Grind.WPF.CSharp\bin\Debug\RestSharp.xml
 J:\Root\Grind\GrindClient\Grind.WPF.CSharp\bin\Debug\System.Data.SQLite.xml
+J:\Root\Grind\GrindClient\Grind.WPF.CSharp\bin\Debug\Newtonsoft.Json.xml
 J:\Root\Grind\GrindClient\Grind.WPF.CSharp\obj\Debug\Grind.WPF.CSharp.csprojResolveAssemblyReference.cache
 J:\Root\Grind\GrindClient\Grind.WPF.CSharp\obj\Debug\Simple Styles.baml
 J:\Root\Grind\GrindClient\Grind.WPF.CSharp\obj\Debug\Window1.baml
@@ -30,5 +30,3 @@ J:\Root\Grind\GrindClient\Grind.WPF.CSharp\obj\Debug\Grind.WPF.CSharp.Properties
 J:\Root\Grind\GrindClient\Grind.WPF.CSharp\obj\Debug\Grind.WPF.CSharp.csproj.GenerateResource.Cache
 J:\Root\Grind\GrindClient\Grind.WPF.CSharp\obj\Debug\Grind.WPF.CSharp.exe
 J:\Root\Grind\GrindClient\Grind.WPF.CSharp\obj\Debug\Grind.WPF.CSharp.pdb
-J:\Root\Grind\GrindClient\Grind.WPF.CSharp\bin\Debug\Newtonsoft.Json.dll
-J:\Root\Grind\GrindClient\Grind.WPF.CSharp\bin\Debug\Newtonsoft.Json.xml

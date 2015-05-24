@@ -45,7 +45,7 @@ Public Class Form1
         Uri.TryCreate("http://localhost:4567/", UriKind.Absolute, rRestClient.BaseUrl)
         rRestRequest = New RestRequest
         rRestRequest.Resource = "task/{id}"
-        rRestRequest.AddUrlSegment("id", dGridTasks.CurrentRow.Index + 1)
+        rRestRequest.AddUrlSegment("id", (dGridTasks.CurrentRow.Index + 1).ToString())
         rRestRequest.Method = Method.GET
         rRestResponse = rRestClient.Execute(rRestRequest)
         ActiveTask = JSONDeserilizer.Deserialize(Of Task)(rRestResponse)

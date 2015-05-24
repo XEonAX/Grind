@@ -10,3 +10,16 @@ J:\Root\Grind\GrindClient\Grind-WF\obj\x86\Debug\Grind.Winforms.VBNet.Resources.
 J:\Root\Grind\GrindClient\Grind-WF\obj\x86\Debug\Grind.Winforms.VBNet.exe
 J:\Root\Grind\GrindClient\Grind-WF\obj\x86\Debug\Grind.Winforms.VBNet.xml
 J:\Root\Grind\GrindClient\Grind-WF\obj\x86\Debug\Grind.Winforms.VBNet.pdb
+J:\Root\Grind\GrindClient\Grind.Winforms.VBNet\bin\Debug\Grind.Winforms.VBNet.exe.config
+J:\Root\Grind\GrindClient\Grind.Winforms.VBNet\bin\Debug\Grind.Winforms.VBNet.exe
+J:\Root\Grind\GrindClient\Grind.Winforms.VBNet\bin\Debug\Grind.Winforms.VBNet.pdb
+J:\Root\Grind\GrindClient\Grind.Winforms.VBNet\bin\Debug\Grind.Winforms.VBNet.xml
+J:\Root\Grind\GrindClient\Grind.Winforms.VBNet\bin\Debug\RestSharp.dll
+J:\Root\Grind\GrindClient\Grind.Winforms.VBNet\bin\Debug\RestSharp.xml
+J:\Root\Grind\GrindClient\Grind.Winforms.VBNet\obj\x86\Debug\Grind.Winforms.VBNet.vbprojResolveAssemblyReference.cache
+J:\Root\Grind\GrindClient\Grind.Winforms.VBNet\obj\x86\Debug\Grind.Winforms.VBNet.Form1.resources
+J:\Root\Grind\GrindClient\Grind.Winforms.VBNet\obj\x86\Debug\Grind.Winforms.VBNet.Resources.resources
+J:\Root\Grind\GrindClient\Grind.Winforms.VBNet\obj\x86\Debug\Grind.Winforms.VBNet.vbproj.GenerateResource.Cache
+J:\Root\Grind\GrindClient\Grind.Winforms.VBNet\obj\x86\Debug\Grind.Winforms.VBNet.exe
+J:\Root\Grind\GrindClient\Grind.Winforms.VBNet\obj\x86\Debug\Grind.Winforms.VBNet.xml
+J:\Root\Grind\GrindClient\Grind.Winforms.VBNet\obj\x86\Debug\Grind.Winforms.VBNet.pdb

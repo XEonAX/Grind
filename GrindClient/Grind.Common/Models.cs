@@ -47,9 +47,9 @@ namespace Grind.Common
                 && updated_at.Equals(otherTimestamp.updated_at)
                 && created_at.Equals(otherTimestamp.created_at);
         }
-        public TS As<TS>() where TS : TimeStamp
+        public TimeStamp AsTimeStamp() 
         {
-            return (TS)new TimeStamp { created_at=created_at,id=id,updated_at=updated_at };
+            return new TimeStamp { created_at=created_at,id=id,updated_at=updated_at };
         }
         public override bool Equals(object obj)
         {
@@ -174,16 +174,16 @@ namespace Grind.Common
             bug_type = eBugType.Others;
             is_bug = true;
         }
-     
-        public TLI As<TLI>() where TLI : TaskListItem
+
+        public TaskListItem AsTaskListItem() 
         {
-            var type = typeof(TLI);
+            var type = typeof(TaskListItem);
             var instance = Activator.CreateInstance(type);
             
             PropertyInfo[] properties = type.GetProperties();
             foreach (var property in properties)
                 if (property.CanWrite) property.SetValue(instance, property.GetValue(this, null), null);
-            return (TLI)instance;
+            return (TaskListItem)instance;
         }
 
         public int developer_id { get; set; }

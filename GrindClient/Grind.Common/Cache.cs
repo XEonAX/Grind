@@ -356,7 +356,7 @@ namespace Grind.Common
                     objs = DataReaderMapToList<T>(grindDBDataReader);
                     PeopleTS.Clear();
                     foreach (TimeStamp TS in (IEnumerable<TimeStamp>)objs)
-                        PeopleTS.Add(TS.As<TimeStamp>());
+                        PeopleTS.Add(TS.AsTimeStamp());
                     break;
                 case "Task":
                     grindDBReadListcmd.CommandText = @"SELECT * FROM [tasks]";
@@ -364,7 +364,7 @@ namespace Grind.Common
                     objs = DataReaderMapToList<T>(grindDBDataReader);
                     TasksTS.Clear();
                     foreach (TimeStamp TS in (IEnumerable<TimeStamp>)objs)
-                        TasksTS.Add(TS.As<TimeStamp>());
+                        TasksTS.Add(TS.AsTimeStamp());
                     break;
                 default:
                     objs = null;
