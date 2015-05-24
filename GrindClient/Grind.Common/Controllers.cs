@@ -3,14 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using RestSharp;
-//using RestSharp.Deserializers;
 using RestSharp.Serializers;
 using NDatabase;
-using NDatabase.Api;
 using System.Diagnostics;
-using NDatabase.Api.Query;
 using System.Windows.Controls.Primitives;
-//using System.Data.SQLite;
 using System.Data;
 using System.Reflection;
 using System.Collections;
@@ -22,43 +18,29 @@ namespace Grind.Common
 {
     public static class Controllers
     {
-        #region Statics
         public static RestClient rRestClient;
         public static IRestResponse rRestResponse;
         public static string Message;
-        //public static IOdb CacheDB;
         public static StatusBarItem xbMessage;
         public static StatusBarItem xbState;
         public static CheckBox xchkOffline;
         private static string lastMessage, lastState;
         private static bool isOnline = true;
 
-
         public static void ControllersInit(string baseUrl)
         {
             rRestClient = new RestClient(baseUrl);
-            //CacheDB = OdbFactory.Open(@"CacheDB.ndb");
-            //grindDBConnection = new SQLiteConnection(@"data source=Grind.db");
-            //grindDBConnection.Open();
-
         }
-
-        //private static List<TimeStamp> Cache.PeopleTS = new List<TimeStamp>();
-        //private static List<TimeStamp> Cache.TasksTS = new List<TimeStamp>();
 
         public static void ControllersInit(string baseUrl, ref StatusBarItem sbiMessage, ref StatusBarItem sbiState, ref CheckBox chkOffline)
         {
             rRestClient = new RestClient(baseUrl);
-            //CacheDB = OdbFactory.Open(@"CacheDB.ndb");
             Cache.SqliteHelperInit(@"data source=Grind.db");
             xbMessage = sbiMessage;
             xbState = sbiState;
             xchkOffline = chkOffline;
+            if (xchkOffline.IsChecked == true) setOffline();
         }
-
-
-
-        #endregion
 
         #region Extensions
 
@@ -116,8 +98,8 @@ namespace Grind.Common
         //}
 
         #endregion
-        #region Base Object CRUD Methods
 
+        #region Base Object CRUD Methods
         public static RetCode CreateObject(ref RootObject rootObject, ref RestClient rClient, string requestResource, out IRestResponse rResponse)
         {
             RestRequest rRequest = new RestRequest();
@@ -325,14 +307,12 @@ namespace Grind.Common
                             //CacheDB.Commit();
                         }
                     }
-                    //If it reaches her it means No cached task or stale task
+                    //If it reaches here it means No cached task or stale task
                     if (RetCode.successful == ReadObject(ref rClient, "task/{id}", taskId.ToString(), out rResponse))
                     {
                         task = JsonConvert.DeserializeObject<Task>(rResponse.Content);
                         SetMessage("Task Added to Cache:" + task.name);
                         Cache.AddObject<Task>(task);
-                        //CacheDB.Store<Task>(task);
-                        //CacheDB.Commit();
                         return RetCode.successful;
                     }
                     else
@@ -611,12 +591,16 @@ namespace Grind.Common
         public static void setOffline()
         {
             isOnline = false;
-            xchkOffline.IsChecked = true;
+            if (xchkOffline!=null)
+            {
+                 xchkOffline.IsChecked = true;
+            }
+           
         }
         public static void setOnline()
         {
             isOnline = true;
-            xchkOffline.IsChecked = false;
+            if (xchkOffline!=null) xchkOffline.IsChecked = false;
         }
 
         #endregion

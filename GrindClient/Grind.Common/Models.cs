@@ -76,9 +76,7 @@ namespace Grind.Common
 
     public class Person : TimeStamp, IEquatable<Person>
     {
-        //public int id { get; set; }
         public string name { get; set; }
-
         public string trigram { get; set; }
         public bool active { get; set; }
         public eLevel level { get; set; }
@@ -87,17 +85,7 @@ namespace Grind.Common
         public int documents_count { get; set; }
         public int work_tasks_count { get; set; }
         public int review_tasks_count { get; set; }
-        //public DateTime created_at { get; set; }
-        //public DateTime updated_at { get; set; }
-        //public int Id { get; set; }
-        //public string Name { get; set; }
-        //public string Trigram { get; set; }
-        //public string State { get; set; }
-        //public string Level { get; set; }
-        //public string InternalObjectId { get; set; }
-        //public int UnreadObjectsCount { get; set; }
-        //public int DocumentsCount { get; set; }
-        //public int TasksCount { get; set; }
+
         public bool Equals(Person obj)
         {
             Person otherPerson = obj as Person;
@@ -145,29 +133,15 @@ namespace Grind.Common
     public class Document : TimeStamp
     {
         public int task_id { get; set; }
-        //public int id { get; set; }
         public string name { get; set; }
         public string data { get; set; }
         public string path { get; set; }
         public int developer_id { get; set; }
         public string internal_object_id { get; set; }
-        //public string created_at { get; set; }
-        //public string updated_at { get; set; }
-
-        //public int TaskId { get; set; }
-        //public int Id { get; set; }
-        //public string Name { get; set; }
-        //public object Data { get; set; }
-        //public string Path { get; set; }
-        //public int DeveloperId { get; set; }
-        //public string InternalObjectId { get; set; }
-        //public DateTime CreatedAt { get; set; }
-        //public DateTime UpdatedAt { get; set; }
     }
 
     public class TaskListItem : Task
     {
-
         public string taskName
         {
             get { return this.name + " - " + this.title; }
@@ -180,26 +154,6 @@ namespace Grind.Common
         {
             get { return Globals.People.Find(x => x.id == this.reviewer_id).name; }
         }
-
-        //public int id { get; set; }
-        //public int developer_id { get; set; }
-        //public int reviewer_id { get; set; }
-        //public string name { get; set; }
-        //public eTaskStatus task_status { get; set; }
-        //public eBugType bug_type { get; set; }
-        //public string title { get; set; }
-        //public bool approved { get; set; }
-        //public bool is_bug { get; set; }
-        ////public DateTime open_date { get; set; }
-        ////public DateTime analysis_date { get; set; }
-        ////public DateTime review_date { get; set; }
-        ////public DateTime correction_date { get; set; }
-        ////public DateTime promotion_date { get; set; }
-        ////public DateTime collection_date { get; set; }
-        ////public DateTime closed_date { get; set; }
-        //public DateTime target_date { get; set; }
-        //public DateTime created_at { get; set; }
-        //public DateTime updated_at { get; set; }
     }
 
 
@@ -217,7 +171,10 @@ namespace Grind.Common
             closed_date = DateTime.Now.AddDays(3 * 7);
             developer_id = Globals.People.First().id;
             reviewer_id = Globals.People.First().id;
+            bug_type = eBugType.Others;
+            is_bug = true;
         }
+     
         public TLI As<TLI>() where TLI : TaskListItem
         {
             var type = typeof(TLI);
@@ -225,14 +182,9 @@ namespace Grind.Common
             
             PropertyInfo[] properties = type.GetProperties();
             foreach (var property in properties)
-            {
                 if (property.CanWrite) property.SetValue(instance, property.GetValue(this, null), null);
-            }
-
             return (TLI)instance;
         }
-
-        //public int id { get; set; }
 
         public int developer_id { get; set; }
         public int reviewer_id { get; set; }
@@ -256,24 +208,7 @@ namespace Grind.Common
         public DateTime collection_date { get; set; }
         public DateTime closed_date { get; set; }
         public DateTime target_date { get; set; }
-        //public DateTime created_at { get; set; }
-        //public DateTime updated_at { get; set; }
         public List<Document> documents { get; set; }
-        //public new Model type { get { return Model.task; } }
-
-        //public bool isLatest { get {
-
-        //    TimeStamp timestamp;
-        //    if (Controllers.GetLatestTimeStamp(out timestamp, Model.task, this.id))
-        //    {
-        //        if (timestamp.updated_at > this.updated_at)
-        //            return false;
-        //        else
-        //            return true;
-        //    }
-        //    else
-        //        return false;
-
     }
 
 

@@ -90,7 +90,7 @@
     <None Include="app.config" />
     <None Include="ClassDiagram.cd" />
     <None Include="Grind.db">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="GrindDataSet.xsc">
       <DependentUpon>GrindDataSet.xsd</DependentUpon>

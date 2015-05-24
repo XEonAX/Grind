@@ -26,11 +26,12 @@ namespace Grind.WPF.CSharp
         }
 
         public Person person = new Person();
+        
         bool Refreshed = false;
-
 
         private void FillForm(Person person)
         {
+            if (person == null) return;
             txtName.Text = person.name;
             txtTrigram.Text = person.trigram;
             txtIntObjId.Text = person.internal_object_id;
@@ -39,7 +40,7 @@ namespace Grind.WPF.CSharp
         }
         private void TextChanged(object sender, TextChangedEventArgs e)
         {
-            if ((txtName.Text.Trim().Length == 0) || (txtTrigram.Text.Trim().Length == 0) || (txtIntObjId.Text.Trim().Length == 0))
+            if ((txtName.Text.Trim().Length == 0) || (txtTrigram.Text.Trim().Length == 0) || (txtIntObjId.Text.Trim().Length == 0) || (cbLevel.SelectedIndex==-1))
             {
                 btnAdd.IsEnabled= false;
                 btnUpdate.IsEnabled = false;
@@ -63,7 +64,6 @@ namespace Grind.WPF.CSharp
             btnRefresh_Click(sender,e);
             Refreshed = true;
             lbPeople.SelectedIndex = lbPeople.Items.Count - 1;
-
         }
 
         private void btnUpdate_Click(object sender, RoutedEventArgs e)
@@ -119,7 +119,6 @@ namespace Grind.WPF.CSharp
             {
                 btnUpdate.IsEnabled = true;
                 btnDelete.IsEnabled = true;
-
             }
             Refreshed = true;
 

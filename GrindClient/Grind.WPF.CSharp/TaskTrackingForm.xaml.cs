@@ -49,6 +49,11 @@ namespace Grind.WPF.CSharp
 
         public void FillFormfromTask(Task task)
         {
+            if (task == null)
+            {
+
+                return;
+            }
             UserChange = false;
             txtName.Text = task.name;
             txtTitle.Text = task.title;
