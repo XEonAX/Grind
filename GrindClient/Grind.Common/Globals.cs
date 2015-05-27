@@ -6,8 +6,11 @@ using System.Windows;
 using System.Windows.Documents;
 using System.IO;
 using System.Windows.Markup;
+using System.Windows.Threading;
+using System.Threading;
 namespace Grind.Common
 {
+
     public class Globals
     {
         public static RootObject rootObject;
@@ -62,4 +65,6 @@ namespace Grind.Common
 
 
     }
+
+
 }

@@ -31,10 +31,10 @@ namespace Grind.Common
             rRestClient = new RestClient(baseUrl);
         }
 
-        public static void ControllersInit(string baseUrl, ref StatusBarItem sbiMessage, ref StatusBarItem sbiState, ref CheckBox chkOffline)
+        public static void ControllersInit(string baseUrl,string ConnectionString, ref StatusBarItem sbiMessage, ref StatusBarItem sbiState, ref CheckBox chkOffline)
         {
             rRestClient = new RestClient(baseUrl);
-            Cache.SqliteHelperInit(@"data source=Grind.db");
+            Cache.SqliteHelperInit(ConnectionString);
             xbMessage = sbiMessage;
             xbState = sbiState;
             xchkOffline = chkOffline;
@@ -216,7 +216,7 @@ namespace Grind.Common
             List<Person> cpeople = Cache.GetObjects<Person>();
             if (isOnline)
             {
-                List<TimeStamp> lts = LatestTimeStamps(Model.person);
+                List<TimeStamp> lts = LatestTimeStamps<Person>();
                 if (lts != null)
                 {
                     if (RetCode.successful == ReadObject(ref rClient, "people", "", out rResponse))
@@ -373,10 +373,10 @@ namespace Grind.Common
             List<Task> ctasks = Cache.GetObjects<Task>();
             if (isOnline)
             {
-                List<TimeStamp> lts = LatestTimeStamps(Model.task);
+                List<TimeStamp> lts = LatestTimeStamps<Task>();
                 if (lts != null)
                 {
-                    if (RetCode.successful == ReadObject(ref rClient, "tasks", "", out rResponse))
+                    if (RetCode.successful == ReadObject(ref rClient, "taskslist", "", out rResponse))
                     {
                         if (tasks == null) tasks = new SortableBindingList<TaskListItem>();
                         tasks.Clear();
@@ -434,6 +434,53 @@ namespace Grind.Common
                     tasks = null;
                 rResponse = null;
                 return RetCode.successful;
+            }
+
+        }
+
+
+        public static RetCode GetAndStoreTasks()
+        {
+            return GetAndStoreTasks(ref rRestClient, out rRestResponse);
+        }
+        public static RetCode GetAndStoreTasks(ref RestClient rClient, out IRestResponse rResponse)
+        {
+            List<Task> ctasks = Cache.GetObjects<Task>();
+            List<Task> tasks;
+            if (isOnline)
+            {
+                List<TimeStamp> lts = LatestTimeStamps<Task>();
+                if (lts != null)
+                {
+                    if (RetCode.successful == ReadObject(ref rClient, "tasks", "", out rResponse))
+                    {
+
+                        tasks = JsonConvert.DeserializeObject<List<Task>>(rResponse.Content);
+                        if (lts.Except(Cache.TasksTS).ToList().Count > 0)
+                        {
+                            Cache.DeleteOldObjects<Task>(lts);
+                            Cache.AddObjects<Task>(tasks.Except(ctasks).ToList());
+                        }
+                        return RetCode.successful;
+                    }
+                    else
+                    {
+                        SetMessage("Offline Cache Tasks");
+                        return RetCode.unsuccessful;
+                    }
+                }
+                else
+                {
+                    SetMessage("Offline Cache Tasks");
+                    rResponse = null;
+                    return RetCode.unsuccessful;
+                }
+            }
+            else
+            {
+                SetMessage("Up to date Cached Tasks");
+                rResponse = null;
+                return RetCode.successful;//We have good tasks in cache
             }
 
         }
@@ -511,22 +558,22 @@ namespace Grind.Common
             }
         }
 
-        public static List<TimeStamp> LatestTimeStamps(Model type)
+        public static List<TimeStamp> LatestTimeStamps<T>()
         {
             List<TimeStamp> timestamps;
-            if (RetCode.successful == GetLatestTimeStamps(out timestamps, type))
+            if (RetCode.successful == GetLatestTimeStamps<T>(out timestamps))
                 return timestamps;
             else
                 return null;
         }
-        public static RetCode GetLatestTimeStamps(out List<TimeStamp> timestamps, Model type)
+        public static RetCode GetLatestTimeStamps<T>(out List<TimeStamp> timestamps)
         {
-            return GetLatestTimeStamps(out timestamps, type, ref  rRestClient, out rRestResponse);
+            return GetLatestTimeStamps<T>(out timestamps, ref  rRestClient, out rRestResponse);
         }
 
-        public static RetCode GetLatestTimeStamps(out List<TimeStamp> timestamps, Model type, ref RestClient rClient, out IRestResponse rResponse)
+        public static RetCode GetLatestTimeStamps<T>(out List<TimeStamp> timestamps, ref RestClient rClient, out IRestResponse rResponse)
         {
-            if (RetCode.successful == ReadObject(ref rClient, @"timestamps/" + type.ToString(), "", out rResponse))
+            if (RetCode.successful == ReadObject(ref rClient, @"timestamps/" + typeof(T).Name.ToLower(), "", out rResponse))
             {
                 timestamps = JsonConvert.DeserializeObject<List<TimeStamp>>(rResponse.Content);
                 return RetCode.successful;

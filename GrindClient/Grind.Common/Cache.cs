@@ -21,7 +21,7 @@ namespace Grind.Common
 
         public static void SqliteHelperInit(string ConnectionString)
         {
-            grindDBConnection = new SQLiteConnection(@"data source=Grind.db");
+            grindDBConnection = new SQLiteConnection(ConnectionString);
             grindDBConnection.Open();
         }
 

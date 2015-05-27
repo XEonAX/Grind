@@ -147,6 +147,10 @@ EventMachine.run do
 
     # {GET Lists}
     get '/tasks' do
+      Task.all.to_json
+    end
+
+    get '/taskslist' do
       Task.select(:id, :name, :task_status, :is_bug, :title, :bug_type, :target_date, :created_at, :updated_at, :approved, :developer_id, :reviewer_id).all.to_json
     end
 
@@ -273,7 +277,7 @@ EventMachine.run do
       # puts GrindServer.realtime_channel.inspect
       # Broadcast the notification to all users
       GrindServer.realtime_channel.push ({
-        'nickname' => '',
+        'nickname' => ws.request["query"]["name"],
         'message' => "New user joined. #{@users.length} users in chat",
         'timestamp' => GrindServer.timestamp }.to_json)
     end

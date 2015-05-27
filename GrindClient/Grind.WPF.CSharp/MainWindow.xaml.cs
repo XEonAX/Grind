@@ -40,7 +40,7 @@ namespace Grind.WPF.CSharp
         {
             dGridTasks.AutoGenerateColumns = false;
             dGridTasks.ItemsSource = TaskList;
-            Controllers.ControllersInit("http://localhost:4567/", ref sbiMessage, ref sbiState, ref chkOffline);
+            Controllers.ControllersInit("http://localhost:4567/", @"data source=J:\Root\Grind\GrindClient\Grind.Common\Grind.db", ref sbiMessage, ref sbiState, ref chkOffline);
             new Globals();
             //Person x1 = new Person { created_at = DateTime.Now, updated_at = DateTime.Now, id = 3 };
             //Cache.AddObject<Person>(x1);
@@ -51,9 +51,10 @@ namespace Grind.WPF.CSharp
                 Globals.People.Add( new Person {id=0, name="DummyUser",level=eLevel.Master});
             }
             Controllers.ReadTasks(ref TaskList);
+
             //cobExecutor.Items.AddRange(Globals.People.Select(x => x.name).ToArray());
             //cobReviewer.Items.AddRange(Globals.People.Select(x => x.name).ToArray());
-            ttfrmControl.FillPeopleDropDown();
+            ttfrmControl.FillPeopleDropDown(Globals.People);
             dGridTasks.ItemsSource = TaskList;
             SetMode(ViewMode.Normal);
         }
@@ -152,7 +153,7 @@ namespace Grind.WPF.CSharp
             Controllers.ReadTasks(ref TaskList);
             //cobExecutor.Items.AddRange(Globals.People.Select(x => x.name).ToArray());
             //cobReviewer.Items.AddRange(Globals.People.Select(x => x.name).ToArray());
-            ttfrmControl.FillPeopleDropDown();
+            ttfrmControl.FillPeopleDropDown(Globals.People);
             dGridTasks.ItemsSource = TaskList;
             SetMode(ViewMode.Normal);
         }
@@ -232,6 +233,11 @@ namespace Grind.WPF.CSharp
         private void chkOffline_Unchecked(object sender, RoutedEventArgs e)
         {
             Controllers.setOnline();
+        }
+
+        private void btnDownloadTasks_Click(object sender, RoutedEventArgs e)
+        {
+            Controllers.GetAndStoreTasks();
         }
     }
 }

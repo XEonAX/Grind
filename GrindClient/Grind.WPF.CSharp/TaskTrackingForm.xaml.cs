@@ -27,7 +27,7 @@ namespace Grind.WPF.CSharp
         }
 
         bool UserChange;
-        public void FillPeopleDropDown()
+        public void FillPeopleDropDown(List<Person> People)
         {
             cbExecutor.Items.Clear();
             cbExecutor.Items.Add("Executor");
@@ -35,7 +35,7 @@ namespace Grind.WPF.CSharp
             cbReviewer.Items.Clear();
             cbReviewer.Items.Add("Reviewer");
             cbReviewer.Items.Add("-------------------------");
-            Globals.People
+            People
                 .Select(x => x.name)
                 .ToList()
                 .ForEach(

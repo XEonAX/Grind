@@ -6,7 +6,9 @@
         mc:Ignorable="d"
         x:Class="Grind.WPF.CSharp.MainWindow" 
         Title="MainWindow" VerticalAlignment="Top" Height="553" Width="757" HorizontalAlignment="Left" Loaded="Window_Loaded">
+
     <Grid>
+        
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition Height="20"/>
@@ -28,11 +30,12 @@
                         </Grid.RowDefinitions>
                         <StackPanel Grid.Row="0" VerticalAlignment="Center" Orientation="Horizontal" Margin="2,0,0,0" >
                             <Button  Content="Refresh" Margin="2,0" x:Name="btnRefresh" Click="btnRefresh_Click" />
+                            <Button  Content="Get and Store All Tasks" Margin="2,0" x:Name="btnDownloadTasks" Click="btnDownloadTasks_Click"  />
                             <Button Content="New" Margin="2,0" x:Name="btnNew" Click="btnNew_Click" />
                             <Button Content="Update" Margin="2,0" x:Name="btnUpdate" Click="btnUpdate_Click" />
                             <CheckBox Content="Work Offline" Height="16" x:Name="chkOffline" HorizontalAlignment="Right" Checked="chkOffline_Checked" Unchecked="chkOffline_Unchecked" IsChecked="True" />
                         </StackPanel>
-                        <DataGrid Grid.Row="1" IsReadOnly="True" ClipboardCopyMode="IncludeHeader" CanUserResizeRows="False" BorderBrush="{x:Null}" x:Name="dGridTasks" SelectionChanged="dGridTasks_SelectionChanged">
+                        <DataGrid Grid.Row="1" IsReadOnly="True" CanUserResizeRows="False" BorderBrush="{x:Null}" x:Name="dGridTasks" SelectionChanged="dGridTasks_SelectionChanged">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Task Name" IsReadOnly="True" Width="2*" Binding="{Binding taskName}"/>
                                 <DataGridTextColumn Header="Task Status" IsReadOnly="True" Width="70" Binding="{Binding task_status}"/>
