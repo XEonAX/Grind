@@ -40,7 +40,7 @@ namespace Grind.WPF.CSharp
         {
             dGridTasks.AutoGenerateColumns = false;
             dGridTasks.ItemsSource = TaskList;
-            Controllers.ControllersInit("http://localhost:4567/", @"data source=J:\Root\Grind\GrindClient\Grind.Common\Grind.db", ref sbiMessage, ref sbiState, ref chkOffline);
+            Controllers.Init("http://localhost:4567/", @"data source=J:\Root\Grind\GrindClient\Grind.Common\Grind.db", ref sbiMessage, ref sbiState, ref chkOffline);
             new Globals();
             //Person x1 = new Person { created_at = DateTime.Now, updated_at = DateTime.Now, id = 3 };
             //Cache.AddObject<Person>(x1);
@@ -48,7 +48,7 @@ namespace Grind.WPF.CSharp
             Controllers.ReadPeople(out Globals.People);
             if (Globals.People.Count == 0)
             {
-                Globals.People.Add( new Person {id=0, name="DummyUser",level=eLevel.Master});
+                Globals.People.Add(new Person { id = 0, name = "DummyUser", level = eLevel.Master });
             }
             Controllers.ReadTasks(ref TaskList);
 
@@ -91,11 +91,11 @@ namespace Grind.WPF.CSharp
                 else
                 {
                     string ErrMsg = "";
-                    //if (Controllers.rRestResponse != null && Controllers.rRestResponse.Content != null)
+                    //if (RestService.rRestResponse != null && RestService.rRestResponse.Content != null)
                     //{
-                    //    ErrMsg = Environment.NewLine + Controllers.rRestResponse.Content;
+                    //    ErrMsg = Environment.NewLine + RestService.rRestResponse.Content;
                     //}
-                    ErrMsg = Controllers.GetResponseError();
+                    ErrMsg = RestService.GetResponseError();
                     MessageBox.Show("There was some problem while Saving the Task." + ErrMsg, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
 
                 }
@@ -168,7 +168,7 @@ namespace Grind.WPF.CSharp
             {
                 int OldTaskId = CurrentTask.id;
                 ttfrmControl.BuildTaskfromTaskFilledForm(ref CurrentTask);
-                if (RetCode.successful==Controllers.UpdateTask(ref CurrentTask))
+                if (RetCode.successful == Controllers.UpdateTask(ref CurrentTask))
                 {
 
                     UserChange = false;
@@ -190,9 +190,9 @@ namespace Grind.WPF.CSharp
                 else
                 {
                     string ErrMsg = "";
-                    if (Controllers.rRestResponse != null && Controllers.rRestResponse.Content != null)
+                    if (RestService.rRestResponse != null && RestService.rRestResponse.Content != null)
                     {
-                        ErrMsg = Environment.NewLine + Controllers.rRestResponse.Content;
+                        ErrMsg = Environment.NewLine + RestService.rRestResponse.Content;
                     }
                     MessageBox.Show("There was some problem while Updating the Task." + ErrMsg, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
@@ -227,12 +227,12 @@ namespace Grind.WPF.CSharp
 
         private void chkOffline_Checked(object sender, RoutedEventArgs e)
         {
-            Controllers.setOffline();
+            State.IsOnline = false; ;
         }
 
         private void chkOffline_Unchecked(object sender, RoutedEventArgs e)
         {
-            Controllers.setOnline();
+            State.IsOnline = true;
         }
 
         private void btnDownloadTasks_Click(object sender, RoutedEventArgs e)

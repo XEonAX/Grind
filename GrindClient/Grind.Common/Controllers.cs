@@ -17,209 +17,53 @@ namespace Grind.Common
 {
     public static class Controllers
     {
-        public static RestClient rRestClient;
-        public static IRestResponse rRestResponse;
-        public static string Message;
-        public static StatusBarItem xbMessage;
-        public static StatusBarItem xbState;
-        public static CheckBox xchkOffline;
-        private static string lastMessage, lastState;
-        private static bool isOnline = true;
-
-        public static void ControllersInit(string baseUrl)
+        public static void Init(string baseUrl)
         {
-            rRestClient = new RestClient(baseUrl);
+            RestService.Init(baseUrl);
         }
-
-        public static void ControllersInit(string baseUrl,string ConnectionString, ref StatusBarItem sbiMessage, ref StatusBarItem sbiState, ref CheckBox chkOffline)
+        public static void Init(string baseUrl, string ConnectionString, ref StatusBarItem sbiMessage, ref StatusBarItem sbiState, ref CheckBox chkOffline)
         {
-            rRestClient = new RestClient(baseUrl);
+            RestService.Init(baseUrl);
             Cache.SqliteHelperInit(ConnectionString);
-            xbMessage = sbiMessage;
-            xbState = sbiState;
-            xchkOffline = chkOffline;
-            if (xchkOffline.IsChecked == true) setOffline();
+            Helper.Init(sbiMessage, sbiState, chkOffline);
         }
 
-        #region Extensions
-
-        //public static RetCode isLatest(this Task task)
-        //{
-        //    TimeStamp timestamp;
-        //    if (RetCode.successful == GetLatestTimeStamp(out timestamp, Model.task, task.id))
-        //    {
-        //        if (timestamp.updated_at > task.updated_at)
-        //            return RetCode.no;
-        //        else
-        //            return RetCode.yes;
-        //    }
-        //    else
-        //        return RetCode.maybe;
-        //}
-        //public static RetCode FilterLatest(this IObjectSet<TimeStamp> timestamplist, out List<TimeStamp> deletionList)
-        //{
-        //    List<TimeStamp> timestamps;
-        //    deletionList = new List<TimeStamp>();
-        //    if (RetCode.successful == GetLatestTimeStamps(out timestamps, Model.task))
-        //    {
-        //        timestamplist.Except(timestamps);
-        //        foreach (Task timestampItem in timestamplist)
-        //        {
-        //            TimeStamp ts = timestamps.Find(x => x.id == timestampItem.id);
-        //            if (ts != null && ts.updated_at > timestampItem.updated_at)
-        //            {
-        //                timestamplist.Remove(timestampItem);
-        //                deletionList.Add(timestampItem);
-        //            }
-        //        }
-        //        if (deletionList.Count > 0)
-        //            return RetCode.yes;
-        //        else
-        //            return RetCode.no;
-        //    }
-        //    else
-        //        return RetCode.maybe
-        //}
-
-
-        //public static RetCode isLatest(this Task task)
-        //{
-        //    TimeStamp timestamp;
-        //    if (GetLatestTimeStamp(out timestamp, Model.task, task.id))
-        //    {
-        //        if (timestamp.updated_at > task.updated_at)
-        //            return RetCode.unsuccessful;
-        //        else
-        //            return RetCode.successful;
-        //    }
-        //    else
-        //        return RetCode.unsuccessful;
-        //}
-
-        #endregion
-
-        #region Base Object CRUD Methods
-        public static RetCode CreateObject(ref RootObject rootObject, ref RestClient rClient, string requestResource, out IRestResponse rResponse)
-        {
-            RestRequest rRequest = new RestRequest();
-            rRequest.DateFormat = "yyyy-MM-ddTHH:mm:ss.sss";
-            rRequest.Resource = requestResource;
-            rRequest.Method = Method.POST;
-            rRequest.RequestFormat = DataFormat.Json;
-            rRequest.AddBody(rootObject);
-            rResponse = rClient.Execute(rRequest);
-            if (rResponse.StatusCode == System.Net.HttpStatusCode.OK)
-            {
-                SetMessage("Creation Successful.");
-                return RetCode.successful;
-            }
-            else
-            {
-                SetState(rResponse.ErrorMessage + " " + rRestResponse.StatusCode.ToString());
-                return RetCode.unsuccessful;
-            }
-        }
-        public static RetCode ReadObject(ref RestClient rClient, string requestResource, string requestResourceId, out IRestResponse rResponse)
-        {
-            RestRequest rRequest = new RestRequest();
-            rRequest.Resource = requestResource;// "task/{id}";
-            rRequest.DateFormat = "yyyy-MM-ddTHH:mm:ss.sss";
-            //rRequest.DateFormat = "yyyy-MM-ddTHH:mm:sssssZ";
-            if (requestResource.Contains("{id}")) rRequest.AddUrlSegment("id", requestResourceId);
-            rRequest.Method = Method.GET;
-            rResponse = rClient.Execute(rRequest);
-            if (rResponse.StatusCode == System.Net.HttpStatusCode.OK)
-            {
-                SetState("Online");
-                return RetCode.successful;
-            }
-            else
-            {
-                setOffline();
-                SetState(rResponse.ErrorMessage);
-                return RetCode.unsuccessful;
-            }
-
-        }
-        public static RetCode UpdateObject(ref RootObject rootObject, ref RestClient rClient, string requestResource, string requestResourceId, out IRestResponse rResponse)
-        {
-            RestRequest rRequest = new RestRequest();
-            rRequest.DateFormat = "yyyy-MM-ddTHH:mm:ss.sss";
-            rRequest.Resource = requestResource;
-            rRequest.Method = Method.PUT;
-            rRequest.AddUrlSegment("id", requestResourceId);
-            rRequest.RequestFormat = DataFormat.Json;
-            rRequest.AddBody(rootObject);
-            rResponse = rClient.Execute(rRequest);
-            if (rResponse.StatusCode == System.Net.HttpStatusCode.OK)
-            {
-                SetState("Update Successful");
-                return RetCode.successful;
-            }
-            else
-            {
-                SetState(rResponse.ErrorMessage);
-                return RetCode.unsuccessful;
-            }
-        }
-        public static RetCode DeleteObject(ref RestClient rClient, string requestResource, string requestResourceId, out IRestResponse rResponse)
-        {
-            RestRequest rRequest = new RestRequest();
-            rRequest.Resource = requestResource;// "task/{id}";
-            rRequest.DateFormat = "yyyy-MM-ddTHH:mm:sssssZ";
-            rRequest.AddUrlSegment("id", requestResourceId);
-            rRequest.Method = Method.DELETE;
-            rResponse = rClient.Execute(rRequest);
-            Globals.rootObject = JsonConvert.DeserializeObject<RootObject>(rResponse.Content);
-            if (rResponse.StatusCode == System.Net.HttpStatusCode.OK)
-            {
-                SetState("Delete Successful");
-                return RetCode.successful;
-            }
-            else
-            {
-                SetState(rResponse.ErrorMessage);
-                return RetCode.unsuccessful;
-            }
-        }
-        #endregion
-
-        #region person and People CRUD Methods
+        #region Person and People CRUD Methods
         public static RetCode CreatePerson(ref Person person)
         {
-            return CreatePerson(ref person, ref rRestClient, out rRestResponse);
+            return CreatePerson(ref person, RestService.rRestClient, out RestService.rRestResponse);
         }
-        public static RetCode CreatePerson(ref Person person, ref RestClient rClient, out IRestResponse rResponse)
+        public static RetCode CreatePerson(ref Person person, IRestClient rClient, out IRestResponse rResponse)
         {
             RootObject rootObject = new RootObject();
             rootObject.person = person;
-            return CreateObject(ref rootObject, ref rClient, "person", out rResponse);
+            return RestService.CreateObject(ref rootObject, rClient, "person", out rResponse);
         }
 
         public static RetCode UpdatePerson(ref Person person)
         {
-            return UpdatePerson(ref person, ref rRestClient, out rRestResponse);
+            return UpdatePerson(ref person, RestService.rRestClient, out RestService.rRestResponse);
         }
-        public static RetCode UpdatePerson(ref Person person, ref RestClient rClient, out IRestResponse rResponse)
+        public static RetCode UpdatePerson(ref Person person, IRestClient rClient, out IRestResponse rResponse)
         {
             RootObject rootObject = new RootObject();
             rootObject.person = person;
-            return UpdateObject(ref rootObject, ref rClient, "person/{id}", person.id.ToString(), out rResponse);
+            return RestService.UpdateObject(ref rootObject, rClient, "person/{id}", person.id.ToString(), out rResponse);
         }
 
         public static RetCode ReadPeople(out List<Person> people)
         {
-            return ReadPeople(out people, ref rRestClient, out rRestResponse);
+            return ReadPeople(out people, RestService.rRestClient, out RestService.rRestResponse);
         }
-        public static RetCode ReadPeople(out List<Person> people, ref RestClient rClient, out IRestResponse rResponse)
+        public static RetCode ReadPeople(out List<Person> people, IRestClient rClient, out IRestResponse rResponse)
         {
             List<Person> cpeople = Cache.GetObjects<Person>();
-            if (isOnline)
+            if (State.IsOnline)
             {
                 List<TimeStamp> lts = LatestTimeStamps<Person>();
                 if (lts != null)
                 {
-                    if (RetCode.successful == ReadObject(ref rClient, "people", "", out rResponse))
+                    if (RetCode.successful == RestService.ReadObject(rClient, "people", "", out rResponse))
                     {
 
                         people = JsonConvert.DeserializeObject<List<Person>>(rResponse.Content);
@@ -227,21 +71,19 @@ namespace Grind.Common
                         {
                             Cache.DeleteOldObjects<Person>(lts);
                             Cache.AddObjects<Person>(people.Except(cpeople).ToList());
-                            //people.Except(cpeople).ToList().ForEach(x => CacheDB.Store<Person>(x));
                         }
-                        //CacheDB.Commit();
                         return RetCode.successful;
                     }
                     else
                     {
-                        SetMessage("Offline Cache People");
+                        Helper.SetMessage("Offline Cache People");
                         people = cpeople;
                         return RetCode.unsuccessful;
                     }
                 }
                 else
                 {
-                    SetMessage("Offline Cache People");
+                    Helper.SetMessage("Offline Cache People");
                     people = cpeople;
                     rResponse = null;
                     return RetCode.unsuccessful;
@@ -249,7 +91,7 @@ namespace Grind.Common
             }
             else
             {
-                SetMessage("Up to date Cached People");
+                Helper.SetMessage("Up to date Cached People");
                 people = cpeople;
                 rResponse = null;
                 return RetCode.successful;//We have good people in cache
@@ -258,44 +100,44 @@ namespace Grind.Common
 
         public static RetCode DeletePerson(ref Person person)
         {
-            return DeletePerson(ref person, ref rRestClient, out rRestResponse);
+            return DeletePerson(ref person, RestService.rRestClient, out RestService.rRestResponse);
         }
-        public static RetCode DeletePerson(ref Person person, ref RestClient rClient, out IRestResponse rResponse)
+        public static RetCode DeletePerson(ref Person person, IRestClient rClient, out IRestResponse rResponse)
         {
-            return DeleteObject(ref rClient, "person/{id}", person.id.ToString(), out rResponse);
+            return RestService.DeleteObject(rClient, "person/{id}", person.id.ToString(), out rResponse);
         }
         #endregion
 
         #region Task CRUD Methods
         public static RetCode CreateTask(ref Task task)
         {
-            return CreateTask(ref task, ref rRestClient, out rRestResponse);
+            return CreateTask(ref task, RestService.rRestClient, out RestService.rRestResponse);
         }
-        public static RetCode CreateTask(ref Task task, ref RestClient rClient, out IRestResponse rResponse)
+        public static RetCode CreateTask(ref Task task, IRestClient rClient, out IRestResponse rResponse)
         {
             RootObject rootObject = new RootObject();
             rootObject.task = task;
-            return CreateObject(ref rootObject, ref rClient, "task", out rResponse);
+            return RestService.CreateObject(ref rootObject, rClient, "task", out rResponse);
         }
 
         public static RetCode ReadTask(int taskId, out Task task)
         {
-            return ReadTask(taskId, out task, ref rRestClient, out rRestResponse);
+            return ReadTask(taskId, out task, RestService.rRestClient, out RestService.rRestResponse);
         }
-        public static RetCode ReadTask(int taskId, out Task task, ref RestClient rClient, out IRestResponse rResponse)
+        public static RetCode ReadTask(int taskId, out Task task, IRestClient rClient, out IRestResponse rResponse)
         {
             task = null;
             Task ctask = Cache.GetObject<Task>(taskId);
-            if (isOnline)
+            if (State.IsOnline)
             {
-                TimeStamp lt = LatestTimeStamp(Model.task, taskId);
+                TimeStamp lt = LatestTimeStamp<Task>(taskId);
                 if (lt != null)
                 {
                     if (ctask != null)
                     {
                         if (ctask.updated_at == lt.updated_at)
                         {
-                            SetMessage("Up to date Task From Cache");
+                            Helper.SetMessage("Up to date Task From Cache");
                             task = ctask;
                             rResponse = null;
                             return RetCode.successful;
@@ -303,21 +145,20 @@ namespace Grind.Common
                         else
                         {
                             Cache.DeleteObject<Task>(ctask.id);
-                            //CacheDB.Commit();
                         }
                     }
                     //If it reaches here it means No cached task or stale task
-                    if (RetCode.successful == ReadObject(ref rClient, "task/{id}", taskId.ToString(), out rResponse))
+                    if (RetCode.successful == RestService.ReadObject(rClient, "task/{id}", taskId.ToString(), out rResponse))
                     {
                         task = JsonConvert.DeserializeObject<Task>(rResponse.Content);
-                        SetMessage("Task Added to Cache:" + task.name);
+                        Helper.SetMessage("Task Added to Cache:" + task.name);
                         Cache.AddObject<Task>(task);
                         return RetCode.successful;
                     }
                     else
                     {
                         task = ctask;
-                        SetMessage("Offline Stale Task From Cache");
+                        Helper.SetMessage("Offline Stale Task From Cache");
                         task = null;
                         //task = null;// new Task();
                         return RetCode.unsuccessful;
@@ -325,7 +166,7 @@ namespace Grind.Common
                 }
                 else
                 {
-                    SetMessage("Get Timestamp Failed");
+                    Helper.SetMessage("Get Timestamp Failed");
                     task = ctask;
                     rResponse = null;
                     return RetCode.unsuccessful;
@@ -333,7 +174,7 @@ namespace Grind.Common
             }
             else
             {
-                SetMessage("Offline Task From Cache");
+                Helper.SetMessage("Offline Task From Cache");
                 task = ctask;
                 //We have Cached Task
                 rResponse = null;
@@ -344,44 +185,44 @@ namespace Grind.Common
 
         public static RetCode UpdateTask(ref Task task)
         {
-            return UpdateTask(ref task, ref rRestClient, out rRestResponse);
+            return UpdateTask(ref task, RestService.rRestClient, out RestService.rRestResponse);
         }
-        public static RetCode UpdateTask(ref Task task, ref RestClient rClient, out IRestResponse rResponse)
+        public static RetCode UpdateTask(ref Task task, IRestClient rClient, out IRestResponse rResponse)
         {
             RootObject rootObject = new RootObject();
             rootObject.task = task;
-            return UpdateObject(ref rootObject, ref rClient, "task/{id}", task.id.ToString(), out rResponse);
+            return RestService.UpdateObject(ref rootObject, rClient, "task/{id}", task.id.ToString(), out rResponse);
         }
 
         public static RetCode DeleteTask(ref Task task)
         {
-            return DeleteTask(ref task, ref rRestClient, out rRestResponse);
+            return DeleteTask(ref task, RestService.rRestClient, out RestService.rRestResponse);
         }
-        public static RetCode DeleteTask(ref Task task, ref RestClient rClient, out IRestResponse rResponse)
+        public static RetCode DeleteTask(ref Task task, IRestClient rClient, out IRestResponse rResponse)
         {
-            return DeleteObject(ref rClient, "task/{id}", task.id.ToString(), out rResponse);
+            return RestService.DeleteObject(rClient, "task/{id}", task.id.ToString(), out rResponse);
         }
         #endregion
 
         #region Tasks Read Methods
         public static RetCode ReadTasks(ref SortableBindingList<TaskListItem> tasks)
         {
-            return ReadTasks(ref tasks, ref rRestClient, out rRestResponse);
+            return ReadTasks(ref tasks, RestService.rRestClient, out RestService.rRestResponse);
         }
-        public static RetCode ReadTasks(ref SortableBindingList<TaskListItem> tasks, ref RestClient rClient, out IRestResponse rResponse)
+        public static RetCode ReadTasks(ref SortableBindingList<TaskListItem> tasks, IRestClient rClient, out IRestResponse rResponse)
         {
             List<Task> ctasks = Cache.GetObjects<Task>();
-            if (isOnline)
+            if (State.IsOnline)
             {
                 List<TimeStamp> lts = LatestTimeStamps<Task>();
                 if (lts != null)
                 {
-                    if (RetCode.successful == ReadObject(ref rClient, "taskslist", "", out rResponse))
+                    if (RetCode.successful == RestService.ReadObject(rClient, "taskslist", "", out rResponse))
                     {
                         if (tasks == null) tasks = new SortableBindingList<TaskListItem>();
                         tasks.Clear();
                         SortableBindingList<TaskListItem> DesrializedTasks = JsonConvert.DeserializeObject<SortableBindingList<TaskListItem>>(rResponse.Content);
-                        foreach (Task item in DesrializedTasks )
+                        foreach (Task item in DesrializedTasks)
                             tasks.Add(item.AsTaskListItem());
                         if (lts.Except(Cache.TasksTS).Count() > 0)
                         {
@@ -390,17 +231,17 @@ namespace Grind.Common
                         return RetCode.successful;
                     }
                     else
-                    {                                                                                   
-                        if (ctasks != null)                                                             
-                        {                                                                               
-                            if (tasks == null) tasks = new SortableBindingList<TaskListItem>();         
-                            tasks.Clear();                                                              
-                            foreach (Task item in ctasks)                                               
-                                tasks.Add(item.AsTaskListItem());                                     
-                            SetMessage("Offline TaskList From Cache");                                  
-                        }                                                                               
-                        else                                                                            
-                            tasks = null;                                                               
+                    {
+                        if (ctasks != null)
+                        {
+                            if (tasks == null) tasks = new SortableBindingList<TaskListItem>();
+                            tasks.Clear();
+                            foreach (Task item in ctasks)
+                                tasks.Add(item.AsTaskListItem());
+                            Helper.SetMessage("Offline TaskList From Cache");
+                        }
+                        else
+                            tasks = null;
                         return RetCode.unsuccessful;
                     }
                 }
@@ -412,7 +253,7 @@ namespace Grind.Common
                         tasks.Clear();
                         foreach (Task item in ctasks)
                             tasks.Add(item.AsTaskListItem());
-                        SetMessage("Offline TaskList From Cache");
+                        Helper.SetMessage("Offline TaskList From Cache");
                     }
                     else
                         tasks = null;
@@ -428,7 +269,7 @@ namespace Grind.Common
                     tasks.Clear();
                     foreach (Task item in ctasks)
                         tasks.Add(item.AsTaskListItem());
-                    SetMessage("Offline TaskList From Cache");
+                    Helper.SetMessage("Offline TaskList From Cache");
                 }
                 else
                     tasks = null;
@@ -441,18 +282,18 @@ namespace Grind.Common
 
         public static RetCode GetAndStoreTasks()
         {
-            return GetAndStoreTasks(ref rRestClient, out rRestResponse);
+            return GetAndStoreTasks(RestService.rRestClient, out RestService.rRestResponse);
         }
-        public static RetCode GetAndStoreTasks(ref RestClient rClient, out IRestResponse rResponse)
+        public static RetCode GetAndStoreTasks(IRestClient rClient, out IRestResponse rResponse)
         {
             List<Task> ctasks = Cache.GetObjects<Task>();
             List<Task> tasks;
-            if (isOnline)
+            if (State.IsOnline)
             {
                 List<TimeStamp> lts = LatestTimeStamps<Task>();
                 if (lts != null)
                 {
-                    if (RetCode.successful == ReadObject(ref rClient, "tasks", "", out rResponse))
+                    if (RetCode.successful == RestService.ReadObject(rClient, "tasks", "", out rResponse))
                     {
 
                         tasks = JsonConvert.DeserializeObject<List<Task>>(rResponse.Content);
@@ -465,20 +306,20 @@ namespace Grind.Common
                     }
                     else
                     {
-                        SetMessage("Offline Cache Tasks");
+                        Helper.SetMessage("Offline Cache Tasks");
                         return RetCode.unsuccessful;
                     }
                 }
                 else
                 {
-                    SetMessage("Offline Cache Tasks");
+                    Helper.SetMessage("Offline Cache Tasks");
                     rResponse = null;
                     return RetCode.unsuccessful;
                 }
             }
             else
             {
-                SetMessage("Up to date Cached Tasks");
+                Helper.SetMessage("Up to date Cached Tasks");
                 rResponse = null;
                 return RetCode.successful;//We have good tasks in cache
             }
@@ -487,12 +328,12 @@ namespace Grind.Common
 
         //public static RetCode ReadTasks(ref List<Task> tasks)
         //{
-        //    return ReadTasks(ref tasks, ref rRestClient, out rRestResponse);
+        //    return ReadTasks(ref tasks,  RestService.rRestClient, out RestService.rRestResponse);
         //}
-        //public static RetCode ReadTasks(ref List<Task> tasks, ref RestClient rClient, out IRestResponse rResponse)
+        //public static RetCode ReadTasks(ref List<Task> tasks, IRestClient rClient, out IRestResponse rResponse)
         //{
         //    JsonDeserializer JSONDeserilizer = new JsonDeserializer();
-        //    if (RetCode.successful == ReadObject(ref rClient, "tasks", "", out rResponse))
+        //    if (RetCode.successful == ReadObject(rClient, "tasks", "", out rResponse))
         //    {
         //        tasks = JsonConvert.DeserializeObject<List<Task>>(rResponse.Content);
         //        return RetCode.successful;
@@ -505,44 +346,22 @@ namespace Grind.Common
         //}
         #endregion
 
-        #region Cache Methods
-
-
-
-
-
-
-        #endregion
-
-
-        #region Helper Methods
-
-        //public static DateTime? TaskLastUpdateAt(int id)
-        //{
-        //    TimeStamp timestamp;
-        //    if (RetCode.successful == GetLatestTimeStamp(out timestamp, Model.task, id))
-        //        return timestamp.updated_at;
-        //    else
-        //        return null;
-        //}
-
-
-        public static TimeStamp LatestTimeStamp(Model type, int id)
+        #region TimeStamp Methods
+        public static TimeStamp LatestTimeStamp<T>(int id)
         {
             TimeStamp timestamp;
-            if (RetCode.successful == GetLatestTimeStamp(out timestamp, type, id))
+            if (RetCode.successful == GetLatestTimeStamp<T>(out timestamp, id))
                 return timestamp;
             else
                 return null;
         }
-        public static RetCode GetLatestTimeStamp(out TimeStamp timestamp, Model type, int id)
+        public static RetCode GetLatestTimeStamp<T>(out TimeStamp timestamp, int id)
         {
-            return GetLatestTimeStamp(out timestamp, type, id, ref  rRestClient, out rRestResponse);
+            return GetLatestTimeStamp<T>(out timestamp, id, RestService.rRestClient, out RestService.rRestResponse);
         }
-
-        public static RetCode GetLatestTimeStamp(out TimeStamp timestamp, Model type, int id, ref RestClient rClient, out IRestResponse rResponse)
+        public static RetCode GetLatestTimeStamp<T>(out TimeStamp timestamp, int id, IRestClient rClient, out IRestResponse rResponse)
         {
-            if (RetCode.successful == ReadObject(ref rClient, @"timestamp/" + type.ToString() + @"/{id}", id.ToString(), out rResponse))
+            if (RetCode.successful == RestService.ReadObject(rClient, @"timestamp/" + typeof(T).Name.ToLower() + @"/{id}", id.ToString(), out rResponse))
             {
 
                 timestamp = JsonConvert.DeserializeObject<TimeStamp>(rResponse.Content);
@@ -557,7 +376,9 @@ namespace Grind.Common
                 return RetCode.unsuccessful;
             }
         }
+        #endregion
 
+        #region TimeStamps
         public static List<TimeStamp> LatestTimeStamps<T>()
         {
             List<TimeStamp> timestamps;
@@ -568,12 +389,11 @@ namespace Grind.Common
         }
         public static RetCode GetLatestTimeStamps<T>(out List<TimeStamp> timestamps)
         {
-            return GetLatestTimeStamps<T>(out timestamps, ref  rRestClient, out rRestResponse);
+            return GetLatestTimeStamps<T>(out timestamps, RestService.rRestClient, out RestService.rRestResponse);
         }
-
-        public static RetCode GetLatestTimeStamps<T>(out List<TimeStamp> timestamps, ref RestClient rClient, out IRestResponse rResponse)
+        public static RetCode GetLatestTimeStamps<T>(out List<TimeStamp> timestamps, IRestClient rClient, out IRestResponse rResponse)
         {
-            if (RetCode.successful == ReadObject(ref rClient, @"timestamps/" + typeof(T).Name.ToLower(), "", out rResponse))
+            if (RetCode.successful == RestService.ReadObject(rClient, @"timestamps/" + typeof(T).Name.ToLower(), "", out rResponse))
             {
                 timestamps = JsonConvert.DeserializeObject<List<TimeStamp>>(rResponse.Content);
                 return RetCode.successful;
@@ -584,71 +404,6 @@ namespace Grind.Common
                 return RetCode.unsuccessful;
             }
         }
-        //public static RetCode ReadPeopleFromCache(out List<Person> people)
-        //{
-        //    IQueryable<List<Person>> qPeople = from _people in CacheDB.AsQueryable<List<Person>>()
-        //                                       select _people;
-        //    if (qPeople.Count() > 0)
-        //    {
-        //        people = qPeople.First();
-        //        return RetCode.successful;
-        //    }
-        //    else
-        //    {
-        //        people = null;
-        //        return RetCode.unsuccessful;
-        //    }
-        //}
-
-        public static void SetMessage(string Message)
-        {
-
-            if (xbMessage != null && lastMessage != Message)
-                xbMessage.Content = Message + Environment.NewLine + xbMessage.Content;
-            lastMessage = Message;
-        }
-
-        public static void SetState(string State)
-        {
-            if (xbState != null && lastState != State)
-                xbState.Content = State + Environment.NewLine + xbState.Content;
-            lastState = State;
-        }
-
-        public static string GetResponseError()
-        {
-            String Error = "";
-            if (rRestResponse != null)
-            {
-                if (rRestResponse.StatusCode != System.Net.HttpStatusCode.OK)
-                {
-                    if (rRestResponse.ContentType == @"application/json")
-                    {
-                        RootObject RO = JsonConvert.DeserializeObject<RootObject>(rRestResponse.Content);
-                        Error = Environment.NewLine + RO.Message;
-                    }
-                    else
-                        Error = Environment.NewLine + (rRestResponse.StatusCode.ToString() + rRestResponse.ErrorMessage).Trim();
-                }
-            }
-            return Error;
-        }
-
-        public static void setOffline()
-        {
-            isOnline = false;
-            if (xchkOffline!=null)
-            {
-                 xchkOffline.IsChecked = true;
-            }
-           
-        }
-        public static void setOnline()
-        {
-            isOnline = true;
-            if (xchkOffline!=null) xchkOffline.IsChecked = false;
-        }
-
         #endregion
     }
 }

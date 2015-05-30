@@ -6,6 +6,9 @@ using System.Reflection;
 using System.Collections;
 using System.Data.SQLite;
 using System.Data;
+using System.Data.Entity.Design.PluralizationServices;
+using System.Globalization;
+
 namespace Grind.Common
 {
     public static class Cache
@@ -17,7 +20,6 @@ namespace Grind.Common
 
         public static List<TimeStamp> PeopleTS = new List<TimeStamp>();
         public static List<TimeStamp> TasksTS = new List<TimeStamp>();
-
 
         public static void SqliteHelperInit(string ConnectionString)
         {
@@ -73,7 +75,7 @@ namespace Grind.Common
                         }
                         else if (prop.PropertyType == typeof(DateTime))
                         {
-                            prop.SetValue(obj, DateTime.SpecifyKind((DateTime)dr[prop.Name],DateTimeKind.Utc ), null);
+                            prop.SetValue(obj, DateTime.SpecifyKind((DateTime)dr[prop.Name], DateTimeKind.Utc), null);
                         }
                         else
                             prop.SetValue(obj, dr[prop.Name], null);
@@ -120,7 +122,13 @@ namespace Grind.Common
             return obj;
         }
 
-
+        public static string Pluralize(this string s)
+        {
+            PluralizationService plural =
+                PluralizationService.CreateService(
+                    CultureInfo.GetCultureInfo("en-us"));
+            return plural.Pluralize(s);
+        }
         #endregion
 
         public static string CommaSeperatedColumnName<T>()
@@ -253,30 +261,23 @@ namespace Grind.Common
 
         public static bool AddObjects<T>(IEnumerable<T> Objects)
         {
-
+            string typeName = typeof(T).Name;
             using (SQLiteTransaction mytransaction = grindDBConnection.BeginTransaction())
             {
                 using (SQLiteCommand mycommand = new SQLiteCommand(grindDBConnection))
                 {
-                    if (typeof(T) == typeof(Person))
-                        mycommand.CommandText = @"INSERT INTO [people] ("
-                            + CommaSeperatedColumnName<T>()
-                            + ") VALUES ("
-                            + ParameterizedCommaSeparatedColumnName<T>()
-                            + ")";
-                    else
-                        mycommand.CommandText = @"INSERT INTO [tasks] ("
-                            + CommaSeperatedColumnName<T>()
-                            + ") VALUES ("
-                            + ParameterizedCommaSeparatedColumnName<T>()
-                            + ")";
+                    mycommand.CommandText = @"INSERT INTO [" + typeName.Pluralize().ToLower() + "] ("
+                        + CommaSeperatedColumnName<T>()
+                        + ") VALUES ("
+                        + ParameterizedCommaSeparatedColumnName<T>()
+                        + ")";
 
                     AddParameterstoSqlCommand<T>(mycommand.Parameters);
                     foreach (T obj in Objects)
                     {
                         BuildParametersofSqlCommand<T>(mycommand.Parameters, obj);
                         mycommand.ExecuteNonQuery();
-                        if (typeof(T) == typeof(Person))
+                        if (typeName == "Person")
                             PeopleTS.Add((TimeStamp)(object)obj);
                         else
                             TasksTS.Add((TimeStamp)(object)obj);
@@ -292,19 +293,11 @@ namespace Grind.Common
             {
                 using (SQLiteCommand mycommand = new SQLiteCommand(grindDBConnection))
                 {
-                    if (typeof(T) == typeof(Person))
-                        mycommand.CommandText = @"INSERT INTO [people] ("
-                            + CommaSeperatedColumnName<T>()
-                            + ") VALUES ("
-                            + ParameterizedCommaSeparatedColumnName<T>()
-                            + ")";
-                    else
-                        mycommand.CommandText = @"INSERT INTO [tasks] ("
-                            + CommaSeperatedColumnName<T>()
-                            + ") VALUES ("
-                            + ParameterizedCommaSeparatedColumnName<T>()
-                            + ")";
-
+                    mycommand.CommandText = @"INSERT INTO [" + typeof(T).Name.Pluralize().ToLower() + "] ("
+                        + CommaSeperatedColumnName<T>()
+                        + ") VALUES ("
+                        + ParameterizedCommaSeparatedColumnName<T>()
+                        + ")";
                     AddParameterstoSqlCommand<T>(mycommand.Parameters);
                     BuildParametersofSqlCommand<T>(mycommand.Parameters, Obj);
                     mycommand.ExecuteNonQuery();
@@ -323,21 +316,10 @@ namespace Grind.Common
         /// <returns>Person or task from Local DB by id</returns>
         public static T GetObject<T>(int id)
         {
-
             SQLiteCommand grindDBReadListcmd = new SQLiteCommand(grindDBConnection);
-            switch (typeof(T).Name)
-            {
-                case "Person":
-                    grindDBReadListcmd.CommandText = @"SELECT * FROM [people] where id =" + id.ToString();
-                    grindDBDataReader = grindDBReadListcmd.ExecuteReader();
-                    return DataReaderMapToObject<T>(grindDBDataReader);
-                case "Task":
-                    grindDBReadListcmd.CommandText = @"SELECT * FROM [tasks] where id =" + id.ToString();
-                    grindDBDataReader = grindDBReadListcmd.ExecuteReader();
-                    return DataReaderMapToObject<T>(grindDBDataReader);
-                default:
-                    return default(T);
-            }
+            grindDBReadListcmd.CommandText = @"SELECT * FROM [" + typeof(T).Name.Pluralize().ToLower() + "] where id =" + id.ToString();
+            grindDBDataReader = grindDBReadListcmd.ExecuteReader();
+            return DataReaderMapToObject<T>(grindDBDataReader);
         }
         /// <summary>
         /// 
@@ -348,20 +330,18 @@ namespace Grind.Common
         {
             List<T> objs = default(List<T>);
             SQLiteCommand grindDBReadListcmd = new SQLiteCommand(grindDBConnection);
-            switch (typeof(T).Name)
+            string typeName = typeof(T).Name;
+            grindDBReadListcmd.CommandText = @"SELECT * FROM [" + typeName.Pluralize().ToLower() + "]";
+            grindDBDataReader = grindDBReadListcmd.ExecuteReader();
+            objs = DataReaderMapToList<T>(grindDBDataReader);
+            switch (typeName)
             {
                 case "Person":
-                    grindDBReadListcmd.CommandText = @"SELECT * FROM [people]";
-                    grindDBDataReader = grindDBReadListcmd.ExecuteReader();
-                    objs = DataReaderMapToList<T>(grindDBDataReader);
                     PeopleTS.Clear();
                     foreach (TimeStamp TS in (IEnumerable<TimeStamp>)objs)
                         PeopleTS.Add(TS.AsTimeStamp());
                     break;
                 case "Task":
-                    grindDBReadListcmd.CommandText = @"SELECT * FROM [tasks]";
-                    grindDBDataReader = grindDBReadListcmd.ExecuteReader();
-                    objs = DataReaderMapToList<T>(grindDBDataReader);
                     TasksTS.Clear();
                     foreach (TimeStamp TS in (IEnumerable<TimeStamp>)objs)
                         TasksTS.Add(TS.AsTimeStamp());
@@ -381,22 +361,17 @@ namespace Grind.Common
         /// <param name="CachedTimestampsList">List of timestamps cached. delete will be called on this also as well as local db</param>
         public static void DeleteOldObjects<T>(List<TimeStamp> latestTimestamps)
         {
-            string tablename = "";
-            if (typeof(T) == typeof(Person))
-                tablename = "people";
-            else
-                tablename = "tasks";
-
+            string typeName = typeof(T).Name;
             using (SQLiteTransaction mytransaction = grindDBConnection.BeginTransaction())
             {
                 using (SQLiteCommand mycommand = new SQLiteCommand(grindDBConnection))
                 {
-                    mycommand.CommandText = @"DELETE FROM [" + tablename + "] WHERE [id] = @id";
+                    mycommand.CommandText = @"DELETE FROM [" + typeName.Pluralize().ToLower() + "] WHERE [id] = @id";
                     mycommand.Parameters.Add("@id", DbType.Int32);
                     foreach (TimeStamp item in latestTimestamps)
                     {
                         List<TimeStamp> objectsById;
-                        if (tablename == "people")
+                        if (typeName == "Person")
                             objectsById = PeopleTS.FindAll(x => x.id == item.id);
                         else
                             objectsById = TasksTS.FindAll(x => x.id == item.id);
@@ -406,7 +381,7 @@ namespace Grind.Common
                             {
                                 mycommand.Parameters["@id"].Value = item.id;
                                 mycommand.ExecuteNonQuery();
-                                if (tablename == "people")
+                                if (typeName == "Person")
                                     PeopleTS.Remove(objectById);
                                 else
                                     TasksTS.Remove(objectById);
@@ -420,22 +395,15 @@ namespace Grind.Common
 
         public static void DeleteObject<T>(int id)
         {
-            string tablename = "";
-            if (typeof(T) == typeof(Person))
-                tablename = "people";
-            else
-                tablename = "tasks";
+            string tablename = typeof(T).Name.Pluralize().ToLower();
             using (SQLiteTransaction mytransaction = grindDBConnection.BeginTransaction())
             {
                 using (SQLiteCommand mycommand = new SQLiteCommand(grindDBConnection))
                 {
-                    //SQLiteParameter myparam = new SQLiteParameter();
-
                     mycommand.CommandText = @"DELETE FROM [" + tablename + "] WHERE [id] = @id";
                     mycommand.Parameters.Add("@id", DbType.Int32);
                     mycommand.Parameters["@id"].Value = id;
                     mycommand.ExecuteNonQuery();
-                    //CachedTimestampsList.Remove(objectById);
                 }
                 mytransaction.Commit();
             }
