@@ -9,11 +9,12 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="25" />
-            <RowDefinition Height="100" />
+            <RowDefinition Height="140" />
             <RowDefinition Height="25" />
         </Grid.RowDefinitions>
         <Grid Grid.Row="2" Margin="5">
             <Grid.RowDefinitions>
+                <RowDefinition  />
                 <RowDefinition  />
                 <RowDefinition  />
                 <RowDefinition  />
@@ -26,11 +27,13 @@
             <Label Content="Name"  HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="0" />
             <Label Content="Trigram"  HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="1" />
             <Label Content="Internal Object ID"  HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="2" />
-            <CheckBox Content="Active" Grid.Row="3" HorizontalAlignment="Left"  Name="chkActive" VerticalAlignment="Center" Margin="5,0,0,0" />
+            <Label Content="Password"  HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="3" />
+            <CheckBox Content="Active" Grid.Row="4" HorizontalAlignment="Left"  Name="chkActive" VerticalAlignment="Center" Margin="5,0,0,0" />
             <TextBox Grid.Column="1"  Grid.Row="0"   Name="txtName" VerticalAlignment="Center" TextChanged="TextChanged" />
             <TextBox Grid.Column="1"  Grid.Row="1"   Name="txtTrigram" VerticalAlignment="Center" TextChanged="TextChanged" />
             <TextBox Grid.Column="1"  Grid.Row="2"   Name="txtIntObjId" VerticalAlignment="Center" TextChanged="TextChanged" />
-            <ComboBox Grid.Row="3"   Name="cbLevel" VerticalAlignment="Center"  Grid.Column="1">
+            <TextBox Grid.Column="1"  Grid.Row="3"   Name="txtPassword" VerticalAlignment="Center" TextChanged="TextChanged" />
+            <ComboBox Grid.Row="4"   Name="cbLevel" VerticalAlignment="Center"  Grid.Column="1">
                 <ComboBoxItem Content="Master" />
                 <ComboBoxItem Content="Admin" />
                 <ComboBoxItem Content="User" />

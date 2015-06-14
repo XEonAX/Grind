@@ -29,7 +29,7 @@ class CreateTasksPeopleDocumentsUnreadsAndComments < ActiveRecord::Migration
     end
     create_table :people do |t|
       t.string :name
-      t.string :trigram
+      t.string :trigram, :unique => true
       t.boolean :active
       t.integer :level
       t.string :internal_object_id
@@ -39,6 +39,8 @@ class CreateTasksPeopleDocumentsUnreadsAndComments < ActiveRecord::Migration
       t.integer :documents_count, :default => 0
       t.datetime :created_at
       t.datetime :updated_at
+      t.string :password_hash
+      t.string :token
     end
     create_table :documents do |t|
       t.string :name
@@ -59,12 +61,19 @@ class CreateTasksPeopleDocumentsUnreadsAndComments < ActiveRecord::Migration
       t.integer :task_id
     end
     create_table :unread_objects do |t|
-      t.string :person_id
+      t.integer :person_id
       t.string :internal_object_id
       t.string :unread_cause
       t.datetime :created_at
       t.datetime :updated_at
     end
+    create_table :messages do |t|
+      t.integer :sender_id
+      t.integer :receiver_id
+      t.datetime :created_at
+      t.integer :parent_message_id
+      t.string :messagetext
+    end  
   end
   
   def self.down
@@ -73,5 +82,6 @@ class CreateTasksPeopleDocumentsUnreadsAndComments < ActiveRecord::Migration
     drop_table :documents
     drop_table :comments
     drop_table :unread_objects
+    drop_table :messages
   end
 end

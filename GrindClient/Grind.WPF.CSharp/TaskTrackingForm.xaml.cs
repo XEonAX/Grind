@@ -196,6 +196,7 @@ namespace Grind.WPF.CSharp
     {
         public object Convert(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
+            if (System.Convert.ToDouble(value) < 10.0) value = 0.0;
             return new Thickness((System.Convert.ToDouble(value) / 2) - 5, 0, (System.Convert.ToDouble(value) / 2) - 5, 0);
         }
         public object ConvertBack(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)

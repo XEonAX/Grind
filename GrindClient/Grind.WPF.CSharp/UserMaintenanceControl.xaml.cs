@@ -37,6 +37,7 @@ namespace Grind.WPF.CSharp
             txtIntObjId.Text = person.internal_object_id;
             chkActive.IsChecked = person.active;
             cbLevel.SelectedIndex = (int)person.level;
+            txtPassword.Text = person.password;
         }
         private void TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -55,12 +56,14 @@ namespace Grind.WPF.CSharp
 
         private void btnAdd_Click(object sender, RoutedEventArgs e)
         {
+            person = new Person();
             person.name = txtName.Text;
             person.trigram = txtTrigram.Text;
             person.internal_object_id = txtIntObjId.Text;
             person.active = (bool)chkActive.IsChecked;
             person.level = (eLevel)cbLevel.SelectedIndex;
-            Controllers.CreatePerson(ref person);
+            person.password = txtPassword.Text;
+            Controllers.CreatePerson(person);
             btnRefresh_Click(sender,e);
             Refreshed = true;
             lbPeople.SelectedIndex = lbPeople.Items.Count - 1;
@@ -74,7 +77,8 @@ namespace Grind.WPF.CSharp
             person.internal_object_id = txtIntObjId.Text;
             person.active = (bool)chkActive.IsChecked;
             person.level = (eLevel)cbLevel.SelectedIndex;
-            Controllers.UpdatePerson(ref person);
+            person.password = txtPassword.Text;
+            Controllers.UpdatePerson(person);
             btnRefresh_Click(sender,e);
             Refreshed = true;
             lbPeople.SelectedIndex = OldSelectedIndex;
@@ -86,7 +90,7 @@ namespace Grind.WPF.CSharp
             if (lbPeople.SelectedIndex >= 0)
             {
                 person = Globals.People[lbPeople.SelectedIndex];
-                Controllers.DeletePerson(ref person);
+                Controllers.DeletePerson(person);
             }
             btnRefresh_Click(sender, e);
             Refreshed = true;

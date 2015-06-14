@@ -18,9 +18,15 @@ namespace Grind.Winforms.CSharp
 
         public class Msg
         {
-            public string nickname { get; set; }
-            public string message { get; set; }
-            public DateTime timestamp { get; set; }   
+            //public string nickname { get; set; }
+            //public string message { get; set; }
+            //public DateTime timestamp { get; set; }
+            public int sender_id { get; set; }
+            public int receiver_id { get; set; }
+            public DateTime created_at { get; set; }
+            public int parent_message_id { get; set; }
+            public string messagetext { get; set; }
+            public List<Msg> messages { get; set; }
         }
 
         public WebSocketClient()
@@ -32,14 +38,12 @@ namespace Grind.Winforms.CSharp
 
         private void button1_Click(object sender, EventArgs e)
         {
-            ws = new WebSocket("ws://localhost:8080/?name=" + txtName.Text);
-
+            ws = new WebSocket("ws://localhost:8080/?id=" + txtName.Text);
             ws.OnOpen += new EventHandler(ws_OnOpen);
             ws.OnMessage += new EventHandler<MessageEventArgs>(ws_OnMessage);
             ws.OnError += new EventHandler<ErrorEventArgs>(ws_OnError);
             ws.OnClose += new EventHandler<CloseEventArgs>(ws_OnClose);
             ws.Connect();
-
         }
 
 
@@ -52,36 +56,35 @@ namespace Grind.Winforms.CSharp
         void ws_OnClose(object sender, CloseEventArgs e)
         {
             Debug.Print("Closed For" + e.Reason);
-            listBox1.UIize(() => listBox1.Items.Add("Errored: " + e.Reason));
+            listBox1.WFUIize(() => listBox1.Items.Add("Errored: " + e.Reason));
         }
 
         void ws_OnError(object sender, ErrorEventArgs e)
         {
             Debug.Print("Errored");
-            listBox1.UIize(() => listBox1.Items.Add("Errored: " + e.Message));
+            listBox1.WFUIize(() => listBox1.Items.Add("Errored: " + e.Message));
         }
 
         void ws_OnMessage(object sender, MessageEventArgs e)
         {
             Debug.Print("Messaged: " + e.Data);
-            listBox1.UIize(() => listBox1.Items.Add("New message: " + e.Data));
+            listBox1.WFUIize(() => listBox1.Items.Add("New message: " + e.Data));
         }
 
         void ws_OnOpen(object sender, EventArgs e)
         {
             Debug.Print("Opened");
-            listBox1.UIize(() => listBox1.Items.Add("Opened"));
+            listBox1.WFUIize(() => listBox1.Items.Add("Opened"));
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            ws.Send(JsonConvert.SerializeObject(new Msg {nickname=txtName.Text,message=txtMessage.Text}));
+            ws.Send(JsonConvert.SerializeObject(new Msg {sender_id=1,messagetext=txtMessage.Text}));
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
             ws.Close(CloseStatusCode.Normal, "Zango");
-
         }
     }
 }

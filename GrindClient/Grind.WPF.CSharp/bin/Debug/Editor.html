@@ -1,0 +1,20 @@
+﻿<!DOCTYPE html>
+<!-- saved from url=(0016)http://localhost -->
+<html>
+<head>
+    <!-- Make sure the path to CKEditor is correct. -->
+    <script src="ckeditor/ckeditor.js"></script>
+</head>
+<body>
+    <form>
+        <textarea name="editor1" id="editor1">
+        </textarea>
+        <script>
+            var editor = CKEDITOR.replace('editor1');
+            editor.on('instanceReady', function (event) {
+                event.editor.execCommand('maximize');
+            });
+        </script>
+    </form>
+</body>
+</html>

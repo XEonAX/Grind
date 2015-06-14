@@ -8,24 +8,26 @@ using System.Threading.Tasks;
 
 namespace Grind.Common
 {
-
     public static class RestService
     {
         public static IRestClient rRestClient;
         public static IRestResponse rRestResponse;
-        public static void Init(string baseUrl)
+        public static Action<IRestResponse> responseAction;
+        public static void Init(string baseUrl, Action<IRestResponse> ResponseAction)
         {
             rRestClient = new RestClient(baseUrl);
+            responseAction = ResponseAction;
         }
 
         #region Base Object CRUD Methods
-        public static RetCode CreateObject(ref RootObject rootObject, IRestClient rClient, string requestResource, out IRestResponse rResponse)
+        public static RetCode CreateObject(RootObject rootObject, IRestClient rClient, string requestResource, out IRestResponse rResponse)
         {
             RestRequest rRequest = new RestRequest();
             rRequest.DateFormat = "yyyy-MM-ddTHH:mm:ss.sss";
             rRequest.Resource = requestResource;
             rRequest.Method = Method.POST;
             rRequest.RequestFormat = DataFormat.Json;
+            if(requestResource!="login") rootObject.Authorize();
             rRequest.AddBody(rootObject);
             rResponse = rClient.Execute(rRequest);
             if (rResponse.StatusCode == System.Net.HttpStatusCode.OK)
@@ -36,6 +38,7 @@ namespace Grind.Common
             else
             {
                 Helper.SetState(rResponse.ErrorMessage + " " + rRestResponse.StatusCode.ToString());
+                responseAction(rResponse);
                 return RetCode.unsuccessful;
             }
         }
@@ -55,13 +58,13 @@ namespace Grind.Common
             }
             else
             {
-                State.IsOnline = false;
                 Helper.SetState(rResponse.ErrorMessage);
+                responseAction(rResponse);
                 return RetCode.unsuccessful;
             }
 
         }
-        public static RetCode UpdateObject(ref RootObject rootObject, IRestClient rClient, string requestResource, string requestResourceId, out IRestResponse rResponse)
+        public static RetCode UpdateObject(RootObject rootObject, IRestClient rClient, string requestResource, string requestResourceId, out IRestResponse rResponse)
         {
             RestRequest rRequest = new RestRequest();
             rRequest.DateFormat = "yyyy-MM-ddTHH:mm:ss.sss";
@@ -69,8 +72,10 @@ namespace Grind.Common
             rRequest.Method = Method.PUT;
             rRequest.AddUrlSegment("id", requestResourceId);
             rRequest.RequestFormat = DataFormat.Json;
+            rootObject.Authorize();
             rRequest.AddBody(rootObject);
             rResponse = rClient.Execute(rRequest);
+
             if (rResponse.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 Helper.SetState("Update Successful");
@@ -79,6 +84,7 @@ namespace Grind.Common
             else
             {
                 Helper.SetState(rResponse.ErrorMessage);
+                responseAction(rResponse);
                 return RetCode.unsuccessful;
             }
         }
@@ -89,7 +95,9 @@ namespace Grind.Common
             rRequest.DateFormat = "yyyy-MM-ddTHH:mm:sssssZ";
             rRequest.AddUrlSegment("id", requestResourceId);
             rRequest.Method = Method.DELETE;
+            rRequest.AddBody(new RootObject().Authorize());
             rResponse = rClient.Execute(rRequest);
+
             Globals.rootObject = JsonConvert.DeserializeObject<RootObject>(rResponse.Content);
             if (rResponse.StatusCode == System.Net.HttpStatusCode.OK)
             {
@@ -114,10 +122,10 @@ namespace Grind.Common
                     if (rRestResponse.ContentType == @"application/json")
                     {
                         RootObject RO = JsonConvert.DeserializeObject<RootObject>(rRestResponse.Content);
-                        Error = Environment.NewLine + RO.Message;
+                        Error = RO.Message;
                     }
                     else
-                        Error = Environment.NewLine + (rRestResponse.StatusCode.ToString() + RestService.rRestResponse.ErrorMessage).Trim();
+                        Error = (rRestResponse.StatusCode.ToString() + RestService.rRestResponse.ErrorMessage).Trim();
                 }
             }
             return Error;

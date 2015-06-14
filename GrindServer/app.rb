@@ -8,7 +8,7 @@ require 'multi_json'
 require 'rack/contrib'
 require 'sinatra-websocket'
 require 'thin'
-
+require 'bcrypt'
 
 module GrindServer
 
@@ -16,7 +16,7 @@ ActiveRecord::Base.default_timezone = :local
 # DB Start
 ActiveRecord::Base.establish_connection(
   adapter: 'sqlite3',
-  database: 'Grind.Server.sqlite3.db'
+  database: 'Grind.Server.sqlite'
 )
 
 def self.realtime_channel
@@ -61,6 +61,25 @@ end
 class Person < ActiveRecord::Base
   has_many :unread_objects
   has_many :tasks
+  
+  include BCrypt
+  # attr_accessor :password_hash, :token
+
+  def password
+    @password ||= Password.new(password_hash)
+  end
+
+  def password=(password)
+    self.password_hash = BCrypt::Password.create(password)
+  end
+  
+  def generate_token!
+    self.token = SecureRandom.urlsafe_base64(64)
+    ActiveRecord::Base.record_timestamps = false
+    self.save! #persist
+    ActiveRecord::Base.record_timestamps = true
+  end
+
 end
 
 class Unread_Object < ActiveRecord::Base
@@ -111,18 +130,48 @@ class Comment < ActiveRecord::Base
   belongs_to :task, counter_cache: true
   has_many :comments
 end
+
+
+class Sender < Person
+end
+class Receiver < Person
+end
+class Message < ActiveRecord::Base
+  belongs_to :sender
+  belongs_to :receiver
+  belongs_to :parent, :class_name => "Message", :foreign_key => "parent_message_id"
+  has_many :child_messages, :class_name => "Message",  :foreign_key => "parent_message_id"
+end
+
 # }{Models}
 
 EventMachine.run do
+  Signal.trap("INT")  { EventMachine.stop }
+  Signal.trap("TERM") { EventMachine.stop }
   #GrindServer.realtime_channel = EventMachine::Channel.new
   @users = {}
   @messages = []
   class App < Sinatra::Base
     Time.zone = "Kolkata"
-    use Rack::PostBodyContentTypeParser
+    # use Rack::PostBodyContentTypeParser
     set :server, 'thin'
     set :sockets, []
     use ExceptionHandling
+    
+    before do
+      content_type 'application/json'
+      begin
+        if request.body.read(1)
+          request.body.rewind
+          @JSON_params = JSON.parse request.body.read, { symbolize_names: true }
+        end
+      rescue JSON::ParserError => e
+        request.body.rewind
+        puts "The body #{request.body.read} was not JSON"
+        halt 500 
+      end
+    end
+
     configure do
 
       # Don't log them. We'll do that ourself
@@ -136,6 +185,32 @@ EventMachine.run do
       set :show_exceptions, false
     end
     # end
+
+    post '/login' do
+      # paramxs = @JSON_params[:person]
+      if !@JSON_params[:person][:trigram].present? or !@JSON_params[:person][:password].present?
+        halt 403, { Error: 'Trigram/Password not specified.' }.to_json
+      end
+      person = Person.where(['trigram = ?', @JSON_params[:person][:trigram]]).first
+      if person.password == @JSON_params[:person][:password] #compare the hash to the string; magic
+        person.generate_token!
+        {token: person.token}.to_json # make sure you give hte person the token
+      else
+         halt 403, {Error: "Invalid Credentials"}.to_json
+        #tell the person they aren't logged in
+      end
+    end
+    
+    def authenticate!
+      @person = Person.where(['token = ?', @JSON_params[:token]]).first
+      puts "#{@person.name} authenticated!"
+      halt 403, {Error: "Invalid Token"}.to_json unless @person
+    end
+
+    post "/protected" do
+      authenticate!
+      puts @person
+    end
 
     get '/' do
       'Hola World!'
@@ -169,7 +244,10 @@ EventMachine.run do
 
     # {Person CRUD}
     post '/person' do
-      @person = Person.new(params[:person].except('id', 'created_at', 'updated_at'))
+      authenticate!
+      @person = Person.new(@JSON_params[:person].except(:id, :created_at, :updated_at,:password_hash,:token))
+      # @person.password = @JSON_params[:person][:password]
+      # @person.save
       redirect "person/#{@person.id}" if @person.save
     end
 
@@ -178,13 +256,15 @@ EventMachine.run do
     end
 
     put '/person/:id' do
+      authenticate!
       @person = Person.find(params[:id])
-      if @person.update(params[:person].except('unread_objects_count', 'documents_count', 'tasks_count'))
+      if @person.update(@JSON_params[:person].except(:unread_objects_count, :documents_count, :tasks_count, :password_hash, :token))
         redirect "person/#{@person.id}"
       end
     end
 
     delete '/person/:id' do
+      authenticate!
       @person = Person.find(params[:id])
       if @person.destroy
         content_type :json
@@ -195,14 +275,16 @@ EventMachine.run do
 
     # {Task CRUD}
     post '/task' do
-      @task = Task.new(params[:task].except('id', 'documents', 'created_at', 'updated_at'))
+      authenticate!
+      @task = Task.new(@JSON_params[:task].except(:id, :documents, :created_at, :updated_at))
       redirect "task/#{@task.id}" if @task.save
     end
 
     post '/tasks' do
-      tasks=Task.create(params[:task])
+      authenticate!
+      tasks=Task.create(@JSON_params[:task])
       { Status:  'Tasks created.' }.to_json
-      #@tasks = Task.new(params[:task])
+      #@tasks = Task.new(@JSON_params[:task])
       #redirect 'task/#{@tasks.id}' if @tasks.save
     end
 
@@ -213,10 +295,11 @@ EventMachine.run do
 
     put '/task/:id' do
       @task = Task.find(params[:id])
-      redirect "task/#{@task.id}" if @task.update(params[:task].except('documents', 'created_at', 'updated_at'))
+      redirect "task/#{@task.id}" if @task.update(@JSON_params[:task].except(:documents, :created_at, :updated_at))
     end
 
     delete '/task/:id' do
+      authenticate!
       @task = Task.find(params[:id])
       if @task.destroy
         content_type :json
@@ -244,13 +327,14 @@ EventMachine.run do
 
     get '/people/online' do
       #puts GrindServer.online_people.to_json(:include => :query)
-      @output = []
+      onlinepeople = []
       GrindServer.online_people.each do |onli|
         #puts onli.request.to_json
-        @output << onli.request["query"]
+        onlinepeople << onli.request["query"]
        
       end
-      @output.to_json
+      # onlinepeople.to_json
+      GrindServer.online_people.inspect
     end
       
     error ActiveRecord::RecordNotFound do
@@ -261,50 +345,77 @@ EventMachine.run do
 
   
 
-  EventMachine::WebSocket.start(host: '0.0.0.0', port: 8080) do |ws|
-    ws.onopen do
+  EventMachine::WebSocket.start(host: '0.0.0.0', port: 8080) do |websock|
+    websock.onopen do
       puts 'New Connection Opened'
-      # Subscribe the new user to the GrindServer.realtime_channel with the callback function for the push action
-      new_user = GrindServer.realtime_channel.subscribe { |msg| ws.send msg }
-      GrindServer.online_people << ws
-      # Add the new user to the user list
-      @users[ws.object_id] = new_user
-
-      # Push the last messages to the user
-      @messages.each do |message|
-        ws.send message
+      cookies = CGI::Cookie::parse( websock.request["cookie"])
+      person = Person.where(['token = ?', cookies["token"]]).first
+      unless person       
+        websock.close(code = nil, body = {Error: "Invalid Token"}.to_json)  unless person
+        return
       end
+      puts "#{person.name} authenticated!"
+      person=person.attributes.merge(websock.attributes)
+      # Subscribe the new user to the GrindServer.realtime_channel with the callback function for the push action
+      new_user = GrindServer.realtime_channel.subscribe { |msg| websock.send msg }
+      GrindServer.online_people << person
+      # Add the new user to the user list
+      @users[websock.object_id] = new_user
+      
+      # Push the last messages to the user
+      # message.all.each do |message|
+        # websock.send message.to_json
+      # end
       # puts GrindServer.realtime_channel.inspect
       # Broadcast the notification to all users
+      onlinepeople = []
+      GrindServer.online_people.each do |onli|
+        onlinepeople << onli.request["query"]
+      end
+      
+      websock.send Message.where({ receiver_id: [0, person.id}).last(10).to_json
+      
       GrindServer.realtime_channel.push ({
-        'nickname' => ws.request["query"]["name"],
-        'message' => "New user joined. #{@users.length} users in chat",
-        'timestamp' => GrindServer.timestamp }.to_json)
+        'id' => 0,
+        'sender_id' => 0,
+        'messagetext' => "#{person.name} joined. <$<^<#<#{@users.length}>#>^>$> users in chat",
+        'users' => onlinepeople,
+        'metadata' => websock.request["query"]["id"],
+        }.to_json)
     end
 
-    ws.onmessage do |msg|
+    websock.onmessage do |msg|
       puts 'Message received ' + msg
-      # Add the timestamp to the message
-      message = JSON.parse(msg).merge('timestamp' => GrindServer.timestamp).to_json
-
-      # append the message at the end of the queue
-      @messages << message
-      @messages.shift if @messages.length > 10
-      # puts GrindServer.realtime_channel.inspect
-      # Broadcast the message to all users connected to the GrindServer.realtime_channel
-      GrindServer.realtime_channel.push message
+      # # Add the timestamp to the message
+      @message = Message.new(JSON.parse(msg).except('id', 'created_at','messages','users','metadata','updated_at'))
+      @message.save
+      # message = JSON.parse(msg).merge('timestamp' => GrindServer.timestamp).to_json
+      GrindServer.realtime_channel.push @message.to_json
+      # # append the message at the end of the queue
+      # @messages << message
+      # @messages.shift if @messages.length > 10
+      # # puts GrindServer.realtime_channel.inspect
+      # # Broadcast the message to all users connected to the GrindServer.realtime_channel
+      # GrindServer.realtime_channel.push message
     end
 
-    ws.onclose do
+    websock.onclose do
       puts 'Websocket Closed'
-      GrindServer.realtime_channel.unsubscribe(@users[ws.object_id])
-      @users.delete(ws.object_id)
-      GrindServer.online_people.delete ws
+      GrindServer.realtime_channel.unsubscribe(@users[websock.object_id])
+      @users.delete(websock.object_id)
+      GrindServer.online_people.delete websock
       # Broadcast the notification to all users
+      onlinepeople = []
+      GrindServer.online_people.each do |onli|
+        onlinepeople << onli.request["query"]
+      end
       GrindServer.realtime_channel.push ({
-        'nickname' => '',
-        'message' => "One user left. #{@users.length} users in chat",
-        'timestamp' => GrindServer.timestamp }.to_json)
+        'id' => 0,
+        'sender_id' => 0,
+        'messagetext' => "A user left. <$<^<#<#{@users.length}>#>^>$> users in chat",
+        'users' => onlinepeople,
+        'metadata' => websock.request["query"]["id"],
+        }.to_json)
     end
   end
 

@@ -33,6 +33,14 @@ ActiveRecord::Schema.define(version: 20150131130010) do
     t.datetime "updated_at"
   end
 
+  create_table "messages", force: :cascade do |t|
+    t.integer  "sender_id"
+    t.integer  "receiver_id"
+    t.datetime "created_at"
+    t.integer  "parent_message_id"
+    t.string   "messagetext"
+  end
+
   create_table "people", force: :cascade do |t|
     t.string   "name"
     t.string   "trigram"
@@ -45,6 +53,8 @@ ActiveRecord::Schema.define(version: 20150131130010) do
     t.integer  "documents_count",      default: 0
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "password_hash"
+    t.string   "token"
   end
 
   create_table "tasks", force: :cascade do |t|
@@ -75,7 +85,7 @@ ActiveRecord::Schema.define(version: 20150131130010) do
   end
 
   create_table "unread_objects", force: :cascade do |t|
-    t.string   "person_id"
+    t.integer  "person_id"
     t.string   "internal_object_id"
     t.string   "unread_cause"
     t.datetime "created_at"

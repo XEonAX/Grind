@@ -16,7 +16,7 @@ namespace Grind.Common
         /// </summary>
         /// <param name="obj">Control like "Textbox1"</param>
         /// <param name="action">Action like "() => Textbox1.text="Zango";"</param>
-        public static void UIize(this ISynchronizeInvoke obj,
+        public static void WFUIize(this ISynchronizeInvoke obj,
                                                  MethodInvoker action)
         {
             if (obj.InvokeRequired)

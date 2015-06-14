@@ -14,18 +14,10 @@ namespace Grind.Common
         /// <param name=""”control”"" />The source control</param />
         /// <param name=""”methodcall”"" />The method to call</param />
         /// <param name=""”priorityForCall”"" />The thread priority</param />
-        public static void UIize(
+        public static void WPFUIize(
             this DispatcherObject control,
             Action methodcall,
-            DispatcherPriority priorityForCall)
-        {
-            UIizeInt(control, methodcall, DispatcherPriority.ApplicationIdle);
-        }
-
-        public static void UIizeInt(
-            this DispatcherObject control,
-            Action methodcall,
-            DispatcherPriority priorityForCall)
+            DispatcherPriority priorityForCall=DispatcherPriority.ApplicationIdle)
         {
             //see if we need to Invoke call to Dispatcher thread
             if (control.Dispatcher.Thread != Thread.CurrentThread)

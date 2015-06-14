@@ -33,7 +33,7 @@ namespace Grind.Winforms.CSharp
             person.internal_object_id = txtIntObjId.Text;
             person.active = chkActive.Checked;
             person.level = (eLevel)dupLevel.SelectedIndex;
-            Controllers.CreatePerson(ref person);
+            Controllers.CreatePerson(person);
             btnRefresh_Click(null, EventArgs.Empty);
             Refreshed = true;
             lbPeople.SelectedIndex = lbPeople.Items.Count - 1;
@@ -75,7 +75,7 @@ namespace Grind.Winforms.CSharp
             person.internal_object_id = txtIntObjId.Text;
             person.active = chkActive.Checked;
             person.level = (eLevel)dupLevel.SelectedIndex;
-            Controllers.UpdatePerson(ref person);
+            Controllers.UpdatePerson(person);
             btnRefresh_Click(null, EventArgs.Empty);
             Refreshed = true;
             lbPeople.SelectedIndex = OldSelectedIndex;
@@ -87,7 +87,7 @@ namespace Grind.Winforms.CSharp
             if (lbPeople.SelectedIndex >= 0)
             {
                 person = Globals.People[lbPeople.SelectedIndex];
-                Controllers.DeletePerson(ref person);
+                Controllers.DeletePerson(person);
             }
             btnRefresh_Click(null, EventArgs.Empty);
             Refreshed = true;

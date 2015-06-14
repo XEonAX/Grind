@@ -19,36 +19,53 @@ namespace Grind.Common
     {
         public static void Init(string baseUrl)
         {
-            RestService.Init(baseUrl);
+            RestService.Init(baseUrl, (_) => { });
         }
         public static void Init(string baseUrl, string ConnectionString, ref StatusBarItem sbiMessage, ref StatusBarItem sbiState, ref CheckBox chkOffline)
         {
-            RestService.Init(baseUrl);
+            RestService.Init(baseUrl, (_) => { });
             Cache.SqliteHelperInit(ConnectionString);
             Helper.Init(sbiMessage, sbiState, chkOffline);
         }
 
-        #region Person and People CRUD Methods
-        public static RetCode CreatePerson(ref Person person)
+        public static RetCode  ServerLogin(string trigram, string password)
         {
-            return CreatePerson(ref person, RestService.rRestClient, out RestService.rRestResponse);
-        }
-        public static RetCode CreatePerson(ref Person person, IRestClient rClient, out IRestResponse rResponse)
-        {
-            RootObject rootObject = new RootObject();
-            rootObject.person = person;
-            return RestService.CreateObject(ref rootObject, rClient, "person", out rResponse);
+            RootObject rootObject = new RootObject { person = new Person { trigram = trigram, password = password } };
+            rootObject.person = new Person { trigram = trigram, password = password };
+            if (RestService.CreateObject(rootObject, RestService.rRestClient, "login", out RestService.rRestResponse) == RetCode.successful)
+            {
+                Token token = JsonConvert.DeserializeObject<Token>(RestService.rRestResponse.Content);
+                Globals.Session.token = token.token;
+                return RetCode.successful;
+            }
+            else
+            {
+                System.Windows.Forms.MessageBox.Show(RestService.rRestResponse.ErrorMessage + Environment.NewLine + RestService.rRestResponse.Content);
+                return RetCode.unsuccessful;
+            }
         }
 
-        public static RetCode UpdatePerson(ref Person person)
+        #region Person and People CRUD Methods
+        public static RetCode CreatePerson(Person person)
         {
-            return UpdatePerson(ref person, RestService.rRestClient, out RestService.rRestResponse);
+            return CreatePerson(person, RestService.rRestClient, out RestService.rRestResponse);
         }
-        public static RetCode UpdatePerson(ref Person person, IRestClient rClient, out IRestResponse rResponse)
+        public static RetCode CreatePerson(Person person, IRestClient rClient, out IRestResponse rResponse)
         {
             RootObject rootObject = new RootObject();
             rootObject.person = person;
-            return RestService.UpdateObject(ref rootObject, rClient, "person/{id}", person.id.ToString(), out rResponse);
+            return RestService.CreateObject(rootObject, rClient, "person", out rResponse);
+        }
+
+        public static RetCode UpdatePerson(Person person)
+        {
+            return UpdatePerson(person, RestService.rRestClient, out RestService.rRestResponse);
+        }
+        public static RetCode UpdatePerson(Person person, IRestClient rClient, out IRestResponse rResponse)
+        {
+            RootObject rootObject = new RootObject();
+            rootObject.person = person;
+            return RestService.UpdateObject(rootObject, rClient, "person/{id}", person.id.ToString(), out rResponse);
         }
 
         public static RetCode ReadPeople(out List<Person> people)
@@ -98,26 +115,26 @@ namespace Grind.Common
             }
         }
 
-        public static RetCode DeletePerson(ref Person person)
+        public static RetCode DeletePerson(Person person)
         {
-            return DeletePerson(ref person, RestService.rRestClient, out RestService.rRestResponse);
+            return DeletePerson(person, RestService.rRestClient, out RestService.rRestResponse);
         }
-        public static RetCode DeletePerson(ref Person person, IRestClient rClient, out IRestResponse rResponse)
+        public static RetCode DeletePerson(Person person, IRestClient rClient, out IRestResponse rResponse)
         {
             return RestService.DeleteObject(rClient, "person/{id}", person.id.ToString(), out rResponse);
         }
         #endregion
 
         #region Task CRUD Methods
-        public static RetCode CreateTask(ref Task task)
+        public static RetCode CreateTask(Task task)
         {
-            return CreateTask(ref task, RestService.rRestClient, out RestService.rRestResponse);
+            return CreateTask(task, RestService.rRestClient, out RestService.rRestResponse);
         }
-        public static RetCode CreateTask(ref Task task, IRestClient rClient, out IRestResponse rResponse)
+        public static RetCode CreateTask(Task task, IRestClient rClient, out IRestResponse rResponse)
         {
             RootObject rootObject = new RootObject();
             rootObject.task = task;
-            return RestService.CreateObject(ref rootObject, rClient, "task", out rResponse);
+            return RestService.CreateObject(rootObject, rClient, "task", out rResponse);
         }
 
         public static RetCode ReadTask(int taskId, out Task task)
@@ -183,22 +200,22 @@ namespace Grind.Common
         }
 
 
-        public static RetCode UpdateTask(ref Task task)
+        public static RetCode UpdateTask(Task task)
         {
-            return UpdateTask(ref task, RestService.rRestClient, out RestService.rRestResponse);
+            return UpdateTask(task, RestService.rRestClient, out RestService.rRestResponse);
         }
-        public static RetCode UpdateTask(ref Task task, IRestClient rClient, out IRestResponse rResponse)
+        public static RetCode UpdateTask(Task task, IRestClient rClient, out IRestResponse rResponse)
         {
             RootObject rootObject = new RootObject();
             rootObject.task = task;
-            return RestService.UpdateObject(ref rootObject, rClient, "task/{id}", task.id.ToString(), out rResponse);
+            return RestService.UpdateObject(rootObject, rClient, "task/{id}", task.id.ToString(), out rResponse);
         }
 
-        public static RetCode DeleteTask(ref Task task)
+        public static RetCode DeleteTask(Task task)
         {
-            return DeleteTask(ref task, RestService.rRestClient, out RestService.rRestResponse);
+            return DeleteTask(task, RestService.rRestClient, out RestService.rRestResponse);
         }
-        public static RetCode DeleteTask(ref Task task, IRestClient rClient, out IRestResponse rResponse)
+        public static RetCode DeleteTask(Task task, IRestClient rClient, out IRestResponse rResponse)
         {
             return RestService.DeleteObject(rClient, "task/{id}", task.id.ToString(), out rResponse);
         }
@@ -378,7 +395,7 @@ namespace Grind.Common
         }
         #endregion
 
-        #region TimeStamps
+        #region TimeStamps Methods
         public static List<TimeStamp> LatestTimeStamps<T>()
         {
             List<TimeStamp> timestamps;

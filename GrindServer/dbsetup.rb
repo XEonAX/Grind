@@ -14,7 +14,7 @@ ActiveRecord::Base.default_timezone = :utc
 # DB Start
 ActiveRecord::Base.establish_connection(
   adapter: 'sqlite3',
-  database: 'Grind.Server.sqlite3.db'
+  database: 'Grind.Server.sqlite'
 )
 
 def self.realtime_channel
@@ -108,6 +108,18 @@ class Comment < ActiveRecord::Base
   belongs_to :task, counter_cache: true
   has_many :comments
 end
+
+class Sender < Person
+end
+class Receiver < Person
+end
+class Message < ActiveRecord::Base
+  belongs_to :sender
+  belongs_to :receiver
+  belongs_to :parent, :class_name => "Message", :foreign_key => "parent_message_id"
+  has_many :child_messages, :class_name => "Message",  :foreign_key => "parent_message_id"
+end
+
 # }{Models}
   class App < Sinatra::Base
     Time.zone = "UTC"

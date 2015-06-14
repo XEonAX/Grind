@@ -41,7 +41,6 @@ namespace Grind.WPF.CSharp
             dGridTasks.AutoGenerateColumns = false;
             dGridTasks.ItemsSource = TaskList;
             Controllers.Init("http://localhost:4567/", @"data source=J:\Root\Grind\GrindClient\Grind.Common\Grind.db", ref sbiMessage, ref sbiState, ref chkOffline);
-            new Globals();
             //Person x1 = new Person { created_at = DateTime.Now, updated_at = DateTime.Now, id = 3 };
             //Cache.AddObject<Person>(x1);
             //Person x2 = Cache.GetObject<Person>(3);
@@ -76,7 +75,7 @@ namespace Grind.WPF.CSharp
                 Task task = new Task();
                 //BuildTaskFromForm(ref task);
                 ttfrmControl.BuildTaskfromTaskFilledForm(ref task);
-                if (RetCode.successful == Controllers.CreateTask(ref task))
+                if (RetCode.successful == Controllers.CreateTask(task))
                 {
                     UserChange = false;
                     Controllers.ReadTasks(ref TaskList);
@@ -95,7 +94,7 @@ namespace Grind.WPF.CSharp
                     //{
                     //    ErrMsg = Environment.NewLine + RestService.rRestResponse.Content;
                     //}
-                    ErrMsg = RestService.GetResponseError();
+                    ErrMsg = Environment.NewLine + RestService.GetResponseError();
                     MessageBox.Show("There was some problem while Saving the Task." + ErrMsg, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
 
                 }
@@ -168,7 +167,7 @@ namespace Grind.WPF.CSharp
             {
                 int OldTaskId = CurrentTask.id;
                 ttfrmControl.BuildTaskfromTaskFilledForm(ref CurrentTask);
-                if (RetCode.successful == Controllers.UpdateTask(ref CurrentTask))
+                if (RetCode.successful == Controllers.UpdateTask(CurrentTask))
                 {
 
                     UserChange = false;
@@ -238,6 +237,12 @@ namespace Grind.WPF.CSharp
         private void btnDownloadTasks_Click(object sender, RoutedEventArgs e)
         {
             Controllers.GetAndStoreTasks();
+        }
+
+        private void btnLogin_Click(object sender, RoutedEventArgs e)
+        {
+            if (Controllers.ServerLogin(txtTrigram.Text, txtPassword.Password) == RetCode.successful)
+                bdrLogin.BorderBrush = Brushes.Green;
         }
     }
 }

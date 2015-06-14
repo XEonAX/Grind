@@ -3,17 +3,27 @@ using System.Collections.Generic;
 using System.Text;
 using System.Reflection;
 using System.Linq;
+using System.Windows.Documents;
 namespace Grind.Common
 {
+    public class Session : Token
+    {
+        public Person User { get; set; }
+        
+
+    }
+    public class Token
+    {
+        public string token { get; set; }
+    }
     public class RootObject
     {
         public Person person { get; set; }
         public Task task { get; set; }
         public Document document { get; set; }
         public string Message { get; set; }
+        public string token { get; set; }
     }
-
-
     public class RootPerson
     {
         public Person person { get; set; }
@@ -81,6 +91,8 @@ namespace Grind.Common
         public bool active { get; set; }
         public eLevel level { get; set; }
         public string internal_object_id { get; set; }
+        public string password { get; set; }
+        public string token { get; set; }
         public int unread_objects_count { get; set; }
         public int documents_count { get; set; }
         public int work_tasks_count { get; set; }
@@ -169,6 +181,7 @@ namespace Grind.Common
             target_date = DateTime.Now.AddDays(1 * 7);
             collection_date = DateTime.Now.AddDays(2 * 7);
             closed_date = DateTime.Now.AddDays(3 * 7);
+            if (Globals.People.Count == 0)    Globals.People.Add(new Person { id = 0, name = "DummyUser", level = eLevel.Master });
             developer_id = Globals.People.First().id;
             reviewer_id = Globals.People.First().id;
             bug_type = eBugType.Others;
@@ -211,7 +224,45 @@ namespace Grind.Common
         public List<Document> documents { get; set; }
     }
 
+    public class WS_Message : TimeStamp
+    {
+        public int sender_id { get; set; }
+        public int receiver_id { get; set; }
+        public int parent_message_id { get; set; }
+        public string messagetext { get; set; }
+        public List<WS_Message> messages { get; set; }
 
+    }
+
+    public class WS_DisplayMessage : WS_Message
+    {
+        public string sender_name
+        {
+            get
+            {
+                Person X = Globals.People.Find(x => x.id == this.sender_id);
+                if (X != null)
+                    return X.name;
+                else
+                    return "DummyUser";
+            }
+        }
+
+        public FlowDocument flow_message
+        {
+            get
+            {
+                if (this.sender_id == 0)
+                {
+                    FlowDocument FD = new FlowDocument();
+                    FD.Blocks.Add(new Paragraph(new Run(this.messagetext)));
+                    return FD;
+                }
+                else
+                    return this.messagetext.FlowDocumentFromBase64String();
+            }
+        }
+    }
     public enum Model
     {
         task = 0,

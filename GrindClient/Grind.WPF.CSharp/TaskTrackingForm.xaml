@@ -179,10 +179,10 @@
                                     <ColumnDefinition Width="1*"/>
                                     <ColumnDefinition Width="1*"/>
                                 </Grid.ColumnDefinitions>
-                                <ComboBox Style="{DynamicResource SimpleComboBox}" Grid.Column="0" Grid.Row="0" Margin="3" Name="cbExecutor" />
-                                <ComboBox Style="{DynamicResource SimpleComboBox}" Grid.Column="1" Grid.Row="0" Margin="3" Name="cbReviewer" />
-                                <ComboBox Style="{DynamicResource SimpleComboBox}" Grid.Column="0" Grid.Row="1" Margin="3"/>
-                                <ComboBox Style="{DynamicResource SimpleComboBox}" Grid.Column="1" Grid.Row="1" Margin="3"/>
+                                <ComboBox Grid.Column="0" Grid.Row="0" Margin="3" Name="cbExecutor" />
+                                <ComboBox Grid.Column="1" Grid.Row="0" Margin="3" Name="cbReviewer" />
+                                <ComboBox Grid.Column="0" Grid.Row="1" Margin="3"/>
+                                <ComboBox Grid.Column="1" Grid.Row="1" Margin="3"/>
 
                             </Grid>
 

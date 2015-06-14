@@ -40,7 +40,7 @@ namespace Grind.Winforms.CSharp
             dGridTasks.AutoGenerateColumns = false;
             dGridTasks.DataSource = TaskList;
             Controllers.Init("http://localhost:4567/");
-            new Globals();
+            
         }
 
 
@@ -61,7 +61,7 @@ namespace Grind.Winforms.CSharp
                 Task task = new Task();
                 //BuildTaskFromForm(ref task);
                 ttfrmControl.BuildTaskfromTaskFilledForm(ref task);
-                Controllers.CreateTask(ref task);
+                Controllers.CreateTask(task);
                 UserChange = false;
                 Controllers.ReadTasks(ref TaskList);
                 UserChange = true;
@@ -111,7 +111,7 @@ namespace Grind.Winforms.CSharp
             {
                 int OldTaskId = CurrentTask.id;
                 ttfrmControl.BuildTaskfromTaskFilledForm(ref CurrentTask);
-                Controllers.UpdateTask(ref CurrentTask);
+                Controllers.UpdateTask(CurrentTask);
 
 
                 UserChange = false;

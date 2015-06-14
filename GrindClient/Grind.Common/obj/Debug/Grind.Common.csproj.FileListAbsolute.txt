@@ -3,9 +3,12 @@ J:\Root\Grind\GrindClient\Grind.Common\bin\Debug\Grind.Common.dll
 J:\Root\Grind\GrindClient\Grind.Common\bin\Debug\Grind.Common.pdb
 J:\Root\Grind\GrindClient\Grind.Common\bin\Debug\Newtonsoft.Json.dll
 J:\Root\Grind\GrindClient\Grind.Common\bin\Debug\RestSharp.dll
-J:\Root\Grind\GrindClient\Grind.Common\bin\Debug\System.Data.SQLite.dll
+J:\Root\Grind\GrindClient\Grind.Common\bin\Debug\websocket-sharp.dll
 J:\Root\Grind\GrindClient\Grind.Common\bin\Debug\Newtonsoft.Json.xml
 J:\Root\Grind\GrindClient\Grind.Common\bin\Debug\RestSharp.xml
-J:\Root\Grind\GrindClient\Grind.Common\bin\Debug\System.Data.SQLite.xml
+J:\Root\Grind\GrindClient\Grind.Common\bin\Debug\websocket-sharp.xml
 J:\Root\Grind\GrindClient\Grind.Common\obj\Debug\Grind.Common.dll
 J:\Root\Grind\GrindClient\Grind.Common\obj\Debug\Grind.Common.pdb
+J:\Root\Grind\GrindClient\Grind.Common\bin\Debug\System.Data.SQLite.dll
+J:\Root\Grind\GrindClient\Grind.Common\bin\Debug\System.Data.SQLite.xml
+J:\Root\Grind\GrindClient\Grind.Common\obj\Debug\Grind.Common.csprojResolveAssemblyReference.cache

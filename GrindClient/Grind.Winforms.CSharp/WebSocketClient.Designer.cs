@@ -64,6 +64,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.listBox1.FormattingEnabled = true;
+            this.listBox1.HorizontalScrollbar = true;
             this.listBox1.Location = new System.Drawing.Point(12, 41);
             this.listBox1.Name = "listBox1";
             this.listBox1.Size = new System.Drawing.Size(566, 199);
@@ -77,7 +78,7 @@
             this.txtMessage.Name = "txtMessage";
             this.txtMessage.Size = new System.Drawing.Size(417, 20);
             this.txtMessage.TabIndex = 3;
-            this.txtMessage.Text = "{\"nickname\":\"\",\"message\":\"Nned.\"}";
+            this.txtMessage.Text = "Halo";
             // 
             // button3
             // 
@@ -96,7 +97,7 @@
             this.txtName.Name = "txtName";
             this.txtName.Size = new System.Drawing.Size(143, 20);
             this.txtName.TabIndex = 5;
-            this.txtName.Text = "Asgardian";
+            this.txtName.Text = "1";
             // 
             // WebSocketClient
             // 
