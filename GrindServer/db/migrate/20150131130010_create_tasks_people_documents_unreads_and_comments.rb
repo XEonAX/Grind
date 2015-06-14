@@ -71,6 +71,7 @@ class CreateTasksPeopleDocumentsUnreadsAndComments < ActiveRecord::Migration
       t.integer :sender_id
       t.integer :receiver_id
       t.datetime :created_at
+      t.datetime :updated_at
       t.integer :parent_message_id
       t.string :messagetext
     end  

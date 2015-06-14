@@ -30,6 +30,7 @@ namespace Grind.Common
                 ws.Close();
             }
             ws = new WebSocket(path);//ws://localhost:8080/?name=
+            if (token == null) token = "";
             ws.SetCookie(new WebSocketSharp.Net.Cookie("token", token));
             ws.OnOpen += new EventHandler(OnOpen);
             ws.OnMessage += new EventHandler<MessageEventArgs>(OnMessage);

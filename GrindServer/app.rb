@@ -106,7 +106,6 @@ class Task < ActiveRecord::Base
         internal_object_id: self.id,
         unread_cause: 'Create')
     end
-    #puts GrindServer.realtime_channel.inspect
 
     GrindServer.realtime_channel.push ({
         'nickname' => 'Server',
@@ -149,8 +148,6 @@ EventMachine.run do
   Signal.trap("INT")  { EventMachine.stop }
   Signal.trap("TERM") { EventMachine.stop }
   #GrindServer.realtime_channel = EventMachine::Channel.new
-  @users = {}
-  @messages = []
   class App < Sinatra::Base
     Time.zone = "Kolkata"
     # use Rack::PostBodyContentTypeParser
@@ -326,15 +323,14 @@ EventMachine.run do
 
 
     get '/people/online' do
-      #puts GrindServer.online_people.to_json(:include => :query)
-      onlinepeople = []
-      GrindServer.online_people.each do |onli|
-        #puts onli.request.to_json
-        onlinepeople << onli.request["query"]
-       
-      end
-      # onlinepeople.to_json
-      GrindServer.online_people.inspect
+      onlinepeople = GrindServer.online_people.map do
+                      |hash|{ws_oid: hash[:ws_oid],
+                             person_id: hash[:person_id],
+                             person_name: hash[:person_name],
+                             person_trigram: hash[:person_trigram]}
+                     end
+      onlinepeople.to_json
+      # GrindServer.online_people.inspect
     end
       
     error ActiveRecord::RecordNotFound do
@@ -350,45 +346,50 @@ EventMachine.run do
       puts 'New Connection Opened'
       cookies = CGI::Cookie::parse( websock.request["cookie"])
       person = Person.where(['token = ?', cookies["token"]]).first
-      unless person       
-        websock.close(code = nil, body = {Error: "Invalid Token"}.to_json)  unless person
-        return
-      end
+      if person  
       puts "#{person.name} authenticated!"
-      person=person.attributes.merge(websock.attributes)
+      # person=person.attributes.merge(websock.attributes)
       # Subscribe the new user to the GrindServer.realtime_channel with the callback function for the push action
-      new_user = GrindServer.realtime_channel.subscribe { |msg| websock.send msg }
-      GrindServer.online_people << person
+      subscriber = GrindServer.realtime_channel.subscribe { |msg| websock.send msg }
+      GrindServer.online_people << {:ws_oid => websock.object_id,
+                                    :websocket => websock,
+                                    :person_id => person.id,
+                                    :person_name => person.name,
+                                    :person_trigram => person.trigram,
+                                    :subscriber => subscriber}
       # Add the new user to the user list
-      @users[websock.object_id] = new_user
-      
       # Push the last messages to the user
       # message.all.each do |message|
         # websock.send message.to_json
       # end
-      # puts GrindServer.realtime_channel.inspect
       # Broadcast the notification to all users
-      onlinepeople = []
-      GrindServer.online_people.each do |onli|
-        onlinepeople << person
-      end
-      
+      onlinepeople = GrindServer.online_people.map do
+                      |hash|{ws_oid: hash[:ws_oid],
+                             person_id: hash[:person_id],
+                             person_name: hash[:person_name],
+                             person_trigram: hash[:person_trigram]}
+                     end
       # Send last 10 messages to the newly connected user
-      websock.send Message.where({ receiver_id: [0, person.id}).last(10).to_json
+      websock.send Message.where({ receiver_id: [0, person.id]}).last(10).to_json
       
       GrindServer.realtime_channel.push ({
         'id' => 0,
         'sender_id' => 0,
-        'messagetext' => "#{person.name} joined. <$<^<#<#{@users.length}>#>^>$> users in chat",
+        'messagetext' => "#{person.name} joined. <$<^<#<#{onlinepeople.length}>#>^>$> users in chat",
         'users' => onlinepeople,
-        'metadata' => websock.request["query"]["id"],
+        'metadata' => person.trigram,
         }.to_json)
+
+      else
+        websock.close_websocket(code = nil, body = {Error: "Invalid Token"}.to_json)      
+      end
     end
 
     websock.onmessage do |msg|
-      puts 'Message received ' + msg
+      puts 'Message received '
       # # Add the timestamp to the message
-      @message = Message.new(JSON.parse(msg).except('id', 'created_at','messages','users','metadata','updated_at'))
+      @message = Message.new(JSON.parse(msg).except('id', 'created_at','messages','users','metadata','created_at','updated_at','sender_id'))
+      @message.sender_id = GrindServer.online_people.find{ |onli| onli[:ws_oid] == websock.object_id }[:person_id]
       @message.save
       # message = JSON.parse(msg).merge('timestamp' => GrindServer.timestamp).to_json
       GrindServer.realtime_channel.push @message.to_json
@@ -402,21 +403,27 @@ EventMachine.run do
 
     websock.onclose do
       puts 'Websocket Closed'
-      GrindServer.realtime_channel.unsubscribe(@users[websock.object_id])
-      @users.delete(websock.object_id)
-      GrindServer.online_people.delete websock
-      # Broadcast the notification to all users
-      onlinepeople = []
-      GrindServer.online_people.each do |onli|
-        onlinepeople << onli.request["query"]
+      unless GrindServer.online_people.select {|onli|
+          onli[:ws_oid] == websock.object_id
+          }.empty?
+        GrindServer.realtime_channel.unsubscribe(
+          GrindServer.online_people.find{ |onli| onli[:ws_oid] == websock.object_id }[:subscriber])
+        GrindServer.online_people.delete_if { |onli| onli[:ws_oid] == websock.object_id }
+        # Broadcast the notification to all users
+        onlinepeople = GrindServer.online_people.map do
+                        |hash|{ws_oid: hash[:ws_oid],
+                               person_id: hash[:person_id],
+                               person_name: hash[:person_name],
+                               person_trigram: hash[:person_trigram]}
+                       end
+        GrindServer.realtime_channel.push ({
+          'id' => 0,
+          'sender_id' => 0,
+          'messagetext' => "A user left. <$<^<#<#{onlinepeople.length}>#>^>$> users in chat",
+          'users' => onlinepeople,
+          'metadata' => "",
+          }.to_json)
       end
-      GrindServer.realtime_channel.push ({
-        'id' => 0,
-        'sender_id' => 0,
-        'messagetext' => "A user left. <$<^<#<#{@users.length}>#>^>$> users in chat",
-        'users' => onlinepeople,
-        'metadata' => websock.request["query"]["id"],
-        }.to_json)
     end
   end
 

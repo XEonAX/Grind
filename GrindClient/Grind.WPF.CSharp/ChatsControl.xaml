@@ -34,10 +34,10 @@
 					<Button x:Name="btnDis" Content="Disc." HorizontalAlignment="Stretch" VerticalAlignment="Bottom"  Grid.Column="1" Click="btnDis_Click"/>
 
 				</Grid>
-				<ListBox x:Name="lbMessages" ItemTemplate="{DynamicResource DataTemplate1}">
+				<ListBox x:Name="lbMessages" ItemTemplate="{DynamicResource DataTemplate1}" ScrollViewer.CanContentScroll="False">
 					<ListBox.Resources>
 						<DataTemplate x:Key="DataTemplate1">
-							<Grid HorizontalAlignment="Stretch" >
+							<Grid HorizontalAlignment="Stretch" d:DesignWidth="920" d:DesignHeight="455" >
 								<Grid.RowDefinitions>
 									<RowDefinition/>
 									<RowDefinition/>
@@ -48,7 +48,7 @@
 								</Grid.ColumnDefinitions>
 								<TextBlock Grid.Row="0" HorizontalAlignment="Left" Text="{Binding sender_name}" VerticalAlignment="Top"/>
 								<TextBlock Grid.Row="1" HorizontalAlignment="Left" Text="{Binding created_at}" VerticalAlignment="Top"/>
-								<FlowDocumentScrollViewer Grid.Column="1" Grid.RowSpan="2" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" Document="{Binding flow_message}"/>
+								<FlowDocumentScrollViewer Grid.Column="1" Grid.RowSpan="2"  Document="{Binding flow_message}"/>
 
 							</Grid>
 						</DataTemplate>
