@@ -370,9 +370,10 @@ EventMachine.run do
       # Broadcast the notification to all users
       onlinepeople = []
       GrindServer.online_people.each do |onli|
-        onlinepeople << onli.request["query"]
+        onlinepeople << person
       end
       
+      # Send last 10 messages to the newly connected user
       websock.send Message.where({ receiver_id: [0, person.id}).last(10).to_json
       
       GrindServer.realtime_channel.push ({
