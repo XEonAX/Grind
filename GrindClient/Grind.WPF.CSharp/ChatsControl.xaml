@@ -34,7 +34,18 @@
 					<Button x:Name="btnDis" Content="Disc." HorizontalAlignment="Stretch" VerticalAlignment="Bottom"  Grid.Column="1" Click="btnDis_Click"/>
 
 				</Grid>
-				<ListBox x:Name="lbMessages" ItemTemplate="{DynamicResource DataTemplate1}" ScrollViewer.CanContentScroll="False">
+                <RichTextBox x:Name="rtbMessages" >
+                    <FlowDocument>
+                        <Table x:Name="tableMessages">
+                            <Table.Columns>
+                                <TableColumn x:Name="metaColumn" Width="100"/>
+                                <TableColumn x:Name="msgColumn" Width="*"/>
+                            </Table.Columns>    
+                        </Table>
+                        
+                    </FlowDocument>
+                </RichTextBox>
+                <!--<ListBox x:Name="lbMessages" ItemTemplate="{DynamicResource DataTemplate1}" ScrollViewer.CanContentScroll="False">
 					<ListBox.Resources>
 						<DataTemplate x:Key="DataTemplate1">
 							<Grid HorizontalAlignment="Stretch" d:DesignWidth="920" d:DesignHeight="455" >
@@ -54,7 +65,7 @@
 						</DataTemplate>
 					</ListBox.Resources>
 				
-				</ListBox>
+				</ListBox>-->
 
 			</Grid>
 			<ListBox x:Name="lbOnlinePeople" Grid.Column="2" ItemTemplate="{DynamicResource DataTemplate1}" >
