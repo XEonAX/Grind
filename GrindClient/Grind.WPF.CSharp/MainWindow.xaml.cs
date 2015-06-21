@@ -45,12 +45,13 @@ namespace Grind.WPF.CSharp
             //Cache.AddObject<Person>(x1);
             //Person x2 = Cache.GetObject<Person>(3);
             Controllers.ReadPeople(out Globals.People);
+            Globals.HashPeople();
             if (Globals.People.Count == 0)
             {
-                Globals.People.Add(new Person { id = 0, name = "DummyUser", level = eLevel.Master });
+                Globals.People.Add(new Person { id = 0, name = "DummyUser", level = eLevel.Master, trigram = "DummyUser" });
             }
             Controllers.ReadTasks(ref TaskList);
-
+            Globals.Session.User = new Person { active = false, id = -1, name = "OfflineUser", trigram = "0x0" };
             //cobExecutor.Items.AddRange(Globals.People.Select(x => x.name).ToArray());
             //cobReviewer.Items.AddRange(Globals.People.Select(x => x.name).ToArray());
             ttfrmControl.FillPeopleDropDown(Globals.People);
@@ -149,6 +150,7 @@ namespace Grind.WPF.CSharp
         private void btnRefresh_Click(object sender, RoutedEventArgs e)
         {
             Controllers.ReadPeople(out Globals.People);
+            Globals.HashPeople();
             Controllers.ReadTasks(ref TaskList);
             //cobExecutor.Items.AddRange(Globals.People.Select(x => x.name).ToArray());
             //cobReviewer.Items.AddRange(Globals.People.Select(x => x.name).ToArray());

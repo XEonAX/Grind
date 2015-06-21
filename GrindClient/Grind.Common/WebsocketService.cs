@@ -25,7 +25,7 @@ namespace Grind.Common
                                 EventHandler<CloseEventArgs> OnClose,
                                 EventHandler<ErrorEventArgs> OnError)
         {
-            if (ws != null)
+            if (ws != null && ws.IsAlive)
             {
                 ws.Close();
             }
@@ -40,7 +40,8 @@ namespace Grind.Common
         public static void Init(string path,
                         string id)
         {
-            if (ws != null) return;
+            if (ws != null && ws.IsAlive)
+                    ws.Close();
             ws = new WebSocket(path + id);//ws://localhost:8080/?name=
             ws.OnOpen += new EventHandler(ws_OnOpen);
             ws.OnMessage += new EventHandler<MessageEventArgs>(ws_OnMessage);
@@ -50,17 +51,19 @@ namespace Grind.Common
 
         static void ws_OnOpen(object sender, EventArgs e)
         {
-            
+            throw new NotImplementedException();
         }
         static void ws_OnMessage(object sender, MessageEventArgs e)
         {
-           
+            throw new NotImplementedException();
         }
         static void ws_OnClose(object sender, CloseEventArgs e)
         {
+            throw new NotImplementedException();
         }
         static void ws_OnError(object sender, ErrorEventArgs e)
         {
+            throw new NotImplementedException();
         }
 
         public static void Send(string data)

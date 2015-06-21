@@ -7,13 +7,13 @@ namespace Grind.Common
 {
     public static class WPFThreadingExtensions
     {
-        /// <summary />
+        /// <summary>
         /// Simple helper extension method to marshall to correct
         /// thread if its required
-        /// </summary />
-        /// <param name=""”control”"" />The source control</param />
-        /// <param name=""”methodcall”"" />The method to call</param />
-        /// <param name=""”priorityForCall”"" />The thread priority</param />
+        /// </summary>
+        /// <param name="control">The source control</param>
+        /// <param name="methodcall">The method to call</param>
+        /// <param name="priorityForCall">The thread priority</param>
         public static void WPFUIize(
             this DispatcherObject control,
             Action methodcall,

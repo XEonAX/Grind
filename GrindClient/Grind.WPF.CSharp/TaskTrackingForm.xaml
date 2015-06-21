@@ -192,22 +192,16 @@
                     </DockPanel>
                 </GroupBox>
                 <GroupBox Header="Description" Grid.Row="4">
-                    <xctk:RichTextBox Name="rtbDescription" />
-                    <!--<WindowsFormsHost ClipToBounds="True">
-                        <wf:RichTextBox x:Name="rtbDescription"/>
-                    </WindowsFormsHost>-->
+                    <TextBox Name="txtDescription" />
+                    <!--<xctk:RichTextBox Name="rtbDescription" />-->
                 </GroupBox>
                 <GroupBox Header="Analysis" Grid.Row="5">
-                    <xctk:RichTextBox Name="rtbAnalysis" />
-                    <!--<WindowsFormsHost>
-                        <wf:RichTextBox x:Name="rtbAnalysis"/>
-                    </WindowsFormsHost>-->
+                    <TextBox Name="txtAnalysis" />
+                    <!--<xctk:RichTextBox Name="rtbAnalysis" />-->
                 </GroupBox>
                 <GroupBox Header="Review" Grid.Row="6">
-                    <xctk:RichTextBox Name="rtbReview" />
-                    <!--<WindowsFormsHost>
-                        <wf:RichTextBox x:Name="rtbReview"/>
-                    </WindowsFormsHost>-->
+                    <TextBox Name="txtReview" />
+                    <!--<xctk:RichTextBox Name="rtbReview" />-->
                 </GroupBox>
             </Grid>
 

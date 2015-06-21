@@ -94,6 +94,7 @@ namespace Grind.Winforms.CSharp
         {
             Controllers.ReadPeople(out Globals.People);
             Controllers.ReadTasks(ref TaskList);
+            Globals.HashPeople();
             //cobExecutor.Items.AddRange(Globals.People.Select(x => x.name).ToArray());
             //cobReviewer.Items.AddRange(Globals.People.Select(x => x.name).ToArray());
             ttfrmControl.FillPeopleDropDown();

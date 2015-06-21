@@ -9,7 +9,7 @@ namespace Grind.Common
     public class Session : Token
     {
         public Person User { get; set; }
-        
+
 
     }
     public class Token
@@ -23,6 +23,7 @@ namespace Grind.Common
         public Document document { get; set; }
         public string Message { get; set; }
         public string token { get; set; }
+        public string Error { get; set; }
     }
     public class RootPerson
     {
@@ -41,10 +42,10 @@ namespace Grind.Common
 
     public class TimeStamp : IEquatable<TimeStamp>
     {
-        public TimeStamp ()
-	{
+        public TimeStamp()
+        {
 
-	}
+        }
         public int id { get; set; }
         public DateTime created_at { get; set; }
         public DateTime updated_at { get; set; }
@@ -57,9 +58,9 @@ namespace Grind.Common
                 && updated_at.Equals(otherTimestamp.updated_at)
                 && created_at.Equals(otherTimestamp.created_at);
         }
-        public TimeStamp AsTimeStamp() 
+        public TimeStamp AsTimeStamp()
         {
-            return new TimeStamp { created_at=created_at,id=id,updated_at=updated_at };
+            return new TimeStamp { created_at = created_at, id = id, updated_at = updated_at };
         }
         public override bool Equals(object obj)
         {
@@ -181,18 +182,18 @@ namespace Grind.Common
             target_date = DateTime.Now.AddDays(1 * 7);
             collection_date = DateTime.Now.AddDays(2 * 7);
             closed_date = DateTime.Now.AddDays(3 * 7);
-            if (Globals.People.Count == 0)    Globals.People.Add(new Person { id = 0, name = "DummyUser", level = eLevel.Master });
+            if (Globals.People.Count == 0) Globals.People.Add(new Person { id = 0, name = "DummyUser", level = eLevel.Master });
             developer_id = Globals.People.First().id;
             reviewer_id = Globals.People.First().id;
             bug_type = eBugType.Others;
             is_bug = true;
         }
 
-        public TaskListItem AsTaskListItem() 
+        public TaskListItem AsTaskListItem()
         {
             var type = typeof(TaskListItem);
             var instance = Activator.CreateInstance(type);
-            
+
             PropertyInfo[] properties = type.GetProperties();
             foreach (var property in properties)
                 if (property.CanWrite) property.SetValue(instance, property.GetValue(this, null), null);
@@ -230,7 +231,8 @@ namespace Grind.Common
         public int receiver_id { get; set; }
         public int parent_message_id { get; set; }
         public string messagetext { get; set; }
-        public List<WS_Message> messages { get; set; }
+        public List<WS_DisplayMessage> messages { get; set; }
+        public List<WS_User> users { get; set; }
 
     }
 
@@ -244,25 +246,46 @@ namespace Grind.Common
                 if (X != null)
                     return X.name;
                 else
-                    return "DummyUser";
+                    return "UnknownUser(id=" + this.sender_id.ToString() + ")" ;
             }
         }
 
-        public FlowDocument flow_message
+        public string receiver_name
         {
             get
             {
-                if (this.sender_id == 0)
-                {
-                    FlowDocument FD = new FlowDocument();
-                    FD.Blocks.Add(new Paragraph(new Run(this.messagetext)));
-                    return FD;
-                }
+                Person X = Globals.People.Find(x => x.id == this.receiver_id);
+                if (X != null)
+                    return X.name;
                 else
-                    return this.messagetext.FlowDocumentFromBase64String();
+                    return "UnknownUser(id=" + this.receiver_id.ToString() + ")";
             }
         }
+        //public FlowDocument flow_message
+        //{
+        //    get
+        //    {
+        //        if (this.sender_id == 0)
+        //        {
+        //            FlowDocument FD = new FlowDocument();
+        //            FD.Blocks.Add(new Paragraph(new Run(this.messagetext)));
+        //            return FD;
+        //        }
+        //        else
+        //            return this.messagetext.FlowDocumentFromBase64String();
+        //    }
+        //}
     }
+
+
+    public class WS_User
+    {
+        public int ws_oid { get; set; }
+        public int person_id { get; set; }
+        public string person_name { get; set; }
+        public string person_trigram { get; set; }
+    }
+
     public enum Model
     {
         task = 0,
@@ -293,6 +316,18 @@ namespace Grind.Common
         Admin,
         User,
         Viewer
+    }
+    public enum eWsMessageType
+    {
+        PublicMsg,
+        PrivateMsg,
+        HistoryMsg,
+        ErrorMsg,
+        ServerMsg,
+        CloseMsg,
+        XMsg,
+        YMsg,
+        ZMsg
     }
     public enum RetCode
     {

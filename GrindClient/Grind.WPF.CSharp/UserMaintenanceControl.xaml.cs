@@ -104,6 +104,7 @@ namespace Grind.WPF.CSharp
         {
             Refreshed = false;
             Controllers.ReadPeople(out Globals.People);
+            Globals.HashPeople();
             lbPeople.ItemsSource = Globals.People.Select(x => x.name).ToList();
             //if (OldSelectedIndex > lbPeople.Items.Count-1)
             //    OldSelectedIndex = lbPeople.Items.Count - 1;

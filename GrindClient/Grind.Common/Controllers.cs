@@ -34,8 +34,8 @@ namespace Grind.Common
             rootObject.person = new Person { trigram = trigram, password = password };
             if (RestService.CreateObject(rootObject, RestService.rRestClient, "login", out RestService.rRestResponse) == RetCode.successful)
             {
-                Token token = JsonConvert.DeserializeObject<Token>(RestService.rRestResponse.Content);
-                Globals.Session.token = token.token;
+                Globals.Session.User = JsonConvert.DeserializeObject<Person>(RestService.rRestResponse.Content);
+                Globals.Session.token = Globals.Session.User.token;
                 return RetCode.successful;
             }
             else
@@ -84,9 +84,11 @@ namespace Grind.Common
                     {
 
                         people = JsonConvert.DeserializeObject<List<Person>>(rResponse.Content);
-                        if (lts.Except(Cache.PeopleTS).ToList().Count > 0)
+                        if (lts.Except(Cache.PeopleTS).ToList().Count > 0 || Cache.PeopleTS.Except(lts).ToList().Count>0)
                         {
-                            Cache.DeleteOldObjects<Person>(lts);
+                            Cache.DeleteOldObjects<Person>(lts.Except(Cache.PeopleTS).ToList());
+                            Cache.DeleteObjects<Person>(Cache.PeopleTS.Except(lts).ToList());
+                            cpeople = Cache.GetObjects<Person>();
                             Cache.AddObjects<Person>(people.Except(cpeople).ToList());
                         }
                         return RetCode.successful;

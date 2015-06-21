@@ -108,10 +108,9 @@ namespace Grind.WPF.CSharp
             //rtbAnalysis.Rtf = task.analysis;
             //rtbReview.Rtf = task.review;
 
-
-            rtbDescription.Text = task.description;
-            rtbAnalysis.Text = task.analysis;
-            rtbReview.Text = task.review;
+            txtDescription.Text = task.description;
+            txtAnalysis.Text = task.analysis;
+            txtReview.Text = task.review;
             UserChange = true;
         }
 
@@ -150,9 +149,9 @@ namespace Grind.WPF.CSharp
 
 
 
-            task.description = rtbDescription.Text;
-            task.analysis = rtbAnalysis.Text;
-            task.review = rtbReview.Text;
+            task.description = txtDescription.Text;
+            task.analysis = txtAnalysis.Text;
+            task.review = txtReview.Text;
 
             //task.description = rtbDescription.Rtf;
             //task.analysis = rtbAnalysis.Rtf;
@@ -165,9 +164,14 @@ namespace Grind.WPF.CSharp
             sldTaskStatus.IsEnabled = true;
             txtName.IsReadOnly = false;
             txtTitle.IsReadOnly = false;
-            rtbAnalysis.IsReadOnly = false;
-            rtbDescription.IsReadOnly = false;
-            rtbReview.IsReadOnly = false;
+            //rtbAnalysis.IsReadOnly = false;
+            //rtbDescription.IsReadOnly = false;
+            //rtbReview.IsReadOnly = false;
+            txtAnalysis.IsReadOnly = false;
+            txtDescription.IsReadOnly = false;
+            txtReview.IsReadOnly = false;
+
+
             //rtbAnalysis.ReadOnly = false;
             //rtbDescription.ReadOnly = false;
             //rtbReview.ReadOnly = false;
@@ -179,9 +183,12 @@ namespace Grind.WPF.CSharp
             sldTaskStatus.IsEnabled = false;
             txtName.IsReadOnly = true;
             txtTitle.IsReadOnly = true;
-            rtbAnalysis.IsReadOnly = true;
-            rtbDescription.IsReadOnly = true;
-            rtbReview.IsReadOnly = true;
+            //rtbAnalysis.IsReadOnly = true;
+            //rtbDescription.IsReadOnly = true;
+            //rtbReview.IsReadOnly = true;
+            txtAnalysis.IsReadOnly = true;
+            txtDescription.IsReadOnly = true;
+            txtReview.IsReadOnly = true;
             //rtbAnalysis.ReadOnly = true;
             //rtbDescription.ReadOnly = true;
             //rtbReview.ReadOnly = true;

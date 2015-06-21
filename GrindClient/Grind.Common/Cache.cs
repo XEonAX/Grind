@@ -408,6 +408,25 @@ namespace Grind.Common
                 mytransaction.Commit();
             }
         }
+        public static void DeleteObjects<T>(List<TimeStamp> latestTimestamps)
+        {
+            string tablename = typeof(T).Name.Pluralize().ToLower();
+            using (SQLiteTransaction mytransaction = grindDBConnection.BeginTransaction())
+            {
+                using (SQLiteCommand mycommand = new SQLiteCommand(grindDBConnection))
+                {
+                    mycommand.CommandText = @"DELETE FROM [" + tablename + "] WHERE [id] = @id";
+                    mycommand.Parameters.Add("@id", DbType.Int32);
+
+                    foreach (TimeStamp item in latestTimestamps)
+                    {
+                        mycommand.Parameters["@id"].Value = item.id;
+                        mycommand.ExecuteNonQuery();
+                    }
+                }
+                mytransaction.Commit();
+            }
+        }
 
 
     }

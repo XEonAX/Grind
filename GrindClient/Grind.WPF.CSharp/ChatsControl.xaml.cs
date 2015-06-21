@@ -1,10 +1,12 @@
 ﻿using Grind.Common;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -29,6 +31,86 @@ namespace Grind.WPF.CSharp
             this.InitializeComponent();
         }
 
+        Table msgTable;
+        TableRowGroup TX;
+        HashSet<string> Targets = new HashSet<string>();
+        string tempname;
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            //rtbMessages.Document.Blocks.Add(new Paragraph());
+            msgTable = new Table();
+            rtbMessages.Document.Blocks.Add(msgTable);
+            msgTable.CellSpacing = 10;
+            msgTable.Background = Brushes.White;
+            msgTable.RowGroups.Add(new TableRowGroup());
+            TX = msgTable.RowGroups[0];
+        }
+
+        void PrintMessage(DateTime TimeStamp, string Name, string Message, eWsMessageType MsgType)
+        {
+
+            rtbMessages.WPFUIize(() =>
+                {
+                    TableRow msgStartRow = new TableRow();
+                    TableRow msgContentRow = new TableRow();
+
+
+                    //TableCell nameCell = new TableCell(new Paragraph(new Run(Name)));
+                    TableCell TimestampAndNameCell = new TableCell(new Paragraph(new Run("[" + TimeStamp.ToString() + "]<" + Name + ">")));
+                    TableCell msgCell = new TableCell(new Paragraph(new Run(Message)));
+                    //msgCell.ColumnSpan = 2;
+                    switch (MsgType)
+                    {
+                        case eWsMessageType.PublicMsg:
+                            TimestampAndNameCell.Foreground = Brushes.CadetBlue;
+                            break;
+                        case eWsMessageType.PrivateMsg:
+                            TimestampAndNameCell.Foreground = Brushes.Chocolate;
+                            msgStartRow.Background = Brushes.Honeydew;
+                            msgContentRow.Background = Brushes.Honeydew;
+                            TimestampAndNameCell.BorderThickness = new Thickness(1);
+                            TimestampAndNameCell.BorderBrush = Brushes.Violet;
+                            msgCell.BorderThickness = new Thickness(1);
+                            msgCell.BorderBrush = Brushes.Violet;
+                            
+                            break;
+                        case eWsMessageType.HistoryMsg:
+                            TimestampAndNameCell.Foreground = Brushes.DarkGray;
+                            msgCell.Foreground = Brushes.Gray;
+                            msgStartRow.Background = Brushes.Linen;
+                            msgContentRow.Background = Brushes.Linen;
+                            msgStartRow.FontSize -= 1;
+                            msgContentRow.FontSize -= 1;
+                            break;
+                        case eWsMessageType.ErrorMsg:
+                            TimestampAndNameCell.Foreground = Brushes.DarkRed;
+                            msgCell.Foreground = Brushes.Red;
+                            break;
+                        case eWsMessageType.ServerMsg:
+                            TimestampAndNameCell.Foreground = Brushes.CadetBlue;
+                            break;
+                        case eWsMessageType.XMsg:
+                            break;
+                        case eWsMessageType.YMsg:
+                            break;
+                        case eWsMessageType.ZMsg:
+                            break;
+                        default:
+                            break;
+                    }
+                    //msgStartRow.Cells.Add(nameCell);
+                    msgStartRow.Cells.Add(TimestampAndNameCell);
+                    msgContentRow.Cells.Add(msgCell);
+
+                    TX.Rows.Add(msgStartRow);
+                    TX.Rows.Add(msgContentRow);
+                    rtbMessages.ScrollToEnd();
+                });
+
+
+
+        }
+
 
         private void btnCon_Click(object sender, RoutedEventArgs e)
         {
@@ -47,116 +129,135 @@ namespace Grind.WPF.CSharp
         }
         void OnMessage(object sender, MessageEventArgs e)
         {
-            WS_DisplayMessage X = new WS_DisplayMessage();
-            rtbMessages.WPFUIize(() =>
+            WS_DisplayMessage wsMsg = JsonConvert.DeserializeObject<WS_DisplayMessage>(e.Data);
+            if (wsMsg.messages != null)
             {
-                rtbMessages.Document.Blocks.Add(new Paragraph(new Run("Zango")));
-                Table table1 = new Table();
-                // ...and add it to the FlowDocument Blocks collection.
-                rtbMessages.Document.Blocks.Add(table1);
-
-
-                // Set some global formatting properties for the table.
-                table1.CellSpacing = 10;
-                table1.Background = Brushes.White;
-                table1.Columns.Add(new TableColumn());
-                table1.Columns[0].Width = new GridLength(100, GridUnitType.Pixel);
-                table1.Columns.Add(new TableColumn());
-                table1.Columns[1].Width = new GridLength(1, GridUnitType.Auto);
-
-                // = new BindingList<WS_DisplayMessage>();// = (BindingList<WS_DisplayMessage>)lbMessages.ItemsSource;// = new BindingList<WS_DisplayMessage>();
-                if (e.Data.StartsWith(@"["))
+                foreach (WS_DisplayMessage Msg in wsMsg.messages)
                 {
-                    List<WS_DisplayMessage> LS = JsonConvert.DeserializeObject<List<WS_DisplayMessage>>(e.Data);
-                    foreach (WS_DisplayMessage item in LS)
-                    {
-                        TableRowGroupCollection TRC = tableMessages.RowGroups;
-                        table1.RowGroups.Add(new TableRowGroup());
-                        TableRowGroup TX = table1.RowGroups[0];
-                        TableRow TR1 = new TableRow();
-                        TableRow TR2 = new TableRow();
-                        
-
-                        TableCell nameCell = new TableCell(new Paragraph(new Run(item.sender_name)));
-                        TableCell timestampCell = new TableCell(new Paragraph(new Run(item.created_at.ToString())));
-                        TableCell msgCell = new TableCell((Paragraph)XamlReader.Parse(XamlWriter.Save(item.flow_message.Blocks.FirstBlock)));
-                        //msgCell.Blocks.AddRange(item.flow_message.Blocks);
-                        msgCell.RowSpan = 2;
-
-                        TR1.Cells.Add(nameCell);
-                        TR1.Cells.Add(msgCell);
-                        TR2.Cells.Add(timestampCell);
-                        TX.Rows.Add(TR1);
-                        TX.Rows.Add(TR2);
-                    }
+                    PrintMessage(Msg.created_at, Msg.sender_name, Msg.messagetext, eWsMessageType.HistoryMsg);
                 }
-                else
-                    //if (LS == null)
-                    {
-                        //LS = new BindingList<WS_DisplayMessage>();
-                        X = JsonConvert.DeserializeObject<WS_DisplayMessage>(e.Data);
-                        TableRowGroupCollection TRC = tableMessages.RowGroups;
-                        TableRowGroup TX = new TableRowGroup();
-                        TableRow TR1 = new TableRow();
-                        TableRow TR2 = new TableRow();
-                        TX.Rows.Add(TR1);
-                        TX.Rows.Add(TR2);
-                        TableCell nameCell = new TableCell(new Paragraph(new Run(X.sender_name)));
-                        TableCell tsCell = new TableCell(new Paragraph(new Run(X.created_at.ToLongDateString())));
-                        TableCell msgCell = new TableCell();
-                        if (X.sender_id != 0)
-                            msgCell.Blocks.AddRange(X.flow_message.Blocks);
-                        else
-                            msgCell.Blocks.Add(new Paragraph(new Run(X.messagetext)));
-                        msgCell.RowSpan = 2;
-                        TR1.Cells.Add(nameCell);
-                        TR1.Cells.Add(msgCell);
-                        TR2.Cells.Add(tsCell);
-                        //LS.Add(X);
-                    }
-                    //else
-                    //{
-                    //    X = JsonConvert.DeserializeObject<WS_DisplayMessage>(e.Data);
-                    //    TableRowCollection TRC = new TableRowCollection();
-                    //    TableRow TR1 = new TableRow();
-                    //    TableRow TR2 = new TableRow();
-                    //    TRC.Add(TR1);
-                    //    TRC.Add(TR2);
-                    //    TableCell nameCell = new TableCell(new Paragraph(new Run(item.sender_name)));
-                    //    TableCell tsCell = new TableCell(new Paragraph(new Run(item.created_at.ToLongDateString())));
-                    //    TableCell msgCell = new TableCell();
-                    //    msgCell.Blocks.AddRange(item.flow_message.Blocks);
-                    //    msgCell.RowSpan = 2;
-                    //    TR1.Cells.Add(nameCell);
-                    //    TR1.Cells.Add(msgCell);
-                    //    TR2.Cells.Add(tsCell);
-                    //    //LS.Add(X);
-                    //}
-                //lbMessages.ItemsSource = LS;
-            });
-            //if (X.users != null)
-            //{ 
-            
-            //}
+            }
+            else
+            {
+                if (wsMsg.sender_id == 0 && wsMsg.receiver_id == 0)
+                {
+                    PrintMessage(wsMsg.created_at, "Server", wsMsg.messagetext, eWsMessageType.ServerMsg);
+                }
+                else if (wsMsg.sender_id != 0 && wsMsg.receiver_id == 0)
+                {
+                    PrintMessage(wsMsg.created_at, wsMsg.sender_name, wsMsg.messagetext, eWsMessageType.PublicMsg);
+                }
+                else if (wsMsg.sender_id == 0 && wsMsg.receiver_id != 0)
+                {
+                    PrintMessage(wsMsg.created_at, "Server=>"+wsMsg.receiver_name, wsMsg.messagetext, eWsMessageType.PrivateMsg);
+                }
+                else if (wsMsg.sender_id != 0 && wsMsg.receiver_id != 0)
+                {
+                    PrintMessage(wsMsg.created_at, wsMsg.sender_name+"=>"+wsMsg.receiver_name, wsMsg.messagetext, eWsMessageType.PrivateMsg);
+                }
+            }
+            if (wsMsg.users != null)
+            {
+                lbOnlinePeople.WPFUIize(() => lbOnlinePeople.ItemsSource = wsMsg.users);
+            }
+
         }
         void OnClose(object sender, CloseEventArgs e)
         {
             Debug.Print("Close " + e.Reason);
+            try
+            {
+                JToken.Parse(e.Reason);
+                RootObject RO = JsonConvert.DeserializeObject<RootObject>(e.Reason);
+                if (RO.Error != null)
+                {
+                    PrintMessage(DateTime.Now, "Server", RO.Error, eWsMessageType.ErrorMsg);
+                }
+            }
+            catch (Exception Ex)
+            {
+
+            }
         }
         void OnError(object sender, WebSocketSharp.ErrorEventArgs e)
         {
             Debug.Print("Errored " + e.Message);
+            try
+            {
+                JToken.Parse(e.Message);
+                RootObject RO = JsonConvert.DeserializeObject<RootObject>(e.Message);
+                if (RO.Error != null)
+                {
+                    PrintMessage(DateTime.Now, "Server", RO.Error, eWsMessageType.ErrorMsg);
+                }
+            }
+            catch (Exception Ex)
+            {
+
+            }
+
+
         }
+
+
 
         private void btnSend_Click(object sender, RoutedEventArgs e)
         {
-
-            WebsocketService.Send(JsonConvert.SerializeObject(new WS_Message { sender_id = 1, messagetext = rtbMessage.Document.ToBase64String() }));
+            if (Targets.Count > 0)
+            {
+                tempname = "";
+                foreach (string item in Targets)
+                {
+                    tempname += Globals.TrigramToPersonMapper[item].name + Environment.NewLine;
+                }
+                mniTargets.Header = tempname.Trim();
+                ppSend.IsOpen = true;
+            }
+            else
+            {
+                WebsocketService.Send(JsonConvert.SerializeObject(new WS_Message { sender_id = Globals.Session.User.id, messagetext = txtMessage.Text }));
+                txtMessage.Text = "";
+            }
         }
 
         private void btnDis_Click(object sender, RoutedEventArgs e)
         {
             WebsocketService.Close();
+            lbOnlinePeople.ItemsSource = null;
+            btnSend.IsEnabled = false;
+            btnDisc.IsEnabled = false;
+        }
+
+        private void mbiSendMsg_Click(object sender, RoutedEventArgs e)
+        {
+        }
+
+        private void txtMessage_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            Targets.Clear();
+            //foreach (Match item in Regex.Matches(txtMessage.GetLineText(0), @"\B@[a-z0-9_-]+"))
+            foreach (Match item in Regex.Matches(txtMessage.GetLineText(0), @"(?<=@)[a-z0-9_-]+"))
+                if (item.Length >= 3)
+                    if (Globals.Trigrams.Contains(item.Value))
+                        Targets.Add(item.Value);
+        }
+
+        private void mniPersonalMsg_Click(object sender, RoutedEventArgs e)
+        {
+            if (Targets.Count > 0)
+            {
+                foreach (string item in Targets)
+                {
+                    WebsocketService.Send(JsonConvert.SerializeObject(new WS_Message { sender_id = Globals.Session.User.id, messagetext = txtMessage.Text, receiver_id = Globals.TrigramToPersonMapper[item].id }));
+                }
+            }
+            txtMessage.Text = "";
+        }
+
+        private void mniPublicMsg_Click(object sender, RoutedEventArgs e)
+        {
+            WebsocketService.Send(JsonConvert.SerializeObject(new WS_Message { sender_id = Globals.Session.User.id, messagetext = txtMessage.Text }));
+            txtMessage.Text = "";
         }
     }
 }

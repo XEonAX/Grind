@@ -6,43 +6,52 @@
 	mc:Ignorable="d"
 	x:Class="Grind.WPF.CSharp.ChatsControl"
 	x:Name="UserControl"
-	d:DesignWidth="592" d:DesignHeight="370">
+	d:DesignWidth="592" d:DesignHeight="370" Loaded="UserControl_Loaded">
 
-	<Grid x:Name="LayoutRoot">
-		<Grid>
-			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="2*"/>
-				<ColumnDefinition Width="3"/>
-				<ColumnDefinition Width="120"/>
-			</Grid.ColumnDefinitions>
-			<GridSplitter Grid.Column="1"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ResizeBehavior="PreviousAndNext" Background="#FF007ACC" />
-			<Grid HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" >
-				<Grid.RowDefinitions>
-					<RowDefinition Height="3*"/>
-					<RowDefinition Height="3"/>
-					<RowDefinition Height="100"/>
-				</Grid.RowDefinitions>
-				<GridSplitter HorizontalAlignment="Stretch"   Grid.Row="1" VerticalAlignment="Stretch" ResizeBehavior="PreviousAndNext" Background="#FF007ACC"  />
-				<Grid HorizontalAlignment="Stretch" Grid.Row="2" VerticalAlignment="Stretch" >
-					<Grid.ColumnDefinitions>
-						<ColumnDefinition Width="*" />
-						<ColumnDefinition Width="35"/>
-					</Grid.ColumnDefinitions>
-					<RichTextBox x:Name="rtbMessage"  AcceptsReturn="True" VerticalScrollBarVisibility="Auto" Grid.Column="0"  />
-					<Button x:Name="btnCon" Content="Conn." HorizontalAlignment="Stretch" VerticalAlignment="Top"  Grid.Column="1" Click="btnCon_Click"/>
-					<Button x:Name="btnSend" Content="Send" HorizontalAlignment="Stretch" VerticalAlignment="Center"  Grid.Column="1" Click="btnSend_Click"/>
-					<Button x:Name="btnDis" Content="Disc." HorizontalAlignment="Stretch" VerticalAlignment="Bottom"  Grid.Column="1" Click="btnDis_Click"/>
+    <Grid x:Name="LayoutRoot">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="3"/>
+                <ColumnDefinition Width="120"/>
+            </Grid.ColumnDefinitions>
+            <GridSplitter Grid.Column="1"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ResizeBehavior="PreviousAndNext" Background="#FF007ACC" />
+            <Grid HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="3*"/>
+                    <RowDefinition Height="3"/>
+                    <RowDefinition Height="100"/>
+                </Grid.RowDefinitions>
+                <GridSplitter HorizontalAlignment="Stretch"   Grid.Row="1" VerticalAlignment="Stretch" ResizeBehavior="PreviousAndNext" Background="#FF007ACC" ResizeDirection="Rows"  />
+                <Grid HorizontalAlignment="Stretch" Grid.Row="2" VerticalAlignment="Stretch" >
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="25"/>
+                    </Grid.RowDefinitions>
 
-				</Grid>
-                <RichTextBox x:Name="rtbMessages" >
+                    <TextBox x:Name="txtMessage"  AcceptsReturn="True" VerticalScrollBarVisibility="Auto" Grid.Row="0" TextChanged="txtMessage_TextChanged"  />
+                    <Button x:Name="btnConn" Grid.Row="1" HorizontalAlignment="Left" Content="Connect" Click="btnCon_Click" />
+                    <Button x:Name="btnSend" Grid.Row="1"  HorizontalAlignment="Center" Content="Send" Click="btnSend_Click">
+
+                    </Button>
+                    <Button x:Name="btnDisc" Grid.Row="1"  HorizontalAlignment="Right"  Content="Disconnect" Click="btnDis_Click" />
+                    <Popup x:Name="ppSend" PlacementTarget="{Binding ElementName=btnSend}" StaysOpen="False">
+                        <Grid Background="#FFE5E5E5">
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                            </Grid.RowDefinitions>
+                            <MenuItem x:Name="mniTargets" Grid.Row="0"/>
+                            <MenuItem/>
+                            <MenuItem x:Name="mniPersonalMsg" Grid.Row="1" Header="Send as Personal Message to above People" Click="mniPersonalMsg_Click"/>
+                            <MenuItem x:Name="mniPublicMsg"   Grid.Row="2" Header="Send as Public Message to Everyone" Click="mniPublicMsg_Click"/>
+                        </Grid>
+                    </Popup>
+                </Grid>
+                <RichTextBox x:Name="rtbMessages" IsReadOnly="True" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
                     <FlowDocument>
-                        <Table x:Name="tableMessages">
-                            <Table.Columns>
-                                <TableColumn x:Name="metaColumn" Width="100"/>
-                                <TableColumn x:Name="msgColumn" Width="*"/>
-                            </Table.Columns>    
-                        </Table>
-                        
                     </FlowDocument>
                 </RichTextBox>
                 <!--<ListBox x:Name="lbMessages" ItemTemplate="{DynamicResource DataTemplate1}" ScrollViewer.CanContentScroll="False">
@@ -67,17 +76,26 @@
 				
 				</ListBox>-->
 
-			</Grid>
-			<ListBox x:Name="lbOnlinePeople" Grid.Column="2" ItemTemplate="{DynamicResource DataTemplate1}" >
-				<ListBox.Resources>
-					<DataTemplate x:Key="DataTemplate1">
-						<WrapPanel>
-							<TextBlock Text="{Binding Name}" FontWeight="Bold"/>
-						</WrapPanel>
-					</DataTemplate>
-				</ListBox.Resources>
-			</ListBox>
+            </Grid>
+            <ListBox x:Name="lbOnlinePeople" Grid.Column="2" ItemTemplate="{DynamicResource DataTemplate1}" SelectionMode="Extended">
 
-		</Grid>
-	</Grid>
+                <ListBox.Resources>
+                    <DataTemplate x:Key="DataTemplate1">
+                        <WrapPanel d:DesignWidth="400" d:DesignHeight="190">
+                            <TextBlock Text="{Binding person_name}" FontWeight="Bold"/>
+                            <TextBlock Text=" (" />
+                            <TextBlock Text="{Binding person_trigram}"/>
+                            <TextBlock Text=")"/>
+                        </WrapPanel>
+                    </DataTemplate>
+                </ListBox.Resources>
+                <ListBox.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem x:Name="mbiSendMsg" Header="Send Message" Click="mbiSendMsg_Click"/>
+                    </ContextMenu>
+                </ListBox.ContextMenu>
+            </ListBox>
+
+        </Grid>
+    </Grid>
 </UserControl>

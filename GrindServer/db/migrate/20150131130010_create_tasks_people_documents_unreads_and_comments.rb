@@ -26,7 +26,7 @@ class CreateTasksPeopleDocumentsUnreadsAndComments < ActiveRecord::Migration
       t.date :target_date
       t.datetime :created_at
       t.datetime :updated_at
-    end
+      end
     create_table :people do |t|
       t.string :name
       t.string :trigram, :unique => true

@@ -53,7 +53,7 @@ class ExceptionHandling
 end
 
 def self.timestamp
-  Time.now.strftime('%H:%M:%S')
+  Time.now.strftime('%F %T')
 end
 
 # {Models}
@@ -191,7 +191,7 @@ EventMachine.run do
       person = Person.where(['trigram = ?', @JSON_params[:person][:trigram]]).first
       if person.password == @JSON_params[:person][:password] #compare the hash to the string; magic
         person.generate_token!
-        {token: person.token}.to_json # make sure you give hte person the token
+        Person.where(['trigram = ?', @JSON_params[:person][:trigram]]).select(:id,:name,:trigram,:active,:level,:internal_object_id,:unread_objects_count,:work_tasks_count,:review_tasks_count,:documents_count,:created_at,:updated_at,:token).first.to_json # make sure you give hte person the token
       else
          halt 403, {Error: "Invalid Credentials"}.to_json
         #tell the person they aren't logged in
@@ -200,7 +200,6 @@ EventMachine.run do
     
     def authenticate!
       @person = Person.where(['token = ?', @JSON_params[:token]]).first
-      puts "#{@person.name} authenticated!"
       halt 403, {Error: "Invalid Token"}.to_json unless @person
     end
 
@@ -210,7 +209,7 @@ EventMachine.run do
     end
 
     get '/' do
-      'Hola World!'
+      'Holas Worldus!'
     end
 
     # get '/tasks' do
@@ -231,7 +230,7 @@ EventMachine.run do
     end
 
     get '/people' do
-      Person.all.to_json
+      Person.select(:id,:name,:trigram,:active,:level,:internal_object_id,:unread_objects_count,:work_tasks_count,:review_tasks_count,:documents_count,:created_at,:updated_at).all.to_json
     end
 
     get '/timestamps/person' do
@@ -249,7 +248,7 @@ EventMachine.run do
     end
 
     get '/person/:id' do
-      Person.where(['id = ?', params[:id]]).first.to_json
+      Person.where(['id = ?', params[:id]]).select(:id,:name,:trigram,:active,:level,:internal_object_id,:unread_objects_count,:work_tasks_count,:review_tasks_count,:documents_count,:created_at,:updated_at).first.to_json
     end
 
     put '/person/:id' do
@@ -370,14 +369,23 @@ EventMachine.run do
                              person_trigram: hash[:person_trigram]}
                      end
       # Send last 10 messages to the newly connected user
-      websock.send Message.where({ receiver_id: [0, person.id]}).last(10).to_json
+      websock.send ({
+        'id' => 0,
+        'sender_id' => 0,
+        'messagetext' => "#{person.name} joined. [[#{onlinepeople.length}]] users in chat",
+        'users' => onlinepeople,
+        'metadata' => person.trigram,
+        'messages' => Message.where({ receiver_id: [0, person.id]}).last(10),
+        'created_at' => GrindServer.timestamp,
+      }.to_json)
       
       GrindServer.realtime_channel.push ({
         'id' => 0,
         'sender_id' => 0,
-        'messagetext' => "#{person.name} joined. <$<^<#<#{onlinepeople.length}>#>^>$> users in chat",
+        'messagetext' => "#{person.name} joined. [[#{onlinepeople.length}]] users in chat",
         'users' => onlinepeople,
         'metadata' => person.trigram,
+        'created_at' => GrindServer.timestamp,
         }.to_json)
 
       else
@@ -392,7 +400,13 @@ EventMachine.run do
       @message.sender_id = GrindServer.online_people.find{ |onli| onli[:ws_oid] == websock.object_id }[:person_id]
       @message.save
       # message = JSON.parse(msg).merge('timestamp' => GrindServer.timestamp).to_json
-      GrindServer.realtime_channel.push @message.to_json
+      if @message.receiver_id == 0
+        GrindServer.realtime_channel.push @message.to_json
+      else
+        receiver=GrindServer.online_people.find{ |onli| onli[:person_id]==@message.receiver_id}
+        receiver[:websocket].send @message.to_json unless receiver.nil?
+        websock.send @message.to_json
+      end
       # # append the message at the end of the queue
       # @messages << message
       # @messages.shift if @messages.length > 10
@@ -419,9 +433,10 @@ EventMachine.run do
         GrindServer.realtime_channel.push ({
           'id' => 0,
           'sender_id' => 0,
-          'messagetext' => "A user left. <$<^<#<#{onlinepeople.length}>#>^>$> users in chat",
+          'messagetext' => "A user left. [[#{onlinepeople.length}]] users in chat",
           'users' => onlinepeople,
           'metadata' => "",
+          'created_at' => GrindServer.timestamp,
           }.to_json)
       end
     end
