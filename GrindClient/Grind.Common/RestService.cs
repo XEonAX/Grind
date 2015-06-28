@@ -8,41 +8,75 @@ using System.Threading.Tasks;
 
 namespace Grind.Common
 {
-    public static class RestService
+    public class RestService
     {
-        public static IRestClient rRestClient;
-        public static IRestResponse rRestResponse;
-        public static Action<IRestResponse> responseAction;
-        public static void Init(string baseUrl, Action<IRestResponse> ResponseAction)
+        public IRestClient rRestClient;
+        public IRestResponse rRestResponse;
+        private string RestServiceEndpointUrl;
+        private Callbacker Callbacker;
+        public Person User;
+
+        public RestService(string RestServiceEndpointUrl)
         {
-            rRestClient = new RestClient(baseUrl);
-            responseAction = ResponseAction;
+            // TODO: Complete member initialization
+            this.RestServiceEndpointUrl = RestServiceEndpointUrl;
+        }
+
+        public RestService(string RestServiceEndpointUrl, Callbacker Callbacker)
+        {
+            // TODO: Complete member initialization
+            rRestClient = new RestClient(RestServiceEndpointUrl);
+            this.Callbacker = Callbacker;
+        }
+
+        public RestService(string RestServiceEndpointUrl, Common.Callbacker Callbacker, Person User)
+        {
+            // TODO: Complete member initialization
+            this.RestServiceEndpointUrl = RestServiceEndpointUrl;
+            this.Callbacker = Callbacker;
+            this.User = User;
+            rRestClient = new RestClient(RestServiceEndpointUrl);
+        }
+
+        public RetCode ServerLogin(string trigram, string password)
+        {
+            RootObject rootObject = new RootObject { person = new Person { trigram = trigram, password = password } };
+            rootObject.person = new Person { trigram = trigram, password = password };
+            if (CreateObject(rootObject, rRestClient, "login", out rRestResponse) == RetCode.successful)
+            {
+                User = JsonConvert.DeserializeObject<Person>(rRestResponse.Content);
+                return RetCode.successful;
+            }
+            else
+            {
+                Callbacker.callback(eAction.RestError, rRestResponse.StatusCode, rRestResponse.ErrorMessage, rRestResponse.Content);
+                return RetCode.unsuccessful;
+            }
         }
 
         #region Base Object CRUD Methods
-        public static RetCode CreateObject(RootObject rootObject, IRestClient rClient, string requestResource, out IRestResponse rResponse)
+        public RetCode CreateObject(RootObject rootObject, IRestClient rClient, string requestResource, out IRestResponse rResponse)
         {
             RestRequest rRequest = new RestRequest();
             rRequest.DateFormat = "yyyy-MM-ddTHH:mm:ss.sss";
             rRequest.Resource = requestResource;
             rRequest.Method = Method.POST;
             rRequest.RequestFormat = DataFormat.Json;
-            if(requestResource!="login") rootObject.Authorize();
+            if (requestResource != "login") Authorize(rootObject);
             rRequest.AddBody(rootObject);
             rResponse = rClient.Execute(rRequest);
             if (rResponse.StatusCode == System.Net.HttpStatusCode.OK)
             {
-                Helper.SetMessage("Creation Successful.");
+                if (requestResource != "login") Callbacker.callback(eAction.Message, "Creation Successful.");
                 return RetCode.successful;
             }
             else
             {
-                Helper.SetState(rResponse.ErrorMessage + " " + rRestResponse.StatusCode.ToString());
-                responseAction(rResponse);
+                Callbacker.callback(eAction.RestError, rResponse.StatusCode, rResponse.ErrorMessage, rResponse.Content);
                 return RetCode.unsuccessful;
             }
         }
-        public static RetCode ReadObject(IRestClient rClient, string requestResource, string requestResourceId, out IRestResponse rResponse)
+        public RetCode ReadObject(IRestClient rClient, string requestResource, string requestResourceId, out IRestResponse rResponse)
         {
             RestRequest rRequest = new RestRequest();
             rRequest.Resource = requestResource;// "task/{id}";
@@ -53,18 +87,17 @@ namespace Grind.Common
             rResponse = rClient.Execute(rRequest);
             if (rResponse.StatusCode == System.Net.HttpStatusCode.OK)
             {
-                Helper.SetState("Online");
+                Callbacker.callback(eAction.State,"Online");
                 return RetCode.successful;
             }
             else
             {
-                Helper.SetState(rResponse.ErrorMessage);
-                responseAction(rResponse);
+                Callbacker.callback(eAction.RestError,rResponse.StatusCode,rResponse.ErrorMessage,rResponse.Content);
                 return RetCode.unsuccessful;
             }
 
         }
-        public static RetCode UpdateObject(RootObject rootObject, IRestClient rClient, string requestResource, string requestResourceId, out IRestResponse rResponse)
+        public RetCode UpdateObject(RootObject rootObject, IRestClient rClient, string requestResource, string requestResourceId, out IRestResponse rResponse)
         {
             RestRequest rRequest = new RestRequest();
             rRequest.DateFormat = "yyyy-MM-ddTHH:mm:ss.sss";
@@ -72,47 +105,44 @@ namespace Grind.Common
             rRequest.Method = Method.PUT;
             rRequest.AddUrlSegment("id", requestResourceId);
             rRequest.RequestFormat = DataFormat.Json;
-            rootObject.Authorize();
+            Authorize(rootObject);
             rRequest.AddBody(rootObject);
             rResponse = rClient.Execute(rRequest);
 
             if (rResponse.StatusCode == System.Net.HttpStatusCode.OK)
             {
-                Helper.SetState("Update Successful");
+                Callbacker.callback(eAction.State,"Update Successful");
                 return RetCode.successful;
             }
             else
             {
-                Helper.SetState(rResponse.ErrorMessage);
-                responseAction(rResponse);
+                Callbacker.callback(eAction.RestError, rResponse.StatusCode, rResponse.ErrorMessage, rResponse.Content);
                 return RetCode.unsuccessful;
             }
         }
-        public static RetCode DeleteObject(IRestClient rClient, string requestResource, string requestResourceId, out IRestResponse rResponse)
+        public RetCode DeleteObject(IRestClient rClient, string requestResource, string requestResourceId, out IRestResponse rResponse)
         {
             RestRequest rRequest = new RestRequest();
             rRequest.Resource = requestResource;// "task/{id}";
             rRequest.DateFormat = "yyyy-MM-ddTHH:mm:sssssZ";
             rRequest.AddUrlSegment("id", requestResourceId);
             rRequest.Method = Method.DELETE;
-            rRequest.AddBody(new RootObject().Authorize());
+            rRequest.AddBody(Authorize(new RootObject()));
             rResponse = rClient.Execute(rRequest);
-
-            Globals.rootObject = JsonConvert.DeserializeObject<RootObject>(rResponse.Content);
             if (rResponse.StatusCode == System.Net.HttpStatusCode.OK)
             {
-                Helper.SetState("Delete Successful");
+                Callbacker.callback(eAction.State,"Delete Successful");
                 return RetCode.successful;
             }
             else
             {
-                Helper.SetState(rResponse.ErrorMessage);
+                Callbacker.callback(eAction.RestError, rResponse.StatusCode, rResponse.ErrorMessage, rResponse.Content);
                 return RetCode.unsuccessful;
             }
         }
         #endregion
 
-        public static string GetResponseError()
+        public string GetResponseError()
         {
             String Error = "";
             if (rRestResponse != null)
@@ -125,10 +155,20 @@ namespace Grind.Common
                         Error = RO.Message;
                     }
                     else
-                        Error = (rRestResponse.StatusCode.ToString() + RestService.rRestResponse.ErrorMessage).Trim();
+                        Error = (rRestResponse.StatusCode.ToString() + rRestResponse.ErrorMessage).Trim();
                 }
             }
             return Error;
+        }
+        public RootObject Authorize(RootObject RO)
+        {
+            if (User.token != null)
+                RO.token = new Token { token = User.token };
+            else
+            {
+                Callbacker.callback(eAction.Error, "Not LoggedIn");
+            }
+            return RO;
         }
     }
 }

@@ -26,12 +26,12 @@ namespace Grind.Winforms.CSharp
             cobExecutor.Items.Clear();
             cobExecutor.Items.Add("Executor");
             cobExecutor.Items.Add("-------------------------");
-            cobExecutor.Items.AddRange(Globals.People.Select(x => x.name).ToArray());
+            cobExecutor.Items.AddRange(Session.People.Select(x => x.name).ToArray());
 
             cobReviewer.Items.Clear();
             cobReviewer.Items.Add("Reviewer");
             cobReviewer.Items.Add("-------------------------");
-            cobReviewer.Items.AddRange(Globals.People.Select(x => x.name).ToArray());
+            cobReviewer.Items.AddRange(Session.People.Select(x => x.name).ToArray());
         }
 
         public void FillFormfromTask(Task task)
@@ -76,8 +76,8 @@ namespace Grind.Winforms.CSharp
             }
             trbTaskStatus.Enabled = true;
             trbTaskStatus.Value = (int)task.task_status;
-            cobExecutor.Text = Globals.People.Find(x => x.id == task.developer_id).name;
-            cobReviewer.Text = Globals.People.Find(x => x.id == task.reviewer_id).name;
+            cobExecutor.Text = Session.People.Find(x => x.id == task.developer_id).name;
+            cobReviewer.Text = Session.People.Find(x => x.id == task.reviewer_id).name;
             rtbDescription.Rtf = (string)task.description;
             rtbAnalysis.Rtf = (string)task.analysis;
             rtbReview.Rtf = (string)task.review;
@@ -104,8 +104,8 @@ namespace Grind.Winforms.CSharp
                 task.bug_type = eBugType.Others;
             task.task_status = (eTaskStatus)trbTaskStatus.Value;
             task.approved = cbApproved.Checked;
-            task.developer_id = Globals.People.Find(x => x.name == cobExecutor.SelectedItem.ToString()).id;
-            task.reviewer_id = Globals.People.Find(x => x.name == cobReviewer.SelectedItem.ToString()).id;
+            task.developer_id = Session.People.Find(x => x.name == cobExecutor.SelectedItem.ToString()).id;
+            task.reviewer_id = Session.People.Find(x => x.name == cobReviewer.SelectedItem.ToString()).id;
             task.open_date = dtpOpen.Value.Date.Add(TimeZoneInfo.Local.BaseUtcOffset);
             task.analysis_date = dtpAnalysis.Value.Date.Add(TimeZoneInfo.Local.BaseUtcOffset);
             task.review_date = dtpReview.Value.Date.Add(TimeZoneInfo.Local.BaseUtcOffset);

@@ -21,7 +21,7 @@ namespace Grind.Winforms.CSharp
         {
             if (Refreshed)
             {
-                person = Globals.People[lbPeople.SelectedIndex];
+                person = Session.People[lbPeople.SelectedIndex];
                 FillForm(person);
             }
         }
@@ -42,9 +42,9 @@ namespace Grind.Winforms.CSharp
         private void btnRefresh_Click(object sender, EventArgs e)
         {
             Refreshed = false;
-            Controllers.ReadPeople(out Globals.People);
-            Globals.HashPeople();
-            lbPeople.DataSource = Globals.People.Select(x => x.name).ToList();
+            Controllers.ReadPeople(out Session.People);
+            Session.HashPeople();
+            lbPeople.DataSource = Session.People.Select(x => x.name).ToList();
             //if (OldSelectedIndex > lbPeople.Items.Count-1)
             //    OldSelectedIndex = lbPeople.Items.Count - 1;
             //else if ((OldSelectedIndex < lbPeople.Items.Count-1) && (OldSelectedIndex == -1))
@@ -87,7 +87,7 @@ namespace Grind.Winforms.CSharp
             int OldSelectedIndex = lbPeople.SelectedIndex;
             if (lbPeople.SelectedIndex >= 0)
             {
-                person = Globals.People[lbPeople.SelectedIndex];
+                person = Session.People[lbPeople.SelectedIndex];
                 Controllers.DeletePerson(person);
             }
             btnRefresh_Click(null, EventArgs.Empty);

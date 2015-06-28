@@ -1,7 +1,7 @@
-J:\Root\Grind\GrindClient\Grind.WPF.CSharp\bin\Debug\Grind.WPF.CSharp.exe.config
-J:\Root\Grind\GrindClient\Grind.WPF.CSharp\obj\Debug\Grind.WPF.CSharp.exe
-J:\Root\Grind\GrindClient\Grind.WPF.CSharp\obj\Debug\Grind.WPF.CSharp.pdb
 J:\Root\Grind\GrindClient\Grind.WPF.CSharp\bin\Debug\Editor.html
+J:\Root\Grind\GrindClient\Grind.WPF.CSharp\bin\Debug\Grind.WPF.CSharp.exe.config
+J:\Root\Grind\GrindClient\Grind.WPF.CSharp\bin\Debug\Grind.WPF.CSharp.exe.manifest
+J:\Root\Grind\GrindClient\Grind.WPF.CSharp\bin\Debug\Grind.WPF.CSharp.application
 J:\Root\Grind\GrindClient\Grind.WPF.CSharp\bin\Debug\Grind.WPF.CSharp.exe
 J:\Root\Grind\GrindClient\Grind.WPF.CSharp\bin\Debug\Grind.WPF.CSharp.pdb
 J:\Root\Grind\GrindClient\Grind.WPF.CSharp\bin\Debug\Grind.Common.dll
@@ -36,3 +36,7 @@ J:\Root\Grind\GrindClient\Grind.WPF.CSharp\obj\Debug\UserMaintenanceControl.baml
 J:\Root\Grind\GrindClient\Grind.WPF.CSharp\obj\Debug\Grind.WPF.CSharp.g.resources
 J:\Root\Grind\GrindClient\Grind.WPF.CSharp\obj\Debug\Grind.WPF.CSharp.Properties.Resources.resources
 J:\Root\Grind\GrindClient\Grind.WPF.CSharp\obj\Debug\Grind.WPF.CSharp.csproj.GenerateResource.Cache
+J:\Root\Grind\GrindClient\Grind.WPF.CSharp\obj\Debug\Grind.WPF.CSharp.exe.manifest
+J:\Root\Grind\GrindClient\Grind.WPF.CSharp\obj\Debug\Grind.WPF.CSharp.application
+J:\Root\Grind\GrindClient\Grind.WPF.CSharp\obj\Debug\Grind.WPF.CSharp.exe
+J:\Root\Grind\GrindClient\Grind.WPF.CSharp\obj\Debug\Grind.WPF.CSharp.pdb

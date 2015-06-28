@@ -14,6 +14,7 @@ using System.Linq;
 using Grind.Common;
 using System.IO;
 using System.Windows.Markup;
+using System.Collections.ObjectModel;
 namespace Grind.WPF.CSharp
 {
     /// <summary>
@@ -25,9 +26,13 @@ namespace Grind.WPF.CSharp
         {
             this.InitializeComponent();
         }
-
+        Session Session;
         bool UserChange;
-        public void FillPeopleDropDown(List<Person> People)
+        internal void SetSession(Session session)
+        {
+            Session = session;
+        }
+        public void FillPeopleDropDown(ObservableCollection<Person> People)
         {
             cbExecutor.Items.Clear();
             cbExecutor.Items.Add("Executor");
@@ -50,10 +55,7 @@ namespace Grind.WPF.CSharp
         public void FillFormfromTask(Task task)
         {
             if (task == null)
-            {
-
                 return;
-            }
             UserChange = false;
             txtName.Text = task.name;
             txtTitle.Text = task.title;
@@ -71,6 +73,7 @@ namespace Grind.WPF.CSharp
             dtpPromotion.SelectedDate = task.promotion_date.Date;
             dtpCollection.SelectedDate = task.collection_date.Date;
             dtpClosed.SelectedDate = task.closed_date.Date;
+            dtpTargetDate.SelectedDate = task.target_date.Date;
             if (task.is_bug)
                 rbBug.IsChecked = true;
             else
@@ -94,8 +97,8 @@ namespace Grind.WPF.CSharp
             }
             sldTaskStatus.IsEnabled = true;
             sldTaskStatus.Value = (int)task.task_status;
-            cbExecutor.Text = Globals.People.Find(x => x.id == task.developer_id).name;
-            cbReviewer.Text = Globals.People.Find(x => x.id == task.reviewer_id).name;
+            cbExecutor.Text = Globals.GetPersonNameFromId(task.developer_id);
+            cbReviewer.Text = Globals.GetPersonNameFromId(task.reviewer_id);
             //if (task.description == null) task.description = "";
             //if (task.analysis == null) task.analysis = new object();
             //if (task.review == null) task.review = new object();
@@ -134,8 +137,8 @@ namespace Grind.WPF.CSharp
                 task.bug_type = eBugType.Others;
             task.task_status = (eTaskStatus)sldTaskStatus.Value;
             task.approved = (bool)chkApproval.IsChecked;
-            task.developer_id = Globals.People.Find(x => x.name == cbExecutor.SelectedItem.ToString()).id;
-            task.reviewer_id = Globals.People.Find(x => x.name == cbReviewer.SelectedItem.ToString()).id;
+            task.developer_id = Globals.GetPersonIdFromName(cbExecutor.SelectedItem.ToString());
+            task.reviewer_id = Globals.GetPersonIdFromName(cbReviewer.SelectedItem.ToString());
             task.open_date = ((DateTime)dtpOpen.SelectedDate).Date.Add(TimeZoneInfo.Local.BaseUtcOffset);
             task.analysis_date = ((DateTime)dtpAnalysis.SelectedDate).Date.Add(TimeZoneInfo.Local.BaseUtcOffset);
             task.review_date = ((DateTime)dtpReview.SelectedDate).Date.Add(TimeZoneInfo.Local.BaseUtcOffset);
@@ -143,6 +146,7 @@ namespace Grind.WPF.CSharp
             task.promotion_date = ((DateTime)dtpPromotion.SelectedDate).Date.Add(TimeZoneInfo.Local.BaseUtcOffset);
             task.collection_date = ((DateTime)dtpCollection.SelectedDate).Date.Add(TimeZoneInfo.Local.BaseUtcOffset);
             task.closed_date = ((DateTime)dtpClosed.SelectedDate).Date.Add(TimeZoneInfo.Local.BaseUtcOffset);
+            task.target_date = ((DateTime)dtpTargetDate.SelectedDate).Date.Add(TimeZoneInfo.Local.BaseUtcOffset);
             //task.description = Globals.WPFRichTextToXamlPackage(rtbDescription.Document);
             //task.analysis = Globals.WPFRichTextToXamlPackage(rtbAnalysis.Document);
             //task.review = Globals.WPFRichTextToXamlPackage(rtbReview.Document);
@@ -161,7 +165,7 @@ namespace Grind.WPF.CSharp
         public void EnableForm()
         {
             gbTaskOptions.IsEnabled = true;
-            sldTaskStatus.IsEnabled = true;
+            gbTaskStatus.IsEnabled = true;
             txtName.IsReadOnly = false;
             txtTitle.IsReadOnly = false;
             //rtbAnalysis.IsReadOnly = false;
@@ -180,7 +184,7 @@ namespace Grind.WPF.CSharp
         public void DisableForm()
         {
             gbTaskOptions.IsEnabled = false;
-            sldTaskStatus.IsEnabled = false;
+            gbTaskStatus.IsEnabled = false;
             txtName.IsReadOnly = true;
             txtTitle.IsReadOnly = true;
             //rtbAnalysis.IsReadOnly = true;
@@ -193,9 +197,6 @@ namespace Grind.WPF.CSharp
             //rtbDescription.ReadOnly = true;
             //rtbReview.ReadOnly = true;
         }
-
-
-
 
     }
     #region  Aesthetics

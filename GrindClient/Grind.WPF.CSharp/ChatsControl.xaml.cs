@@ -30,7 +30,11 @@ namespace Grind.WPF.CSharp
         {
             this.InitializeComponent();
         }
-
+        public Session Session;
+        internal void SetSession(Session session)
+        {
+            Session = session;
+        }
         Table msgTable;
         TableRowGroup TX;
         HashSet<string> Targets = new HashSet<string>();
@@ -72,7 +76,6 @@ namespace Grind.WPF.CSharp
                             TimestampAndNameCell.BorderBrush = Brushes.Violet;
                             msgCell.BorderThickness = new Thickness(1);
                             msgCell.BorderBrush = Brushes.Violet;
-                            
                             break;
                         case eWsMessageType.HistoryMsg:
                             TimestampAndNameCell.Foreground = Brushes.DarkGray;
@@ -114,13 +117,13 @@ namespace Grind.WPF.CSharp
 
         private void btnCon_Click(object sender, RoutedEventArgs e)
         {
-            WebsocketService.Init(@"ws://localhost:8080/", Globals.Session.token,
+            Session.WebsocketService.BindAndAuthenticate(Session.User.token,
                                     OnOpen,
                                     OnMessage,
                                     OnClose,
                                     OnError);
 
-            WebsocketService.Connect();
+            Session.WebsocketService.Connect();
         }
 
         void OnOpen(object sender, EventArgs e)
@@ -129,12 +132,12 @@ namespace Grind.WPF.CSharp
         }
         void OnMessage(object sender, MessageEventArgs e)
         {
-            WS_DisplayMessage wsMsg = JsonConvert.DeserializeObject<WS_DisplayMessage>(e.Data);
+            WS_Message wsMsg = JsonConvert.DeserializeObject<WS_Message>(e.Data);
             if (wsMsg.messages != null)
             {
-                foreach (WS_DisplayMessage Msg in wsMsg.messages)
+                foreach (WS_Message Msg in wsMsg.messages)
                 {
-                    PrintMessage(Msg.created_at, Msg.sender_name, Msg.messagetext, eWsMessageType.HistoryMsg);
+                    PrintMessage(Msg.created_at, Globals.GetPersonNameFromId(Msg.sender_id), Msg.messagetext, eWsMessageType.HistoryMsg);
                 }
             }
             else
@@ -145,15 +148,15 @@ namespace Grind.WPF.CSharp
                 }
                 else if (wsMsg.sender_id != 0 && wsMsg.receiver_id == 0)
                 {
-                    PrintMessage(wsMsg.created_at, wsMsg.sender_name, wsMsg.messagetext, eWsMessageType.PublicMsg);
+                    PrintMessage(wsMsg.created_at, Globals.GetPersonNameFromId(wsMsg.sender_id), wsMsg.messagetext, eWsMessageType.PublicMsg);
                 }
                 else if (wsMsg.sender_id == 0 && wsMsg.receiver_id != 0)
                 {
-                    PrintMessage(wsMsg.created_at, "Server=>"+wsMsg.receiver_name, wsMsg.messagetext, eWsMessageType.PrivateMsg);
+                    PrintMessage(wsMsg.created_at, "Server=>" + Globals.GetPersonNameFromId(wsMsg.receiver_id), wsMsg.messagetext, eWsMessageType.PrivateMsg);
                 }
                 else if (wsMsg.sender_id != 0 && wsMsg.receiver_id != 0)
                 {
-                    PrintMessage(wsMsg.created_at, wsMsg.sender_name+"=>"+wsMsg.receiver_name, wsMsg.messagetext, eWsMessageType.PrivateMsg);
+                    PrintMessage(wsMsg.created_at, Globals.GetPersonNameFromId(wsMsg.sender_id) + "=>" + Globals.GetPersonNameFromId(wsMsg.receiver_id), wsMsg.messagetext, eWsMessageType.PrivateMsg);
                 }
             }
             if (wsMsg.users != null)
@@ -167,6 +170,7 @@ namespace Grind.WPF.CSharp
             Debug.Print("Close " + e.Reason);
             try
             {
+
                 JToken.Parse(e.Reason);
                 RootObject RO = JsonConvert.DeserializeObject<RootObject>(e.Reason);
                 if (RO.Error != null)
@@ -208,21 +212,21 @@ namespace Grind.WPF.CSharp
                 tempname = "";
                 foreach (string item in Targets)
                 {
-                    tempname += Globals.TrigramToPersonMapper[item].name + Environment.NewLine;
+                    tempname += Globals.DictTrigramToPerson[item].name + Environment.NewLine;
                 }
                 mniTargets.Header = tempname.Trim();
                 ppSend.IsOpen = true;
             }
             else
             {
-                WebsocketService.Send(JsonConvert.SerializeObject(new WS_Message { sender_id = Globals.Session.User.id, messagetext = txtMessage.Text }));
+                Session.WebsocketService.Send(JsonConvert.SerializeObject(new WS_Message { sender_id = Session.User.id, messagetext = txtMessage.Text }));
                 txtMessage.Text = "";
             }
         }
 
         private void btnDis_Click(object sender, RoutedEventArgs e)
         {
-            WebsocketService.Close();
+            Session.WebsocketService.Close();
             lbOnlinePeople.ItemsSource = null;
             btnSend.IsEnabled = false;
             btnDisc.IsEnabled = false;
@@ -238,7 +242,7 @@ namespace Grind.WPF.CSharp
             //foreach (Match item in Regex.Matches(txtMessage.GetLineText(0), @"\B@[a-z0-9_-]+"))
             foreach (Match item in Regex.Matches(txtMessage.GetLineText(0), @"(?<=@)[a-z0-9_-]+"))
                 if (item.Length >= 3)
-                    if (Globals.Trigrams.Contains(item.Value))
+                    if (Globals.DictTrigramToPerson.ContainsKey(item.Value))
                         Targets.Add(item.Value);
         }
 
@@ -248,7 +252,7 @@ namespace Grind.WPF.CSharp
             {
                 foreach (string item in Targets)
                 {
-                    WebsocketService.Send(JsonConvert.SerializeObject(new WS_Message { sender_id = Globals.Session.User.id, messagetext = txtMessage.Text, receiver_id = Globals.TrigramToPersonMapper[item].id }));
+                    Session.WebsocketService.Send(JsonConvert.SerializeObject(new WS_Message { sender_id = Session.User.id, messagetext = txtMessage.Text, receiver_id = Globals.GetPersonFromTrigram(item).id}));
                 }
             }
             txtMessage.Text = "";
@@ -256,7 +260,7 @@ namespace Grind.WPF.CSharp
 
         private void mniPublicMsg_Click(object sender, RoutedEventArgs e)
         {
-            WebsocketService.Send(JsonConvert.SerializeObject(new WS_Message { sender_id = Globals.Session.User.id, messagetext = txtMessage.Text }));
+            Session.WebsocketService.Send(JsonConvert.SerializeObject(new WS_Message { sender_id = Session.User.id, messagetext = txtMessage.Text }));
             txtMessage.Text = "";
         }
     }

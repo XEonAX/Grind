@@ -11,51 +11,48 @@ using System.Globalization;
 
 namespace Grind.Common
 {
-    public static class Cache
+    public class Cache
     {
-        private static SQLiteConnection grindDBConnection;
-        private static SQLiteDataReader grindDBDataReader;
-        private static Hashtable reflectionProperties = new Hashtable();
-        private static Hashtable reflectionDBTypeProperties = new Hashtable();
+        private SQLiteConnection grindDBConnection;
+        private SQLiteDataReader grindDBDataReader;
 
-        public static List<TimeStamp> PeopleTS = new List<TimeStamp>();
-        public static List<TimeStamp> TasksTS = new List<TimeStamp>();
 
-        public static void SqliteHelperInit(string ConnectionString)
+        public List<TimeStamp> PeopleTS = new List<TimeStamp>();
+        public List<TimeStamp> TasksTS = new List<TimeStamp>();
+        private string SqlConnectionString;
+        private Callbacker Callbacker;
+
+        public Cache(string SqlConnectionString)
+        {
+            // TODO: Complete member initialization
+            this.SqlConnectionString = SqlConnectionString;
+        }
+
+        public Cache(string SqlConnectionString, Callbacker Callbacker)
+        {
+            // TODO: Complete member initialization
+            this.SqlConnectionString = SqlConnectionString;
+            this.Callbacker = Callbacker;
+
+            grindDBConnection = new SQLiteConnection(SqlConnectionString);
+            grindDBConnection.Open();
+        }
+
+        public void SqliteHelperInit(string ConnectionString)
         {
             grindDBConnection = new SQLiteConnection(ConnectionString);
             grindDBConnection.Open();
         }
 
         #region Reflection
-        /// <summary>
-        /// Caches PropertyInfo of given Datatype to a HashTable for better performance.
-        /// </summary>
-        /// <param name="targetType">DataType who's PropertyInfo is to be Cached</param>
-        private static void LoadProperties(Type targetType)
-        {
-            if (reflectionProperties[targetType.FullName] == null)
-            {
-                List<PropertyInfo> propertyList = new List<PropertyInfo>();
-                PropertyInfo[] objectProperties = targetType.GetProperties(/*BindingFlags.Public*/);
-                foreach (PropertyInfo currentProperty in objectProperties)
-                {
-                    if (reflectionDBTypeProperties[currentProperty.Name] == null)
-                        reflectionDBTypeProperties.Add(currentProperty.Name,
-                            DataTypetoDBType(currentProperty.PropertyType.ToString()));
-                    //propertyList.Add(currentProperty);
-                }
-                reflectionProperties.Add(targetType.FullName, objectProperties.ToList<PropertyInfo>());
-                //reflectionproperties[targetObject] = propertyList;
-            }
-        }
-        public static List<T> DataReaderMapToList<T>(IDataReader dr)
+
+        public List<T> DataReaderMapToList<T>(IDataReader dr)
         {
             List<T> list = new List<T>();
             T obj = default(T);
             Type datatype = typeof(T);
-            LoadProperties(datatype);
-            List<PropertyInfo> objectproperties = reflectionProperties[datatype.FullName] as List<PropertyInfo>;
+            Extensions.LoadProperties(datatype);
+            List<PropertyInfo> objectproperties = Extensions.reflectionProperties[datatype.FullName] as List<PropertyInfo>;
             while (dr.Read())
             {
                 obj = Activator.CreateInstance<T>();
@@ -86,12 +83,12 @@ namespace Grind.Common
             }
             return list;
         }
-        public static T DataReaderMapToObject<T>(IDataReader dr)
+        public T DataReaderMapToObject<T>(IDataReader dr)
         {
             T obj = default(T);
             Type datatype = Activator.CreateInstance<T>().GetType();
-            LoadProperties(datatype);
-            List<PropertyInfo> objectproperties = reflectionProperties[datatype.FullName] as List<PropertyInfo>;
+            Extensions.LoadProperties(datatype);
+            List<PropertyInfo> objectproperties = Extensions.reflectionProperties[datatype.FullName] as List<PropertyInfo>;
             while (dr.Read())
             {
                 obj = Activator.CreateInstance<T>();
@@ -121,21 +118,13 @@ namespace Grind.Common
             }
             return obj;
         }
-
-        public static string Pluralize(this string s)
-        {
-            PluralizationService plural =
-                PluralizationService.CreateService(
-                    CultureInfo.GetCultureInfo("en-us"));
-            return plural.Pluralize(s);
-        }
         #endregion
 
-        public static string CommaSeperatedColumnName<T>()
+        public string CommaSeperatedColumnName<T>()
         {
             Type datatype = typeof(T);
-            LoadProperties(datatype);
-            List<PropertyInfo> objectproperties = reflectionProperties[datatype.FullName] as List<PropertyInfo>;
+            Extensions.LoadProperties(datatype);
+            List<PropertyInfo> objectproperties = Extensions.reflectionProperties[datatype.FullName] as List<PropertyInfo>;
             string ColumnNames = "";
             foreach (PropertyInfo propInfo in objectproperties)
             {
@@ -147,11 +136,11 @@ namespace Grind.Common
             }
             return ColumnNames;
         }
-        public static string ParameterizedCommaSeparatedColumnName<T>()
+        public string ParameterizedCommaSeparatedColumnName<T>()
         {
             Type datatype = typeof(T);
-            LoadProperties(datatype);
-            List<PropertyInfo> objectproperties = reflectionProperties[datatype.FullName] as List<PropertyInfo>;
+            Extensions.LoadProperties(datatype);
+            List<PropertyInfo> objectproperties = Extensions.reflectionProperties[datatype.FullName] as List<PropertyInfo>;
             string ColumnNames = "";
             foreach (PropertyInfo propInfo in objectproperties)
             {
@@ -165,23 +154,23 @@ namespace Grind.Common
             }
             return ColumnNames;
         }
-        public static SQLiteParameterCollection AddParameterstoSqlCommand<T>(SQLiteParameterCollection Params)
+        public SQLiteParameterCollection AddParameterstoSqlCommand<T>(SQLiteParameterCollection Params)
         {
             Type datatype = typeof(T);
-            LoadProperties(datatype);
-            List<PropertyInfo> objectproperties = reflectionProperties[datatype.FullName] as List<PropertyInfo>;
+            Extensions.LoadProperties(datatype);
+            List<PropertyInfo> objectproperties = Extensions.reflectionProperties[datatype.FullName] as List<PropertyInfo>;
             foreach (PropertyInfo propInfo in objectproperties)
             {
-                Params.Add(new SQLiteParameter("@" + propInfo.Name, (DbType)reflectionDBTypeProperties[propInfo.Name]));
+                Params.Add(new SQLiteParameter("@" + propInfo.Name, (DbType)Extensions.reflectionDBTypeProperties[propInfo.Name]));
             }
             return Params;
         }
 
-        public static SQLiteParameterCollection BuildParametersofSqlCommand<T>(SQLiteParameterCollection Params, T obj)
+        public SQLiteParameterCollection BuildParametersofSqlCommand<T>(SQLiteParameterCollection Params, T obj)
         {
             Type datatype = typeof(T);
-            LoadProperties(datatype);
-            List<PropertyInfo> objectproperties = reflectionProperties[datatype.FullName] as List<PropertyInfo>;
+            Extensions.LoadProperties(datatype);
+            List<PropertyInfo> objectproperties = Extensions.reflectionProperties[datatype.FullName] as List<PropertyInfo>;
             foreach (PropertyInfo propInfo in objectproperties)
             {
                 if (propInfo.PropertyType.GetInterface(typeof(IList<>).FullName) == null && !object.Equals(propInfo.GetValue(obj, null), null))
@@ -203,11 +192,11 @@ namespace Grind.Common
         }
 
 
-        public static List<string> ParameterListof<T>()
+        public List<string> ParameterListof<T>()
         {
             Type datatype = typeof(T);
-            LoadProperties(datatype);
-            List<PropertyInfo> objectproperties = reflectionProperties[datatype.FullName] as List<PropertyInfo>;
+            Extensions.LoadProperties(datatype);
+            List<PropertyInfo> objectproperties = Extensions.reflectionProperties[datatype.FullName] as List<PropertyInfo>;
             List<string> Parameters = new List<string>();
             foreach (PropertyInfo propInfo in objectproperties)
             {
@@ -216,50 +205,8 @@ namespace Grind.Common
             return Parameters;
         }
 
-        public static DbType DataTypetoDBType(string DataType)
-        {
-            switch (DataType)
-            {
-                case "byte": return DbType.Byte;
-                case "sbyte": return DbType.SByte;
-                case "short": return DbType.Int16;
-                case "ushort": return DbType.UInt16;
-                case "int": return DbType.Int32;
-                case "uint": return DbType.UInt32;
-                case "long": return DbType.Int64;
-                case "ulong": return DbType.UInt64;
-                case "float": return DbType.Single;
-                case "double": return DbType.Double;
-                case "decimal": return DbType.Decimal;
-                case "bool": return DbType.Boolean;
-                case "string": return DbType.String;
-                case "char": return DbType.StringFixedLength;
-                case "Guid": return DbType.Guid;
-                case "DateTime": return DbType.DateTime;
-                case "DateTimeOffset": return DbType.DateTimeOffset;
-                case "byte[]": return DbType.Binary;
-                case "byte?": return DbType.Byte;
-                case "sbyte?": return DbType.SByte;
-                case "short?": return DbType.Int16;
-                case "ushort?": return DbType.UInt16;
-                case "int?": return DbType.Int32;
-                case "uint?": return DbType.UInt32;
-                case "long?": return DbType.Int64;
-                case "ulong?": return DbType.UInt64;
-                case "float?": return DbType.Single;
-                case "double?": return DbType.Double;
-                case "decimal?": return DbType.Decimal;
-                case "bool?": return DbType.Boolean;
-                case "char?": return DbType.StringFixedLength;
-                case "Guid?": return DbType.Guid;
-                case "DateTime?": return DbType.DateTime;
-                case "DateTimeOffset?": return DbType.DateTimeOffset;
-                case "System.Data.Linq.Binary": return DbType.Binary;
-                default: return DbType.Object;
-            }
-        }
 
-        public static bool AddObjects<T>(IEnumerable<T> Objects)
+        public bool AddObjects<T>(IEnumerable<T> Objects)
         {
             string typeName = typeof(T).Name;
             using (SQLiteTransaction mytransaction = grindDBConnection.BeginTransaction())
@@ -287,7 +234,7 @@ namespace Grind.Common
             }
             return false;
         }
-        public static bool AddObject<T>(T Obj)
+        public bool AddObject<T>(T Obj)
         {
             using (SQLiteTransaction mytransaction = grindDBConnection.BeginTransaction())
             {
@@ -314,7 +261,7 @@ namespace Grind.Common
         /// <typeparam name="T">Only Specify Person or Task</typeparam>
         /// <param name="id">id of Object to retrieve</param>
         /// <returns>Person or task from Local DB by id</returns>
-        public static T GetObject<T>(int id)
+        public T GetObject<T>(int id)
         {
             SQLiteCommand grindDBReadListcmd = new SQLiteCommand(grindDBConnection);
             grindDBReadListcmd.CommandText = @"SELECT * FROM [" + typeof(T).Name.Pluralize().ToLower() + "] where id =" + id.ToString();
@@ -326,7 +273,7 @@ namespace Grind.Common
         /// </summary>
         /// <typeparam name="T">Only Specify Person or Task</typeparam>
         /// <returns>Returns List of Person or Task from Local DB</returns>
-        public static List<T> GetObjects<T>()
+        public List<T> GetObjects<T>()
         {
             List<T> objs = default(List<T>);
             SQLiteCommand grindDBReadListcmd = new SQLiteCommand(grindDBConnection);
@@ -359,7 +306,7 @@ namespace Grind.Common
         /// <typeparam name="T">Only Specify Person or Task</typeparam>
         /// <param name="latestTimestamps">List of Timestamps retrieved from server</param>
         /// <param name="CachedTimestampsList">List of timestamps cached. delete will be called on this also as well as local db</param>
-        public static void DeleteOldObjects<T>(List<TimeStamp> latestTimestamps)
+        public void DeleteOldObjects<T>(List<TimeStamp> latestTimestamps)
         {
             string typeName = typeof(T).Name;
             using (SQLiteTransaction mytransaction = grindDBConnection.BeginTransaction())
@@ -393,7 +340,7 @@ namespace Grind.Common
         }
 
 
-        public static void DeleteObject<T>(int id)
+        public void DeleteObject<T>(int id)
         {
             string tablename = typeof(T).Name.Pluralize().ToLower();
             using (SQLiteTransaction mytransaction = grindDBConnection.BeginTransaction())
@@ -408,7 +355,7 @@ namespace Grind.Common
                 mytransaction.Commit();
             }
         }
-        public static void DeleteObjects<T>(List<TimeStamp> latestTimestamps)
+        public void DeleteObjects<T>(List<TimeStamp> latestTimestamps)
         {
             string tablename = typeof(T).Name.Pluralize().ToLower();
             using (SQLiteTransaction mytransaction = grindDBConnection.BeginTransaction())

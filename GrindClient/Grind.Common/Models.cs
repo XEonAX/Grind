@@ -6,23 +6,17 @@ using System.Linq;
 using System.Windows.Documents;
 namespace Grind.Common
 {
-    public class Session : Token
-    {
-        public Person User { get; set; }
-
-
-    }
     public class Token
     {
         public string token { get; set; }
     }
-    public class RootObject
+    public class RootObject 
     {
         public Person person { get; set; }
-        public Task task { get; set; }
         public Document document { get; set; }
+        public Task Task { get; set; }
+        public Token token { get; set; }
         public string Message { get; set; }
-        public string token { get; set; }
         public string Error { get; set; }
     }
     public class RootPerson
@@ -84,6 +78,13 @@ namespace Grind.Common
             }
         }
     }
+
+
+    public class NameOnlyPerson
+    {
+        public string name { get; set; }
+    }
+
 
     public class Person : TimeStamp, IEquatable<Person>
     {
@@ -159,13 +160,23 @@ namespace Grind.Common
         {
             get { return this.name + " - " + this.title; }
         }
+        //public string DeveloperName
+        //{
+        //    get { return developer.name; }
+        //}
+        //public string ReviewerName
+        //{
+        //    get { return reviewer.name; }
+        //}
+        //public NameOnlyPerson developer { get; set; }
+        //public NameOnlyPerson reviewer { get; set; }
         public string DeveloperName
         {
-            get { return Globals.People.Find(x => x.id == this.developer_id).name; }
+            get { return Globals.GetPersonNameFromId(developer_id); }
         }
         public string ReviewerName
         {
-            get { return Globals.People.Find(x => x.id == this.reviewer_id).name; }
+            get { return Globals.GetPersonNameFromId(reviewer_id); }
         }
     }
 
@@ -182,9 +193,9 @@ namespace Grind.Common
             target_date = DateTime.Now.AddDays(1 * 7);
             collection_date = DateTime.Now.AddDays(2 * 7);
             closed_date = DateTime.Now.AddDays(3 * 7);
-            if (Globals.People.Count == 0) Globals.People.Add(new Person { id = 0, name = "DummyUser", level = eLevel.Master });
-            developer_id = Globals.People.First().id;
-            reviewer_id = Globals.People.First().id;
+            if (Globals.People.Count == 0) Globals.People.Add(new Person { id = -1, name = "DummyUser", level = eLevel.Master });
+            developer_id = -1;// Session.People.First().id;
+            reviewer_id = -1;//Session.People.First().id;
             bug_type = eBugType.Others;
             is_bug = true;
         }
@@ -231,51 +242,51 @@ namespace Grind.Common
         public int receiver_id { get; set; }
         public int parent_message_id { get; set; }
         public string messagetext { get; set; }
-        public List<WS_DisplayMessage> messages { get; set; }
+        public List<WS_Message> messages { get; set; }
         public List<WS_User> users { get; set; }
 
     }
 
-    public class WS_DisplayMessage : WS_Message
-    {
-        public string sender_name
-        {
-            get
-            {
-                Person X = Globals.People.Find(x => x.id == this.sender_id);
-                if (X != null)
-                    return X.name;
-                else
-                    return "UnknownUser(id=" + this.sender_id.ToString() + ")" ;
-            }
-        }
+    //public class WS_DisplayMessage : WS_Message
+    //{
+    //    public string sender_name
+    //    {
+    //        get
+    //        {
+    //            Person X = Session.People.Find(x => x.id == this.sender_id);
+    //            if (X != null)
+    //                return X.name;
+    //            else
+    //                return "UnknownUser(id=" + this.sender_id.ToString() + ")" ;
+    //        }
+    //    }
 
-        public string receiver_name
-        {
-            get
-            {
-                Person X = Globals.People.Find(x => x.id == this.receiver_id);
-                if (X != null)
-                    return X.name;
-                else
-                    return "UnknownUser(id=" + this.receiver_id.ToString() + ")";
-            }
-        }
-        //public FlowDocument flow_message
-        //{
-        //    get
-        //    {
-        //        if (this.sender_id == 0)
-        //        {
-        //            FlowDocument FD = new FlowDocument();
-        //            FD.Blocks.Add(new Paragraph(new Run(this.messagetext)));
-        //            return FD;
-        //        }
-        //        else
-        //            return this.messagetext.FlowDocumentFromBase64String();
-        //    }
-        //}
-    }
+    //    public string receiver_name
+    //    {
+    //        get
+    //        {
+    //            Person X = Session.People.Find(x => x.id == this.receiver_id);
+    //            if (X != null)
+    //                return X.name;
+    //            else
+    //                return "UnknownUser(id=" + this.receiver_id.ToString() + ")";
+    //        }
+    //    }
+    //    //public FlowDocument flow_message
+    //    //{
+    //    //    get
+    //    //    {
+    //    //        if (this.sender_id == 0)
+    //    //        {
+    //    //            FlowDocument FD = new FlowDocument();
+    //    //            FD.Blocks.Add(new Paragraph(new Run(this.messagetext)));
+    //    //            return FD;
+    //    //        }
+    //    //        else
+    //    //            return this.messagetext.FlowDocumentFromBase64String();
+    //    //    }
+    //    //}
+    //}
 
 
     public class WS_User
@@ -339,4 +350,16 @@ namespace Grind.Common
         unsuccessful,
         successful
     }
+
+    public enum eAction
+    {
+        Message,
+        Error,
+        State,
+        Notification,
+        RestError,
+        WS_Error,
+        Cache_Error,
+    }
+
 }

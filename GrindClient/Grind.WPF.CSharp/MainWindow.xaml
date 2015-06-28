@@ -1,4 +1,4 @@
-﻿<Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+<Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -19,14 +19,13 @@
         </StatusBar>
         <TabControl >
             <TabItem Header="Tasks" x:Name="tbTasks">
-                <Border BorderThickness="1" BorderBrush="#FF688BAE">
+                <Border BorderThickness="5" BorderBrush="#FF688BAE" CornerRadius="2">
                     <Grid x:Name="MainGrid">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="28"  />
                             <RowDefinition MaxHeight="{Binding ActualHeight, ElementName=MainGrid}" />
                             <RowDefinition Height="6"/>
                             <RowDefinition />
-                            <RowDefinition Height="20"/>
                         </Grid.RowDefinitions>
                         <StackPanel Grid.Row="0" VerticalAlignment="Center" Orientation="Horizontal" Margin="2,0,0,0" >
                             <Border x:Name="bdrLogin" BorderThickness="1" CornerRadius="3" BorderBrush="Red">

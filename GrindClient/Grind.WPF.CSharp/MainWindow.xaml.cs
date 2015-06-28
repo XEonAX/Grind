@@ -21,6 +21,7 @@ namespace Grind.WPF.CSharp
     /// </summary>
     public partial class MainWindow : Window
     {
+
         public MainWindow()
         {
             InitializeComponent();
@@ -28,6 +29,7 @@ namespace Grind.WPF.CSharp
         public SortableBindingList<TaskListItem> TaskList;
         Task CurrentTask;
         bool UserChange = true;
+        Session Session;
         enum ViewMode
         {
             Normal,
@@ -36,22 +38,35 @@ namespace Grind.WPF.CSharp
             ChangeCancelled
         }
 
+        Action<eAction, object, object, object> callbackFn;
+        void CallBack(eAction action, object obj1, object obj2, object obj3)
+        {
+            Debug.Print(action.ToString() + "===>" + obj1.ToString());
+        }
+        Callbacker callbacker;
+        
+
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             dGridTasks.AutoGenerateColumns = false;
             dGridTasks.ItemsSource = TaskList;
-            Controllers.Init("http://localhost:4567/", @"data source=J:\Root\Grind\GrindClient\Grind.Common\Grind.db", ref sbiMessage, ref sbiState, ref chkOffline);
+            callbacker = new Callbacker(CallBack);
+            Session = new Session(@"data source=J:\Root\Grind\GrindClient\Grind.Common\Grind.db", "http://localhost:4567/", @"ws://localhost:8080/", callbacker);
+            ttfrmControl.SetSession(Session);
+            userMaintenanceControl1.SetSession(Session);
+            ChatsControl.SetSession(Session);
+
+            //Controllers("http://localhost:4567/", @"data source=J:\Root\Grind\GrindClient\Grind.Common\Grind.db");
             //Person x1 = new Person { created_at = DateTime.Now, updated_at = DateTime.Now, id = 3 };
             //Cache.AddObject<Person>(x1);
             //Person x2 = Cache.GetObject<Person>(3);
-            Controllers.ReadPeople(out Globals.People);
-            Globals.HashPeople();
+            Session.ReadPeople();
             if (Globals.People.Count == 0)
             {
                 Globals.People.Add(new Person { id = 0, name = "DummyUser", level = eLevel.Master, trigram = "DummyUser" });
             }
-            Controllers.ReadTasks(ref TaskList);
-            Globals.Session.User = new Person { active = false, id = -1, name = "OfflineUser", trigram = "0x0" };
+            Session.Controllers.ReadTasks(ref TaskList);
+            Session.User = new Person { active = false, id = -1, name = "OfflineUser", trigram = "0x0" };
             //cobExecutor.Items.AddRange(Globals.People.Select(x => x.name).ToArray());
             //cobReviewer.Items.AddRange(Globals.People.Select(x => x.name).ToArray());
             ttfrmControl.FillPeopleDropDown(Globals.People);
@@ -76,10 +91,10 @@ namespace Grind.WPF.CSharp
                 Task task = new Task();
                 //BuildTaskFromForm(ref task);
                 ttfrmControl.BuildTaskfromTaskFilledForm(ref task);
-                if (RetCode.successful == Controllers.CreateTask(task))
+                if (RetCode.successful == Session.Controllers.CreateTask(task))
                 {
                     UserChange = false;
-                    Controllers.ReadTasks(ref TaskList);
+                    Session.Controllers.ReadTasks(ref TaskList);
                     UserChange = true;
                     //dGridTasks.DataSource = TaskList;
                     //if (dGridTasks.RowCount > 0)
@@ -91,11 +106,11 @@ namespace Grind.WPF.CSharp
                 else
                 {
                     string ErrMsg = "";
-                    //if (RestService.rRestResponse != null && RestService.rRestResponse.Content != null)
+                    //if(Session.RestService.rRestResponse != null &&Session.RestService.rRestResponse.Content != null)
                     //{
-                    //    ErrMsg = Environment.NewLine + RestService.rRestResponse.Content;
+                    //    ErrMsg = Environment.NewLine +Session.RestService.rRestResponse.Content;
                     //}
-                    ErrMsg = Environment.NewLine + RestService.GetResponseError();
+                    ErrMsg = Environment.NewLine + Session.RestService.GetResponseError();
                     MessageBox.Show("There was some problem while Saving the Task." + ErrMsg, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
 
                 }
@@ -149,9 +164,8 @@ namespace Grind.WPF.CSharp
 
         private void btnRefresh_Click(object sender, RoutedEventArgs e)
         {
-            Controllers.ReadPeople(out Globals.People);
-            Globals.HashPeople();
-            Controllers.ReadTasks(ref TaskList);
+            Session.ReadPeople();
+            Session.Controllers.ReadTasks(ref TaskList);
             //cobExecutor.Items.AddRange(Globals.People.Select(x => x.name).ToArray());
             //cobReviewer.Items.AddRange(Globals.People.Select(x => x.name).ToArray());
             ttfrmControl.FillPeopleDropDown(Globals.People);
@@ -169,17 +183,17 @@ namespace Grind.WPF.CSharp
             {
                 int OldTaskId = CurrentTask.id;
                 ttfrmControl.BuildTaskfromTaskFilledForm(ref CurrentTask);
-                if (RetCode.successful == Controllers.UpdateTask(CurrentTask))
+                if (RetCode.successful == Session.Controllers.UpdateTask(CurrentTask))
                 {
 
                     UserChange = false;
-                    Controllers.ReadTasks(ref TaskList);
+                    Session.Controllers.ReadTasks(ref TaskList);
 
                     if (TaskList.Count > 0)
                     {
                         dGridTasks.SelectedIndex = GetIndexByIdFromTaskList(OldTaskId);
                         //dGridTasks.CurrentCell = DataGrid.GetCell(1, GetIndexByIdFromTaskList(OldTaskId));
-                        Controllers.ReadTask(((Task)dGridTasks.SelectedCells[0].Item).id, out CurrentTask);
+                        Session.Controllers.ReadTask(((Task)dGridTasks.SelectedCells[0].Item).id, out CurrentTask);
                         //Controllers.ReadTask((int)dGridTasks.CurrentItem.Cells["colId"].Value, ref CurrentTask);
                     }
 
@@ -191,9 +205,9 @@ namespace Grind.WPF.CSharp
                 else
                 {
                     string ErrMsg = "";
-                    if (RestService.rRestResponse != null && RestService.rRestResponse.Content != null)
+                    if (Session.RestService.rRestResponse != null && Session.RestService.rRestResponse.Content != null)
                     {
-                        ErrMsg = Environment.NewLine + RestService.rRestResponse.Content;
+                        ErrMsg = Environment.NewLine + Session.RestService.rRestResponse.Content;
                     }
                     MessageBox.Show("There was some problem while Updating the Task." + ErrMsg, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
@@ -219,7 +233,7 @@ namespace Grind.WPF.CSharp
             if (UserChange && dGridTasks.CurrentItem != null)
             {
                 Debug.Print(">>>>>>>>>>>" + dGridTasks.SelectedCells[0].Item.ToString());
-                Controllers.ReadTask(((Task)dGridTasks.SelectedCells[0].Item).id, out CurrentTask);
+                Session.Controllers.ReadTask(((Task)dGridTasks.SelectedCells[0].Item).id, out CurrentTask);
                 //FillTaskTrackingForm(RetrievedTask);
                 ttfrmControl.FillFormfromTask(CurrentTask);
 
@@ -238,12 +252,12 @@ namespace Grind.WPF.CSharp
 
         private void btnDownloadTasks_Click(object sender, RoutedEventArgs e)
         {
-            Controllers.GetAndStoreTasks();
+            Session.Controllers.GetAndStoreTasks();
         }
 
         private void btnLogin_Click(object sender, RoutedEventArgs e)
         {
-            if (Controllers.ServerLogin(txtTrigram.Text, txtPassword.Password) == RetCode.successful)
+            if (Session.ServerLogin(txtTrigram.Text, txtPassword.Password) == RetCode.successful)
                 bdrLogin.BorderBrush = Brushes.Green;
         }
     }

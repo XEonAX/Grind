@@ -222,6 +222,7 @@ EventMachine.run do
     end
 
     get '/taskslist' do
+    # Task.select(:id, :name, :task_status, :is_bug, :title, :bug_type, :target_date, :created_at, :updated_at, :approved, :developer_id, :reviewer_id).includes(:developer,:reviewer).all.as_json(include: {developer: {only: :name}, reviewer: {only: :name}}).to_json
       Task.select(:id, :name, :task_status, :is_bug, :title, :bug_type, :target_date, :created_at, :updated_at, :approved, :developer_id, :reviewer_id).all.to_json
     end
 

@@ -92,9 +92,9 @@ namespace Grind.Winforms.CSharp
 
         private void tsmiRefresh_Click(System.Object sender, System.EventArgs e)
         {
-            Controllers.ReadPeople(out Globals.People);
+            Controllers.ReadPeople(out Session.People);
             Controllers.ReadTasks(ref TaskList);
-            Globals.HashPeople();
+            Session.HashPeople();
             //cobExecutor.Items.AddRange(Globals.People.Select(x => x.name).ToArray());
             //cobReviewer.Items.AddRange(Globals.People.Select(x => x.name).ToArray());
             ttfrmControl.FillPeopleDropDown();

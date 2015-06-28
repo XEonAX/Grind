@@ -24,11 +24,15 @@ namespace Grind.WPF.CSharp
         {
             InitializeComponent();
         }
-
+        Session Session;
         public Person person = new Person();
         
         bool Refreshed = false;
 
+        internal void SetSession(Session session)
+        {
+        Session=session;
+        }
         private void FillForm(Person person)
         {
             if (person == null) return;
@@ -63,7 +67,7 @@ namespace Grind.WPF.CSharp
             person.active = (bool)chkActive.IsChecked;
             person.level = (eLevel)cbLevel.SelectedIndex;
             person.password = txtPassword.Text;
-            Controllers.CreatePerson(person);
+            Session.Controllers.CreatePerson(person);
             btnRefresh_Click(sender,e);
             Refreshed = true;
             lbPeople.SelectedIndex = lbPeople.Items.Count - 1;
@@ -78,7 +82,7 @@ namespace Grind.WPF.CSharp
             person.active = (bool)chkActive.IsChecked;
             person.level = (eLevel)cbLevel.SelectedIndex;
             person.password = txtPassword.Text;
-            Controllers.UpdatePerson(person);
+            Session.Controllers.UpdatePerson(person);
             btnRefresh_Click(sender,e);
             Refreshed = true;
             lbPeople.SelectedIndex = OldSelectedIndex;
@@ -90,7 +94,7 @@ namespace Grind.WPF.CSharp
             if (lbPeople.SelectedIndex >= 0)
             {
                 person = Globals.People[lbPeople.SelectedIndex];
-                Controllers.DeletePerson(person);
+                Session.Controllers.DeletePerson(person);
             }
             btnRefresh_Click(sender, e);
             Refreshed = true;
@@ -103,9 +107,8 @@ namespace Grind.WPF.CSharp
         private void btnRefresh_Click(object sender, RoutedEventArgs e)
         {
             Refreshed = false;
-            Controllers.ReadPeople(out Globals.People);
-            Globals.HashPeople();
-            lbPeople.ItemsSource = Globals.People.Select(x => x.name).ToList();
+            Session.ReadPeople();
+            lbPeople.ItemsSource = Globals.DictIdToPersonName.Values.ToList();
             //if (OldSelectedIndex > lbPeople.Items.Count-1)
             //    OldSelectedIndex = lbPeople.Items.Count - 1;
             //else if ((OldSelectedIndex < lbPeople.Items.Count-1) && (OldSelectedIndex == -1))

@@ -21,9 +21,7 @@
                     <RowDefinition Height="35"/>
                     <RowDefinition Height="25"/>
                     <RowDefinition Height="120"/>
-                    <RowDefinition Height="92"/>
-                    <RowDefinition Height="200"/>
-                    <RowDefinition Height="200"/>
+                    <RowDefinition Height="75"/>
                     <RowDefinition Height="200"/>
                     <RowDefinition Height="200"/>
                     <RowDefinition Height="200"/>
@@ -36,7 +34,7 @@
                     <Label Content="Title" HorizontalAlignment="Left" Margin="5,0,0,0"/>
                     <TextBox  Text="" VerticalAlignment="Center" Margin="0,0,5,0" Name="txtTitle" />
                 </DockPanel>
-                <GroupBox  Grid.Row="2" Header="Task Status" >
+                <GroupBox x:Name="gbTaskStatus"  Grid.Row="2" Header="Task Status">
                     <Grid Name="grdTaskStatus">
                         <Grid.RowDefinitions>
                             <RowDefinition/>
@@ -53,7 +51,7 @@
                             <ColumnDefinition Width="1*"/>
                             <ColumnDefinition Width="1*"/>
                         </Grid.ColumnDefinitions>
-                        <Border BorderThickness="2,2,2,2" Grid.RowSpan="3" Grid.ColumnSpan="7" BorderBrush="#FF6493EB" CornerRadius="4"/>
+                        <Border BorderThickness="2,2,2,2" Grid.RowSpan="3" Grid.ColumnSpan="7" BorderBrush="#FF6493EB" CornerRadius="2"/>
 	<Border BorderThickness="2,2,1,2" Grid.Column="1" Grid.RowSpan="3" BorderBrush="#FF6493EB"/>
 <Border BorderThickness="1,2" Grid.Column="2" Grid.RowSpan="3" BorderBrush="#FF6493EB"/>
 <Border BorderThickness="1,2" Grid.Column="3" Grid.RowSpan="3" BorderBrush="#FF6493EB"/>
@@ -138,6 +136,11 @@
                 </GroupBox>
                 <GroupBox Header="Task Options"  Grid.Row="3" Name="gbTaskOptions">
                     <DockPanel>
+                        <GroupBox Header="Target Date">
+                            <Grid>
+                                <DatePicker Name="dtpTargetDate" VerticalAlignment="Center" BorderBrush="{x:Null}"/>
+                            </Grid>
+                        </GroupBox>
                         <GroupBox Header="Task Type">
                             <Grid>
                                 <Grid.ColumnDefinitions>
@@ -147,7 +150,6 @@
                                 <RadioButton Content="Bug" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="3,0" Name="rbBug" />
                                 <RadioButton Content="HL" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="3,0" Name="rbHL" />
                             </Grid>
-
                         </GroupBox>
                         <GroupBox Header="Bug Type">
                             <Grid>
@@ -172,18 +174,14 @@
                         <GroupBox Header="Concerned Persons">
                             <Grid >
                                 <Grid.RowDefinitions>
-                                    <RowDefinition Height="1*"/>
-                                    <RowDefinition Height="1*"/>
+                                    <RowDefinition/>
                                 </Grid.RowDefinitions>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="1*"/>
                                     <ColumnDefinition Width="1*"/>
                                 </Grid.ColumnDefinitions>
-                                <ComboBox Grid.Column="0" Grid.Row="0" Margin="3" Name="cbExecutor" />
-                                <ComboBox Grid.Column="1" Grid.Row="0" Margin="3" Name="cbReviewer" />
-                                <ComboBox Grid.Column="0" Grid.Row="1" Margin="3"/>
-                                <ComboBox Grid.Column="1" Grid.Row="1" Margin="3"/>
-
+                                <ComboBox Grid.Column="0" Grid.Row="0" Margin="3" Name="cbExecutor" VerticalAlignment="Center"/>
+                                <ComboBox Grid.Column="1" Grid.Row="0" Margin="3" Name="cbReviewer" VerticalAlignment="Center" />
                             </Grid>
 
                         </GroupBox>
