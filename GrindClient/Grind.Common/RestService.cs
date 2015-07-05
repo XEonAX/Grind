@@ -49,7 +49,7 @@ namespace Grind.Common
             }
             else
             {
-                Callbacker.callback(eAction.RestError, rRestResponse.StatusCode, rRestResponse.ErrorMessage, rRestResponse.Content);
+                //Callbacker.callback(eAction.RestError, rRestResponse.StatusCode, rRestResponse.ErrorMessage, rRestResponse.Content);
                 return RetCode.unsuccessful;
             }
         }
@@ -163,7 +163,7 @@ namespace Grind.Common
         public RootObject Authorize(RootObject RO)
         {
             if (User.token != null)
-                RO.token = new Token { token = User.token };
+                RO.token = User.token;
             else
             {
                 Callbacker.callback(eAction.Error, "Not LoggedIn");

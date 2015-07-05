@@ -14,8 +14,8 @@ namespace Grind.Common
     {
         public Person person { get; set; }
         public Document document { get; set; }
-        public Task Task { get; set; }
-        public Token token { get; set; }
+        public Task task { get; set; }
+        public string token { get; set; }
         public string Message { get; set; }
         public string Error { get; set; }
     }
@@ -358,8 +358,11 @@ namespace Grind.Common
         State,
         Notification,
         RestError,
-        WS_Error,
-        Cache_Error,
+        ControllerError,
+        WebSocketError,
+        CacheError,
     }
+
+    
 
 }

@@ -32,14 +32,6 @@ namespace Grind.Common
             this.RestService = RestService;
         }
 
-        public Controllers(Common.Cache Cache, Common.RestService RestService, WebsocketService WebsocketService)
-        {
-            // TODO: Complete member initialization
-            this.Cache = Cache;
-            this.RestService = RestService;
-            this.WebsocketService = WebsocketService;
-        }
-
         public Controllers(Common.Cache Cache, Common.RestService RestService, Common.WebsocketService WebsocketService, Callbacker Callbacker)
         {
             // TODO: Complete member initialization
@@ -144,7 +136,7 @@ namespace Grind.Common
         public RetCode CreateTask(Task task, IRestClient rClient, out IRestResponse rResponse)
         {
             RootObject rootObject = new RootObject();
-            rootObject.Task = task;
+            rootObject.task = task;
             return RestService.CreateObject(rootObject, rClient, "task", out rResponse);
         }
 
@@ -219,7 +211,7 @@ namespace Grind.Common
         public RetCode UpdateTask(Task task, IRestClient rClient, out IRestResponse rResponse)
         {
             RootObject rootObject = new RootObject();
-            rootObject.Task = task;
+            rootObject.task = task;
             return RestService.UpdateObject(rootObject, rClient, "task/{id}", task.id.ToString(), out rResponse);
         }
 

@@ -30,6 +30,8 @@ namespace Grind.WPF.CSharp
         Task CurrentTask;
         bool UserChange = true;
         Session Session;
+
+        private string lastMessage, lastState;
         enum ViewMode
         {
             Normal,
@@ -42,16 +44,64 @@ namespace Grind.WPF.CSharp
         void CallBack(eAction action, object obj1, object obj2, object obj3)
         {
             Debug.Print(action.ToString() + "===>" + obj1.ToString());
+            switch (action)
+            {
+                case eAction.Message:
+                    string Message = obj1 as string;
+                    if (Message != null)
+                    {
+                        if (lastMessage != Message)
+                            sbiMessage.Content = Message + Environment.NewLine + sbiMessage.Content;
+                        lastMessage = Message;
+                    }
+
+                    break;
+                case eAction.Error:
+                    if (obj1 is string)
+                    {
+                        MessageBox.Show((string)obj1, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                    break;
+                case eAction.State:
+                    string state = obj1 as string;
+                    if (state != null)
+                    {
+                        if (lastState != state)
+                            sbiState.Content = state + Environment.NewLine + sbiState.Content;
+                        lastState = state;
+                    }
+                    break;
+                case eAction.Notification:
+                    break;
+                case eAction.RestError:
+                    if (obj1 is System.Net.HttpStatusCode)
+                    {
+                        System.Net.HttpStatusCode StatusCode = (System.Net.HttpStatusCode)obj1;
+                        if (StatusCode == System.Net.HttpStatusCode.Forbidden)
+                            MessageBox.Show("Invalid Credentials", "Forbidden", MessageBoxButton.OK, MessageBoxImage.Error);
+                        else
+                            MessageBox.Show("Error:" + (string)obj2, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+
+                    }
+                    break;
+                case eAction.WebSocketError:
+                    break;
+                case eAction.CacheError:
+                    break;
+                default:
+                    break;
+            }
+
         }
         Callbacker callbacker;
-        
+
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             dGridTasks.AutoGenerateColumns = false;
             dGridTasks.ItemsSource = TaskList;
             callbacker = new Callbacker(CallBack);
-            Session = new Session(@"data source=J:\Root\Grind\GrindClient\Grind.Common\Grind.db", "http://localhost:4567/", @"ws://localhost:8080/", callbacker);
+            Session = new Session(@"data source=Grind.db", "http://localhost:4567/", @"ws://localhost:8080/", callbacker);
             ttfrmControl.SetSession(Session);
             userMaintenanceControl1.SetSession(Session);
             ChatsControl.SetSession(Session);

@@ -40,3 +40,6 @@ J:\Root\Grind\GrindClient\Grind.WPF.CSharp\obj\Debug\Grind.WPF.CSharp.exe.manife
 J:\Root\Grind\GrindClient\Grind.WPF.CSharp\obj\Debug\Grind.WPF.CSharp.application
 J:\Root\Grind\GrindClient\Grind.WPF.CSharp\obj\Debug\Grind.WPF.CSharp.exe
 J:\Root\Grind\GrindClient\Grind.WPF.CSharp\obj\Debug\Grind.WPF.CSharp.pdb
+J:\Root\Grind\GrindClient\Grind.WPF.CSharp\bin\Debug\Faker.NET4.dll
+J:\Root\Grind\GrindClient\Grind.WPF.CSharp\bin\Debug\de-DE\Faker.NET4.resources.dll
+J:\Root\Grind\GrindClient\Grind.WPF.CSharp\bin\Debug\Grind.db

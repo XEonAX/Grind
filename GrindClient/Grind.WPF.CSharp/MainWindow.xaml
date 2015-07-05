@@ -52,12 +52,12 @@
                                 <DataGridTextColumn Header="Task Status" IsReadOnly="True" Width="70" Binding="{Binding task_status}"/>
                                 <DataGridCheckBoxColumn Header="Is Bug" IsReadOnly="True" Width="40" Binding="{Binding is_bug}"/>
                                 <DataGridTextColumn Header="Bug Type" IsReadOnly="True" Width="60" Binding="{Binding bug_type}"/>
-                                <DataGridCheckBoxColumn Header="Approved" IsReadOnly="True" Width="60" Binding="{Binding approved}"/>
-                                <DataGridTextColumn Header="Target Date" IsReadOnly="True" Width="1*" Binding="{Binding target_date, StringFormat=\{0:dd - MMM - yyyy\}}"/>
+                                <DataGridCheckBoxColumn Header="Approved" IsReadOnly="True" Width="70" Binding="{Binding approved}"/>
+                                <DataGridTextColumn Header="Target Date" IsReadOnly="True" Width="70" Binding="{Binding target_date, StringFormat=\{0:dd-MMM-yyyy\}}"/>
                                 <DataGridTextColumn Header="Executor" IsReadOnly="True" Width="1*" Binding="{Binding DeveloperName}"/>
                                 <DataGridTextColumn Header="Reviewer" IsReadOnly="True" Width="1*" Binding="{Binding ReviewerName}"/>
-                                <DataGridTextColumn Header="Created" IsReadOnly="True" Width="1*" Binding="{Binding created_at, StringFormat=\{0:d\}}"/>
-                                <DataGridTextColumn Header="Modified" IsReadOnly="True" Width="1*" Binding="{Binding updated_at, StringFormat=\{0:d\}}"/>
+                                <DataGridTextColumn Header="Created" IsReadOnly="True" Width="70" Binding="{Binding created_at, StringFormat=\{0:dd-MMM-yyyy\}}"/>
+                                <DataGridTextColumn Header="Modified" IsReadOnly="True" Width="70" Binding="{Binding updated_at, StringFormat=\{0:dd-MMM-yyyy\}}"/>
                             </DataGrid.Columns>
                         </DataGrid>
                         <GridSplitter HorizontalAlignment="Stretch" Grid.Row="2" ResizeDirection="Rows" ResizeBehavior="PreviousAndNext" Foreground="Black" Background="#FF688CAF" />

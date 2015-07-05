@@ -42,6 +42,30 @@
     </dependentAssembly>
   </dependency>
   <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Faker.NET4.dll" size="64000">
+      <assemblyIdentity name="Faker.NET4" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>suCBpcqYuMSeWA+ddhxcqZnmn5rAX7imAgig7igogyA=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="de-DE\Faker.NET4.resources.dll" size="43520">
+      <assemblyIdentity name="Faker.NET4.resources" version="1.0.0.0" language="de-DE" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>ziSUDyVV1CL5nUOOl0dxg9Jg1N9XMZrIO0GLTWlml6M=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
     <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Grind.Common.dll" size="49152">
       <assemblyIdentity name="Grind.Common" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
@@ -49,19 +73,19 @@
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>GgTLSVybXWO/NoFPSni3AAXQLevdY/T5lZbJHIxn0eY=</dsig:DigestValue>
+        <dsig:DigestValue>eUJC/j0xcL4VTjhs+aFRDqoF4EfZXo/JicWbbCoGZw8=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Grind.WPF.CSharp.exe" size="89088">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Grind.WPF.CSharp.exe" size="90624">
       <assemblyIdentity name="Grind.WPF.CSharp" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>CPX5nhzeb4sM5otMffS1BkxARrKAMIB2vdMAjwnTxJg=</dsig:DigestValue>
+        <dsig:DigestValue>oEP/VO6qESpB1Oi09m946WlNII9wSfWfR85EbC7G/5s=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

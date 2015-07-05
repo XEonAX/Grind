@@ -301,7 +301,7 @@ namespace Grind.Common
         }
 
         /// <summary>
-        /// Deletes Stale objects from cache. Requires new objects to br added explicitly.
+        /// Deletes Stale objects from cache. Requires new objects to be added explicitly.
         /// </summary>
         /// <typeparam name="T">Only Specify Person or Task</typeparam>
         /// <param name="latestTimestamps">List of Timestamps retrieved from server</param>

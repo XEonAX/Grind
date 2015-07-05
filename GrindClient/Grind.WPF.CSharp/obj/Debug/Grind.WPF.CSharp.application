@@ -7,14 +7,14 @@
     <framework targetVersion="4.5.1" profile="Full" supportedRuntime="4.0.30319" />
   </compatibleFrameworks>
   <dependency>
-    <dependentAssembly dependencyType="install" codebase="Grind.WPF.CSharp.exe.manifest" size="7923">
+    <dependentAssembly dependencyType="install" codebase="Grind.WPF.CSharp.exe.manifest" size="9223">
       <assemblyIdentity name="Grind.WPF.CSharp.exe" version="1.0.0.2" publicKeyToken="0000000000000000" language="neutral" processorArchitecture="msil" type="win32" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>F32tdj1nKVFrDnZRmOMAZd9Wq2b49T73Xf2gPcRJOQU=</dsig:DigestValue>
+        <dsig:DigestValue>akkk/XXuoeZ5Z/vYGPGC2FA+73Zka1n/cdIMN4eWink=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

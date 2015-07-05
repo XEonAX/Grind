@@ -199,13 +199,13 @@ EventMachine.run do
     end
     
     def authenticate!
-      @person = Person.where(['token = ?', @JSON_params[:token]]).first
-      halt 403, {Error: "Invalid Token"}.to_json unless @person
+      @authenticatedperson = Person.where(['token = ?', @JSON_params[:token]]).first
+      halt 403, {Error: "Invalid Token"}.to_json unless @authenticatedperson
     end
 
     post "/protected" do
       authenticate!
-      puts @person
+      puts @authenticatedperson
     end
 
     get '/' do
@@ -291,6 +291,7 @@ EventMachine.run do
     end
 
     put '/task/:id' do
+      authenticate!
       @task = Task.find(params[:id])
       redirect "task/#{@task.id}" if @task.update(@JSON_params[:task].except(:documents, :created_at, :updated_at))
     end

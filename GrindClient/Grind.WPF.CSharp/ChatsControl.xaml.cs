@@ -18,7 +18,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using WebSocketSharp;
+using Faker;
 
+using Grind.Common;
 namespace Grind.WPF.CSharp
 {
     /// <summary>
@@ -29,6 +31,8 @@ namespace Grind.WPF.CSharp
         public ChatsControl()
         {
             this.InitializeComponent();
+            X.DoWork += X_DoWork;
+            X.WorkerSupportsCancellation = true;
         }
         public Session Session;
         internal void SetSession(Session session)
@@ -123,7 +127,7 @@ namespace Grind.WPF.CSharp
                                     OnClose,
                                     OnError);
 
-            Session.WebsocketService.Connect();
+            //Session.WebsocketService.Connect();
         }
 
         void OnOpen(object sender, EventArgs e)
@@ -180,7 +184,7 @@ namespace Grind.WPF.CSharp
             }
             catch (Exception Ex)
             {
-
+                PrintMessage(DateTime.Now, "Client", e.Reason, eWsMessageType.ErrorMsg);
             }
         }
         void OnError(object sender, WebSocketSharp.ErrorEventArgs e)
@@ -197,7 +201,7 @@ namespace Grind.WPF.CSharp
             }
             catch (Exception Ex)
             {
-
+                PrintMessage(DateTime.Now, "Client", e.Exception.Message, eWsMessageType.ErrorMsg);
             }
 
 
@@ -252,7 +256,7 @@ namespace Grind.WPF.CSharp
             {
                 foreach (string item in Targets)
                 {
-                    Session.WebsocketService.Send(JsonConvert.SerializeObject(new WS_Message { sender_id = Session.User.id, messagetext = txtMessage.Text, receiver_id = Globals.GetPersonFromTrigram(item).id}));
+                    Session.WebsocketService.Send(JsonConvert.SerializeObject(new WS_Message { sender_id = Session.User.id, messagetext = txtMessage.Text, receiver_id = Globals.GetPersonFromTrigram(item).id }));
                 }
             }
             txtMessage.Text = "";
@@ -262,6 +266,27 @@ namespace Grind.WPF.CSharp
         {
             Session.WebsocketService.Send(JsonConvert.SerializeObject(new WS_Message { sender_id = Session.User.id, messagetext = txtMessage.Text }));
             txtMessage.Text = "";
+        }
+        BackgroundWorker X = new BackgroundWorker();
+        
+        private void btnSpam_Click(object sender, RoutedEventArgs e)
+        {
+            if (X.IsBusy) X.CancelAsync();
+            else X.RunWorkerAsync();
+        }
+
+        void X_DoWork(object sender, DoWorkEventArgs e)
+        {
+            while (!X.CancellationPending)
+            {
+                txtMessage.WPFUIize(
+                    () =>
+                    {
+                        txtMessage.Text = Faker.Lorem.Paragraph(5);
+                    });
+                btnSend.WPFUIize(() => btnSend_Click(null, null));
+            }
+
         }
     }
 }

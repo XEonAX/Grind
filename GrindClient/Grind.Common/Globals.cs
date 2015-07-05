@@ -17,7 +17,6 @@ namespace Grind.Common
 
     public static class Globals
     {
-        private static bool _Notify = true;
         public static ObservableCollection<Person> People = new ObservableCollection<Person>();
         public static ConcurrentDictionary<string, Person> DictTrigramToPerson = new ConcurrentDictionary<string, Person>();
         public static ConcurrentDictionary<int, string> DictIdToPersonName = new ConcurrentDictionary<int, string>();
@@ -123,10 +122,22 @@ namespace Grind.Common
         public Session(string SqlConnectionString, string RestServiceEndpointUrl, string WebSocketServiceEndpointUrl, Callbacker Callbacker)
         {
             this.Callbacker = Callbacker;
+            if (!Validate(SqlConnectionString, RestServiceEndpointUrl, WebSocketServiceEndpointUrl, Callbacker)) Environment.Exit(-1);
             Cache = new Cache(SqlConnectionString, Callbacker);
             RestService = new RestService(RestServiceEndpointUrl, Callbacker, User);
             WebsocketService = new WebsocketService(WebSocketServiceEndpointUrl, Callbacker);
             Controllers = new Controllers(Cache, RestService, WebsocketService, Callbacker);
+        }
+
+        private bool Validate(string SqlConnectionString, string RestServiceEndpointUrl, string WebSocketServiceEndpointUrl, Common.Callbacker Callbacker)
+        {
+            if (!File.Exists(SqlConnectionString.Substring(@"data source=".Length)))
+            {
+                Callbacker.callback(eAction.Error, SqlConnectionString.Substring(@"data source=".Length) + " is not accesible." +
+                    Environment.NewLine +"Please correct and restart application");
+                return false;
+            }
+            return true;
         }
 
 
